@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 2 MCQ Quiz: Team Organization & Requirement Gathering</title>
+  <style>
+    :root { --maxw: 980px; --accent: #1d4ed8; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#eef2ff; color:#1e3a8a; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#1e40af }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 2 MCQ Quiz — Team Organization & Requirement Gathering</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 24</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks to prevent double-counting. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 2: Team Organization and Requirement Gathering (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    // Agile basics & suitability
+    { q: "Which statement best reflects the Agile philosophy in this lecture?",
+      options: [
+        "Heavy upfront analysis and formal documentation over delivery.",
+        "Encourage customer satisfaction through early, incremental delivery using small, motivated teams and informal methods.",
+        "Prioritise hardware integration first.",
+        "Design freeze before any customer contact."
+      ], correct: 1,
+      why: "Agile emphasises customer satisfaction, early incremental delivery, small motivated teams, informal methods, simplicity, and active developer–customer communication." },
+
+    { q: "When is Agile generally a poor fit according to the slides?",
+      options: [
+        "Time‑critical prototypes.",
+        "New/uncertain requirements.",
+        "Lack a good team attitude/skills; very large projects needing heavy formal documentation.",
+        "Technology is new."
+      ], correct: 2,
+      why: "Lecture cautions against Agile when team quality is weak or for large projects requiring specific documentation and formal comms." },
+
+    { q: "Which model is contrasted with Agile alongside Waterfall in the overview?",
+      options: ["Spiral only","Incremental","Big‑bang","V‑Model"], correct: 1,
+      why: "The lecture’s process slide shows Waterfall, Incremental, and Agile together." },
+
+    // Team size & effects
+    { q: "Why do smaller agile teams often achieve bigger impact?",
+      options: [
+        "They avoid any meetings.",
+        "They move faster, decide quicker, fail fast/mature faster, provide transparency/accountability, and keep a familial feel.",
+        "They have more managers.",
+        "They eliminate testing."
+      ], correct: 1,
+      why: "Slide: smaller teams → faster decisions, fail‑fast maturity, transparency/accountability, familial feel." },
+
+    { q: "Which is NOT a characteristic listed for agile teams?",
+      options: ["Less social loafing","Visible contributions","Minimal coordination needed","Strict role silos that never flex"], correct: 3,
+      why: "Agile teams show constructive interactions, minimal coordination overhead, visible/meaningful contributions, and willingness to work beyond roles—strict silos contradict this." },
+
+    // Traditional vs Agile roles/structure
+    { q: "Traditional teams typically have Project Manager/Team Lead. What’s the comparable concept in Agile teams?",
+      options: ["Chief Architect","Servant Leader / Facilitator (e.g., Scrum Master)","Foreman","Director of Waterfall"], correct: 1,
+      why: "Slide contrasts traditional PM/lead with servant‑leader/facilitator roles in Agile." },
+
+    // Scrum essentials
+    { q: "What is the time‑boxed unit of development in Scrum?",
+      options: ["Epic","Iteration of 6–12 weeks","Sprint of 1–3 weeks (up to a month)","Release only"], correct: 2,
+      why: "Scrum progresses in sprints typically 1–3 weeks; at most a calendar month." },
+
+    { q: "Which artefacts are highlighted in Scrum?",
+      options: [
+        "Product backlog, Sprint backlog, Burndown charts",
+        "Gantt chart only",
+        "Architecture decision records only",
+        "Risk register and contract only"
+      ], correct: 0,
+      why: "Lecture lists core Scrum artefacts: product backlog, sprint backlog, burndown charts." },
+
+    { q: "A ‘product backlog’ is best described as…",
+      options: [
+        "A detailed test plan.",
+        "A prioritised list of deliverables/features for implementation.",
+        "A code review checklist.",
+        "Only the UX assets."
+      ], correct: 1,
+      why: "Slide: product backlog = prioritised list of deliverables/features." },
+
+    { q: "What typically happens during a Sprint Review meeting?",
+      options: [
+        "Estimate story points for the next sprint only.",
+        "Deliver & demonstrate the increment; summarise progress vs plan; explain deviations; identify new features.",
+        "Re‑negotiate employee contracts.",
+        "Only fix bugs."
+      ], correct: 1,
+      why: "Lecture specifies showcasing the new version, comparing to plan, reasons for deviations, and identifying new features." },
+
+    { q: "Which two key questions drive a Sprint Retrospective?",
+      options: [
+        "What went well? What could be improved?",
+        "What failed testing? What is in scope?",
+        "Who to hire? What to cut?",
+        "What did the customer pay? What is profit?"
+      ], correct: 0,
+      why: "Retrospectives ask what went well and what to improve; time‑boxed (three hours in slide)." },
+
+    { q: "Stand‑ups in this course context should occur…",
+      options: [
+        "At least weekly, facilitated by Scrum Master; each member covers done/doing/blockers; ~10–15 minutes.",
+        "Only at project end.",
+        "Whenever someone feels like it, no structure.",
+        "Only managers speak."
+      ], correct: 0,
+      why: "Monitoring progress in stand‑ups: frequency, facilitation, three questions, short duration, documentation suggested." },
+
+    { q: "A release usually comprises…",
+      options: [
+        "Exactly one sprint.",
+        "Two or more sprints, scoped in release planning meetings with roadmap/milestones.",
+        "UI work only.",
+        "Bug fixes only."
+      ], correct: 1,
+      why: "Release planning: multiple sprints, features/milestones roadmap aligned to priorities/customer days." },
+
+    // Roles
+    { q: "Which is NOT a Scrum role listed on the framework slide?",
+      options: ["Scrum Master","Product Owner","UX Designer","Chief Compliance Officer"], correct: 3,
+      why: "Roles shown: Scrum Master, Product Owner, Architect, Developer, UX Designer, QA—no ‘Chief Compliance Officer’." },
+
+    { q: "Which responsibility belongs to the Product Owner per slides?",
+      options: [
+        "Removes impediments and coaches the team.",
+        "Defines features, prioritises by market value, adjusts per iteration, accepts/rejects results, steers release content and ROI.",
+        "Writes all code.",
+        "Approves expense claims."
+      ], correct: 1,
+      why: "These are Product Owner responsibilities in the lecture." },
+
+    { q: "Which responsibility belongs to the Scrum Master per slides?",
+      options: [
+        "Define all features and decide release contents.",
+        "Guide the team in Scrum use, remove impediments, enable cooperation; acts as coach rather than traditional PM.",
+        "Own product profitability.",
+        "Approve marketing budget."
+      ], correct: 1,
+      why: "Scrum Master coaches/enacts Scrum values and removes impediments; may have some PM responsibilities." },
+
+    // Requirement gathering – foundations
+    { q: "A key objective of a project launch meeting is to…",
+      options: [
+        "Freeze scope permanently.",
+        "Identify long‑term objectives and MVP; develop initial user stories; refine into tasks; triage backlog by cost/priority.",
+        "Sign a fixed‑price contract.",
+        "Skip customer involvement."
+      ], correct: 1,
+      why: "Project launch focuses features over sprints, long‑term objectives/MVP, initial user stories, and backlog triage." },
+
+    { q: "Which is good preparation for requirement gathering?",
+      options: [
+        "Avoid market research to stay unbiased.",
+        "Survey market solutions; identify stakeholders (users, bosses/colleagues, data/API providers); note constraints; special tech needs.",
+        "Meet only one person and decide yourself.",
+        "Write code first, discuss later."
+      ], correct: 1,
+      why: "Slide lists surveying solutions, stakeholder mapping, constraints, and tech needs." },
+
+    { q: "Which practice improves requirement sessions per slides?",
+      options: [
+        "Keep agenda implicit and broad.",
+        "Use visual aides, structured techniques (mockups, user stories), visual walkthroughs; highlight complex decisions for follow‑up.",
+        "Avoid time boxing.",
+        "Ban customer questions."
+      ], correct: 1,
+      why: "Effective requirement gathering: clear agenda, visuals, structured techniques, and highlighting complex decisions." },
+
+    { q: "Time boxing an agenda helps the Chair to…",
+      options: [
+        "Extend meetings indefinitely.",
+        "Pause/park items that over‑run and allocate effort effectively.",
+        "Avoid decisions.",
+        "Skip notes."
+      ], correct: 1,
+      why: "Time estimates per item help use time wisely and allow the Chair to pause over‑running discussions." },
+
+    { q: "Which is an example of a focused question?",
+      options: [
+        "Which of the 10 features would you like?",
+        "Which two features should be implemented first—and which two after that?",
+        "Do you want everything?",
+        "Are you happy?"
+      ], correct: 1,
+      why: "Slides propose narrowing choice to prioritise effectively (e.g., pick two now, two next)." },
+
+    { q: "How should the team manage discussions in meetings?",
+      options: [
+        "Let the loudest person dominate.",
+        "Balance openness for ideas with adherence to agenda; Chair moderates turn‑taking, interrupts dominance, probes unclear points, stimulates quieter members.",
+        "Avoid the agenda entirely.",
+        "Ban customer input."
+      ], correct: 1,
+      why: "Managing discussions: maintain balance and use Chair authority to keep productive flow." },
+
+    { q: "Negotiating plan changes with customers should…",
+      options: [
+        "Be accepted immediately regardless of impact.",
+        "Be approached cautiously; assess schedule impact, be honest, renegotiate timelines as needed, incorporate past delays.",
+        "Be ignored.",
+        "Only happen by email."
+      ], correct: 1,
+      why: "Slides advise careful evaluation and honest negotiation when expectations/priorities shift." },
+
+    { q: "Which practice is recommended for managing and minuting outcomes?",
+      options: [
+        "Avoid recording.",
+        "Ask permission to record; summarise agreed goals/work items; create tracker issues for new work and follow‑ups; minute discussions.",
+        "Keep decisions verbal only.",
+        "Delete backlog items."
+      ], correct: 1,
+      why: "Explicitly listed: permission to record, summarise agreements, create backlog/follow‑up issues, minute the meeting." },
+
+    { q: "Between meetings, effective communication includes…",
+      options: [
+        "Waiting silently for the next sprint.",
+        "Direct channels, periodic demos, continuous improvements based on feedback, additional sessions to resolve uncertainty, pursuit of customer satisfaction.",
+        "Only sending release notes at the end.",
+        "Blocking stakeholders from the repo."
+      ], correct: 1,
+      why: "Slide recommends ongoing engagement and feedback loops between meetings." }
+  ];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset on render
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0; render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+
+  render();
+  </script>
+</body>
+</html>

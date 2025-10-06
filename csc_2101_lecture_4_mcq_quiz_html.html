@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 4 MCQ Quiz: UML Class & Use Case Diagrams</title>
+  <style>
+    :root { --maxw: 980px; --accent: #7c3aed; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#ede9fe; color:#4c1d95; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#ddd6fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#4c1d95 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 4 MCQ Quiz — UML Class Diagram & Use Case Diagram</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 24</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 4: UML Modelling – Class Diagram and Use Case Diagram (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    // Overview & diagram types
+    { q: "Which statement best matches the lecture’s definition of UML modelling?",
+      options: [
+        "Programming language for back-end services.",
+        "Graphical notation (UML) to represent a system; five core diagram types cover essentials.",
+        "A database ER-only technique.",
+        "A code generator that replaces design."
+      ], correct: 1,
+      why: "UML is a graphical notation; lecture notes that five diagram types (Class, Use Case, Activity, Sequence, State) capture essentials." },
+
+    { q: "Which grouping is correct?",
+      options: [
+        "Structural models: show dynamic behaviour; Behavioural: show organization of components.",
+        "Structural models: show organization/relationships; Behavioural: show dynamic behaviour in response to stimuli.",
+        "Both structural and behavioural show only data stores.",
+        "Neither is part of UML."
+      ], correct: 1,
+      why: "Slides define structural vs behavioural as organization/relationships vs dynamic responses." },
+
+    { q: "Data-driven vs Event-driven modelling distinction?",
+      options: [
+        "Data-driven shows sequence from input to output; Event-driven shows responses to external/internal events.",
+        "Both are identical.",
+        "Event-driven focuses only on databases.",
+        "Data-driven only for GUI design."
+      ], correct: 0,
+      why: "Lecture contrasts entire processing sequence vs reactions to events under assumptions." },
+
+    // Class diagram fundamentals
+    { q: "Class diagram primarily shows…",
+      options: [
+        "Network topologies.",
+        "Object classes and associations between them.",
+        "Only UI screens.",
+        "Deployment nodes."
+      ], correct: 1,
+      why: "Class diagrams depict classes and relationships (associations, aggregation, generalization)." },
+
+    { q: "Which is a correct class/object statement?",
+      options: [
+        "Object is the template; class is an instance.",
+        "Class models a collection of objects with identical properties; object is an instance of a class.",
+        "Class equals package.",
+        "Object equals attribute."
+      ], correct: 1,
+      why: "Slide ‘Class Diagram – Objects’." },
+
+    // Association & multiplicity
+    { q: "Binary association relates…",
+      options: ["Two classes","Three classes","Four or more classes","Two packages only"], correct: 0,
+      why: "Binary relates two; ternary relates three; higher-order >3." },
+
+    { q: "Which multiplicity means zero to many?",
+      options: ["1..*","0..*","1..1","1..3"], correct: 1,
+      why: "0..* indicates zero or more instances." },
+
+    { q: "Interpret ‘1..*’ at one end of an association:",
+      options: [
+        "Exactly one.",
+        "At least one, potentially many.",
+        "Zero or one.",
+        "At most one."
+      ], correct: 1,
+      why: "‘1..*’ = lower bound 1, no upper bound." },
+
+    { q: "Which is TRUE about association attributes?",
+      options: [
+        "Associations cannot have attributes.",
+        "Associations may have attributes like Quantity on a Use relation.",
+        "Only classes have attributes.",
+        "Attributes are only for generalization."
+      ], correct: 1,
+      why: "Lecture provides example of association attribute ‘Quantity’." },
+
+    { q: "Mathematical representation of associations in slides demonstrates…",
+      options: [
+        "Enumerating valid tuples (e.g., (Company, Employee)) consistent with multiplicities.",
+        "SQL joins only.",
+        "Graph traversal algorithms.",
+        "Compiler parsing."
+      ], correct: 0,
+      why: "Slides enumerate sets of tuples that satisfy multiplicity constraints." },
+
+    // Aggregation & generalization
+    { q: "Aggregation models…",
+      options: [
+        "General classification hierarchy.",
+        "Part–whole relationships where each part belongs to a whole.",
+        "Runtime object creation.",
+        "Package imports."
+      ], correct: 1,
+      why: "Aggregation = whole composed of parts (e.g., Article → Paragraphs, Sentences, Figures)." },
+
+    { q: "Generalization arrow points…",
+      options: ["From super-class to sub-class","From sub-class to super-class","Between unrelated classes","To an association node"], correct: 1,
+      why: "Diagram shows triangle/arrow pointing to super-class." },
+
+    { q: "Choose the correct mapping:",
+      options: [
+        "Association: part–whole; Aggregation: interactions; Generalization: classification.",
+        "Association: interactions; Aggregation: part–whole; Generalization: classification.",
+        "Association: classification; Aggregation: interactions; Generalization: part–whole.",
+        "All three are identical."
+      ], correct: 1,
+      why: "Slide ‘Association, Aggregation, Generalization’." },
+
+    // Class diagram example constraints
+    { q: "In the IT admissions example, how many external examiners review an application?",
+      options: ["1","2","3","It depends; unspecified"], correct: 2,
+      why: "The example states review by 3 external examiners." },
+
+    { q: "Which constraint is stated for admin members managing applications?",
+      options: [
+        "Each admin manages at least 10 applications.",
+        "Each admin manages at most 3 applications.",
+        "Only the chief admin manages applications.",
+        "Admins do not manage applications."
+      ], correct: 0,
+      why: "Example: an admin member manages \u2265 10 applications." },
+
+    // Use case concepts & template
+    { q: "A use case is…",
+      options: [
+        "A class attribute.",
+        "A collection of scenarios describing interactions between system and external environments from an actor’s viewpoint.",
+        "A database schema.",
+        "A deployment script."
+      ], correct: 1,
+      why: "Use case: collection of scenarios; actor can be person/device/entity." },
+
+    { q: "Which is NOT a primary field in the use case template?",
+      options: ["Primary actor","Goal in context","Preconditions","Compiler options"], correct: 3,
+      why: "Template lists actor, goal, preconditions, trigger, scenario, exceptions, etc.—not compiler options." },
+
+    { q: "Which items appear in the extended template?",
+      options: [
+        "Priority, When available, Frequency of use, Channels to actors, Secondary actors, Open issues.",
+        "Programming language, IDE theme, Keyboard layout.",
+        "IP addresses, VLAN IDs, TLS versions.",
+        "Budget approvals only."
+      ], correct: 0,
+      why: "Slides show these additional fields." },
+
+    { q: "In use case diagrams, actors are drawn as…",
+      options: [
+        "Stick-person for humans; rectangle for non-human actors.",
+        "Only rectangles.",
+        "Only circles.",
+        "Lightning bolts."
+      ], correct: 0,
+      why: "Slide ‘Use Case Diagram’ notes symbols for human vs non-human actors." },
+
+    { q: "‘Include’ relationship notation is…",
+      options: [
+        "Solid line with closed arrow.",
+        "Dashed line with open arrow from base use case to inclusion use case, labelled <<include>>.",
+        "Dashed line with open arrow from inclusion to base.",
+        "Zig‑zag line without label."
+      ], correct: 1,
+      why: "Slide ‘Include and Extend’." },
+
+    { q: "‘Extend’ relationship means…",
+      options: [
+        "One use case (extension) adds behaviour to a base use case under certain conditions.",
+        "Two use cases are identical.",
+        "A class inherits from a superclass.",
+        "Actors include other actors."
+      ], correct: 0,
+      why: "Extension use case augments base use case behaviour." },
+
+    { q: "Which is TRUE about actors in use case diagrams?",
+      options: [
+        "Actors must be human.",
+        "Actors can be human or non-human (e.g., sensors, systems).",
+        "Actors are always inside the system boundary.",
+        "Actors represent classes."
+      ], correct: 1,
+      why: "Slides: non-human actors are possible and drawn with rectangles." },
+
+    { q: "Which mapping is correct for the Home Security example?",
+      options: [
+        "Homeowner uses ‘Arms/disarms’, ‘Remote Access’, ‘Respond to alarms’, ‘Encounter errors’; IT technician ‘Reconfigure sensors & features’.",
+        "Only IT technician uses all use cases.",
+        "Sensors are primary actors for all use cases.",
+        "No actors interact with use cases."
+      ], correct: 0,
+      why: "Slide lists these use cases and actor interactions." },
+
+    { q: "What does a use case diagram primarily convey?",
+      options: [
+        "Detailed algorithmic steps.",
+        "Overview of all use cases and their interactions with actors (who does what).",
+        "Database schema normal forms.",
+        "Runtime memory layout."
+      ], correct: 1,
+      why: "It is an overview of actor–use case interactions, not detailed flows." },
+
+    { q: "Which of the following is LEAST appropriate to put on a class diagram?",
+      options: [
+        "Associations with multiplicities.",
+        "Aggregation and generalization relationships.",
+        "Detailed use case scenarios.",
+        "Classes with attributes/methods."
+      ], correct: 2,
+      why: "Detailed scenarios belong to use case/specification, not the class diagram." }
+  ];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset on render
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0; render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+
+  render();
+  </script>
+</body>
+</html>

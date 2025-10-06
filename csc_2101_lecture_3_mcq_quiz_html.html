@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 3 MCQ Quiz: Functional & Non‑functional Requirements</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0ea5e9; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#e0f2fe; color:#075985; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#7dd3fc; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#075985 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 3 MCQ Quiz — Functional & Non‑functional Requirements</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 24</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 3: Functional and Non‑functional Requirements (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    // Evolving requirements & risks
+    { q: "Which is NOT listed as a potential risk when gathering requirements?",
+      options: [
+        "Misunderstanding business context",
+        "Misunderstanding system domain",
+        "Cultural differences between customers and teams",
+        "Excessive modularity of code"
+      ], correct: 3,
+      why: "Slides list misunderstandings, culture differences, and vague requirements—not ‘excessive modularity’." },
+
+    { q: "The ‘moving target problem’ refers to…",
+      options: [
+        "Team members changing jobs",
+        "Requirements changing while development is underway and the need to track those changes",
+        "Hardware specs changing post‑release",
+        "Source control branching conflicts"
+      ], correct: 1,
+      why: "The lecture defines it as requirements changing during development and tracking those changes." },
+
+    { q: "Requirement engineering is described as an iterative process of…",
+      options: [
+        "Design, coding, deployment",
+        "Elicitation, specification, and validation",
+        "Testing, packaging, marketing",
+        "Recruitment, training, and budgeting"
+      ], correct: 1,
+      why: "Elicitation → specification → validation in iterations." },
+
+    // Elicitation techniques
+    { q: "Which two techniques are explicitly highlighted for ongoing requirement elicitation?",
+      options: ["Interview and survey","Pair programming and TDD","Heuristics and proofs","Benchmarking and capacity planning"], correct: 0,
+      why: "Interview and survey are named as common techniques." },
+
+    { q: "Good question design during elicitation aims to…",
+      options: [
+        "Resolve uncertainty and identify new requirements, coordinated across the team",
+        "Impress the client with jargon",
+        "Avoid rehearsal to save time",
+        "Focus only on architecture"
+      ], correct: 0,
+      why: "Slides recommend structured questions, coordination, and rehearsal." },
+
+    // User stories, actors
+    { q: "A user story template from the slides is…",
+      options: [
+        "As a [actor], I want [action], so that [rationale]",
+        "Who, What, Where, When, Why",
+        "Given‑When‑Then only",
+        "Problem‑Agitate‑Solve"
+      ], correct: 0,
+      why: "That exact template is shown with examples." },
+
+    { q: "An actor is defined as…",
+      options: [
+        "Only a human end‑user",
+        "A person, device, or entity that interacts with the software",
+        "A UML stereotype",
+        "Any stakeholder with budget control"
+      ], correct: 1,
+      why: "Actor may be person, device, or entity interacting with the system." },
+
+    // Documentation forms
+    { q: "Which is NOT listed as a form of requirement documentation?",
+      options: ["Natural language","Structured natural language (user stories)","UML diagrams","Gantt charts"], correct: 3,
+      why: "Slides list natural language, user stories, pseudocode, UML (class/use‑case/activity/sequence/state)—not Gantt charts." },
+
+    { q: "Which prioritisation scheme is covered?",
+      options: ["RICE","MoSCoW","Kano","ICE"], correct: 1,
+      why: "MoSCoW: Must, Should, Could, Won’t (for now)." },
+
+    // FR vs NFR
+    { q: "Functional requirements primarily specify…",
+      options: [
+        "How well the system performs",
+        "What the system should do: inputs, outputs, stored data, computations, reactions",
+        "Legal compliance only",
+        "Which team writes the code"
+      ], correct: 1,
+      why: "FR describe intended behaviours: inputs/outputs/data/computations/reactions." },
+
+    { q: "Non‑functional requirements primarily specify…",
+      options: [
+        "Quality attributes and external constraints such as reliability, performance, usability, security",
+        "Exact SQL schema",
+        "UI colour palette",
+        "Test case IDs"
+      ], correct: 0,
+      why: "NFR = quality attributes & constraints; critical to usability/effectiveness." },
+
+    { q: "Which example illustrates how FR and NFR can blur?",
+      options: [
+        "System shall use microservices",
+        "System shall include user authorisation with username/password to ensure data protection",
+        "System shall be written in Rust",
+        "System shall use OAuth 2.0"
+      ], correct: 1,
+      why: "‘Protect data from unauthorised access’ reads NFR; specifying login function becomes an FR detail." },
+
+    // Measuring NFR
+    { q: "Why must NFR be measurable?",
+      options: [
+        "To support subjective debates",
+        "So they can be verified at system testing with clear metrics, conditions, and thresholds",
+        "Because unit tests always cover them",
+        "To avoid trade‑offs"
+      ], correct: 1,
+      why: "Slides emphasise measurability, operating conditions, and thresholds; typically validated at system test level." },
+
+    { q: "Which set correctly pairs a property with a typical measure?",
+      options: [
+        "Reliability — Mean time to failure",
+        "Ease of use — CPU utilisation",
+        "Portability — Frames per second",
+        "Robustness — Lines of code"
+      ], correct: 0,
+      why: "Examples list MTTF for reliability; other pairings are mismatches." },
+
+    { q: "Which is a valid quantified usability requirement from the slides?",
+      options: [
+        "The UI should be good",
+        "Four of five users shall complete a booking within 5 minutes after a 2‑hour introduction",
+        "Users will love the app",
+        "Everyone finishes tasks instantly"
+      ], correct: 1,
+      why: "Quantified: proportion, time, training duration." },
+
+    { q: "Which is a valid quantified reliability example?",
+      options: [
+        "Defect rate shall be low",
+        "Down time shall be minimal",
+        "System defect rate < 1 failure per 1,000 hours of operation",
+        "System never fails"
+      ], correct: 2,
+      why: "Slides give numeric reliability targets like failures per operating hours; avoid vague terms." },
+
+    { q: "Security testing methods highlighted include…",
+      options: [
+        "Fuzz testing, SQL injection testing, port scanning, and penetration testing",
+        "Unit testing and linting only",
+        "A/B testing",
+        "Heuristic evaluation only"
+      ], correct: 0,
+      why: "All listed under security testing methods/approaches." },
+
+    { q: "Which is a plausible security metric from the slides?",
+      options: [
+        "Time and resources to penetration; successful penetrations per year",
+        "Pixels per inch",
+        "Number of UI themes",
+        "Daily stand‑up duration"
+      ], correct: 0,
+      why: "Security metrics include time/resources to penetration, unpatched vulnerabilities, attack surface, etc." },
+
+    { q: "Performance testing should specify…",
+      options: [
+        "Only average response time without conditions",
+        "Throughput/response metrics with operating conditions and thresholds (limit vs stress)",
+        "Stakeholder names",
+        "Licensing terms"
+      ], correct: 1,
+      why: "Slides list throughput/response and thresholds including limit and stress behaviour." },
+
+    { q: "Which is a valid performance requirement example from the slides?",
+      options: [
+        "System should be fast",
+        "Process 100 payment transactions per second at peak load",
+        "Pages should feel snappy",
+        "Zero latency always"
+      ], correct: 1,
+      why: "Concrete throughput target is provided in the examples." },
+
+    // Usability
+    { q: "Usability sub‑attributes listed include…",
+      options: [
+        "Learnability, operability, likeability, user satisfaction",
+        "Compressibility, serialisability",
+        "Refactorability, testability only",
+        "Integrability, shippability only"
+      ], correct: 0,
+      why: "These are directly named as usability metrics." },
+
+    // MoSCoW priorities
+    { q: "In MoSCoW, ‘Should Have’ means…",
+      options: [
+        "Critical to current delivery",
+        "Important but not vital; large impact on success",
+        "Desirable with minor impact if left out",
+        "Out of scope for current timeframe"
+      ], correct: 1,
+      why: "Matches the MoSCoW definitions on the slide." },
+
+    // FR examples
+    { q: "Which is a correct FR example from the clinic system?",
+      options: [
+        "System shall be reliable",
+        "User can search appointment lists for all clinics",
+        "System shall be easy to use",
+        "CPU usage shall be <50%"
+      ], correct: 1,
+      why: "Clinic example lists searchable appointment lists as a functional requirement." },
+
+    // Thresholds & operating conditions
+    { q: "When defining NFR tests, you should specify…",
+      options: [
+        "Only a target number",
+        "Property, metric, operating conditions, and threshold",
+        "A persona name",
+        "Price of the product"
+      ], correct: 1,
+      why: "Slides prescribe all four: property, metric, operating conditions, threshold." },
+
+    // Trade‑offs
+    { q: "Quantification guidance suggests…",
+      options: [
+        "Precise numbers are always known early",
+        "Values need rationale, stakeholders must understand trade‑offs, and priorities must be ranked",
+        "Avoid ranking requirements",
+        "Use subjective adjectives to stay flexible"
+      ], correct: 1,
+      why: "Quantification: provide rationale, acknowledge trade‑offs, rank and prioritise; precise numbers may be unknown initially." }
+  ];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false;
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0; render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+
+  render();
+  </script>
+</body>
+</html>

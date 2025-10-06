@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 1 MCQ Quiz: Software Engineering & Process</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 1 MCQ Quiz — Software Engineering & Process</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 24</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 1: Introduction of Software Engineering and Process (slides). This educational quiz is for practice.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    // 1
+    { q: "Which statement best defines Software Engineering in this lecture?",
+      options: [
+        "Writing efficient algorithms only.",
+        "A discipline aiming to produce high‑quality software, on time and within budget, that satisfies user needs.",
+        "The study of computer hardware integration.",
+        "Debugging legacy systems for maintainability."
+      ], correct: 1,
+      why: "The lecture defines Software Engineering as a discipline whose aim is the production of high‑quality software, delivered on time and within budget, satisfying user needs."
+    },
+    // 2
+    { q: "Which items together constitute ‘software’ in professional development?",
+      options: [
+        "Programs only.",
+        "Programs and compilers only.",
+        "Programs plus documentation, libraries, support websites, and configuration data.",
+        "Only executable binaries and their source code."
+      ], correct: 2,
+      why: "Software = programs + documentation, libraries, support sites, and configuration data in the lecture."
+    },
+    // 3
+    { q: "Which is NOT listed as a common complaint about software projects?",
+      options: ["Over budget","Over time","Too modular","Difficult to maintain"], correct: 2,
+      why: "Complaints include over budget/time, unreliable, not meeting requirements, difficult maintenance, poor performance, and never delivered—‘too modular’ is not listed."
+    },
+    // 4
+    { q: "Which quality attribute concerns processing time, memory use, responsiveness, and power?",
+      options: ["Maintainability","Efficiency","Reliability","Security"], correct: 1,
+      why: "Efficiency covers processing time, memory utilisation, responsiveness, and power requirements."
+    },
+    // 5
+    { q: "Which SDLC activity comes first in the lecture’s typical flow?",
+      options: ["Testing","Requirement specification","Maintenance","Deployment"], correct: 1,
+      why: "The lecture sequence: Requirement specification → Analysis & Design → Implementation → Testing → Deployment → Maintenance."
+    },
+    // 6
+    { q: "According to the cost approximation at SDLC, which phase consumes the largest proportion over a product’s lifetime?",
+      options: ["Implementation","Testing","Maintenance","Requirements"], correct: 2,
+      why: "The chart emphasises Maintenance dominates total cost across a system’s life."
+    },
+    // 7
+    { q: "Pick the BEST description of the Waterfall model’s suitability from the lecture.",
+      options: [
+        "Small research projects with unclear goals.",
+        "Well‑defined requirements, adequate resources, experienced team, not too large/complex, no urgent need for any part.",
+        "High‑risk projects needing frequent releases.",
+        "Any project using cutting‑edge technology with high uncertainty."
+      ], correct: 1,
+      why: "Waterfall: well‑defined requirements, adequate resources, good expertise, not too large/complex, no urgent urgency."
+    },
+    // 8
+    { q: "In the Incremental model, what is delivered first?",
+      options: ["A fully detailed design for all features.","A throw‑away prototype only.","A core product addressing basic requirements.","A maintenance plan."], correct: 2,
+      why: "Start with a core product addressing basic requirements, then add prioritised features in increments."
+    },
+    // 9
+    { q: "When is the Incremental model particularly appropriate per the lecture?",
+      options: [
+        "Requirements are fixed and won’t change.",
+        "Need to deliver limited functionality quickly; some details will change; new tech; or team not fully skilled.",
+        "Low‑risk, low‑complexity tasks only.",
+        "Never; it’s deprecated."
+      ], correct: 1,
+      why: "Lecture lists: reasonably defined but evolving requirements, need quick limited functionality, new tech, or less skilled teams."
+    },
+    // 10
+    { q: "Which grouping BEST describes Evolutionary process models in the lecture?",
+      options: [
+        "Strictly sequential phases with no iteration.",
+        "A combination of iterative and incremental development to accommodate change over time.",
+        "Random feature drops with no planning.",
+        "A security‑only process."
+      ], correct: 1,
+      why: "Evolutionary models are iterative + incremental to support evolving products."
+    },
+    // 11
+    { q: "Which two models are cited as examples of Evolutionary models?",
+      options: ["Waterfall & V‑Model","Prototyping & Spiral","Agile & Waterfall","Incremental & Big‑Bang"], correct: 1,
+      why: "Lecture: Prototyping and Spiral are examples under Evolutionary process models."
+    },
+    // 12
+    { q: "Prototyping model tends to suit which scenario?",
+      options: [
+        "Small or low‑cost systems with unclear/incomplete requirements and actively involved customers; team lacks expertise.",
+        "Mission‑critical systems with fixed requirements.",
+        "Mature products with no stakeholder access.",
+        "Ultra‑large regulated systems with stable specs."
+      ], correct: 0,
+      why: "The slide lists small/low‑cost, unclear requirements, active customer involvement, and lack of expertise."
+    },
+    // 13
+    { q: "Spiral model is especially suitable for…",
+      options: ["Low‑risk classroom exercises.","High‑risk projects, frequent releases, large/complex systems with unclear requirements.","Static websites.","Short hackathon prototypes only."], correct: 1,
+      why: "Lecture: Spiral → high risk, frequent releases, large/complex with unclear requirements."
+    },
+    // 14
+    { q: "Which statement about Plan‑Driven vs Agile (per lecture) is true?",
+      options: [
+        "Requirements and design are always completed before coding in both.",
+        "In Agile, requirements and design are developed together incrementally.",
+        "Plan‑driven methods never use documentation.",
+        "Agile forbids any planning."
+      ], correct: 1,
+      why: "Slide notes: in Agile, requirements and design evolve together."
+    },
+    // 15
+    { q: "Which pair accurately contrasts Product vs Process per the lecture?",
+      options: [
+        "Product: how produced; Process: what is produced.",
+        "Product: what is produced; Process: how it is produced.",
+        "Both mean the same thing.",
+        "Product refers only to documentation; Process is only code."
+      ], correct: 1,
+      why: "Lecture distinguishes product (what) and process (how)."
+    },
+    // 16
+    { q: "Which list contains core SE activities in the Software Development Life Cycle as presented?",
+      options: [
+        "Spec → Design/Analysis → Implementation → Testing → Deployment → Maintenance",
+        "Brainstorm → Coding → Shipping",
+        "Design → Marketing → Sales",
+        "Procurement → Logistics → HR"
+      ], correct: 0,
+      why: "Matches the lecture’s SDLC flow."
+    },
+    // 17
+    { q: "Which is a characteristic of ‘good software’ called out in the lecture?",
+      options: ["Includes a flashy UI only.","Delivers required functionality/performance; maintainable, dependable, and usable.","Has zero documentation.","Optimised only for developer convenience."], correct: 1,
+      why: "Good software: required functionality/performance; maintainable, dependable, usable."
+    },
+    // 18
+    { q: "Which layer concept appears in the lecture’s ‘Software Engineering Layers’?",
+      options: ["Process layer over methods and tools.","Only hardware layer is relevant.","Legal layer above UI.","Gamification layer."], correct: 0,
+      why: "SE Layers slide shows process/methods/tools layering (with quality focus)."
+    },
+    // 19
+    { q: "What does ‘Dependability & Security’ emphasise in the product characteristics slide?",
+      options: [
+        "Avoiding any documentation.",
+        "Preventing damage at failure and blocking malicious access.",
+        "Maximising frame rate.",
+        "Reducing licensing costs only."
+      ], correct: 1,
+      why: "Dependable software should not cause damages at failure; prevent malicious access/damage."
+    },
+    // 20
+    { q: "Which statement about software costs is highlighted?",
+      options: [
+        "Hardware costs dominate overall.",
+        "Maintenance is usually more expensive than development; on PCs, software often costs more than hardware.",
+        "Testing is always costliest by far.",
+        "Development always dwarfs maintenance."
+      ], correct: 1,
+      why: "Lecture: software often dominates system costs; maintenance often exceeds development."
+    },
+    // 21
+    { q: "In the Incremental approach, what can differ between increments per the lecture?",
+      options: ["Programming language only.","Process model used in each increment.","Team composition only.","Nothing; all increments must be identical."], correct: 1,
+      why: "Slide notes: different process models can be used per increment."
+    },
+    // 22
+    { q: "Which option reflects the ‘core product’ idea correctly?",
+      options: ["A minimal set meeting basic needs, with more functionality added later by priority.","All features fully implemented at once.","A marketing document.","Only backend services without any UI."], correct: 0,
+      why: "Start with a core product; later increments add prioritised features."
+    },
+    // 23
+    { q: "Which scenario from the lecture’s example suggests mixing models?",
+      options: [
+        "Large system, well‑defined requirements; one small low‑cost part lacking team expertise; active customers for that small part.",
+        "Tiny script with a one‑hour deadline.",
+        "Lecture notes compilation.",
+        "A photo gallery website."
+      ], correct: 0,
+      why: "Example proposes Incremental overall; Waterfall within increments; Prototyping for the small uncertain part."
+    },
+    // 24
+    { q: "Which practice approach is emphasised for achieving good outcomes?",
+      options: ["Ad‑hoc heroics.","Repeatable practices across the full life‑cycle.","Skipping validation.","Avoiding user needs for scope control."], correct: 1,
+      why: "Lecture highlights repeatable practices spanning the full life‑cycle."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      // also highlight the correct option
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+    // revealing does not alter score or answered counts
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+
+  render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 5 MCQ Quiz: UML Behavioural Modelling & Software Reuse</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0b7; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#d1fae5; color:#065f46; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#a7f3d0; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 5 MCQ Quiz — UML Behavioural Modelling & Software Reuse</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 24</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 5: UML Behavioural Modelling and Software Reuse (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    // Activity diagrams
+    { q: "What does an activity diagram primarily show?",
+      options: [
+        "Network topology",
+        "Procedural flow of actions (what happens), not who does it",
+        "Class hierarchy only",
+        "Deployment architecture"
+      ], correct: 1,
+      why: "Activity diagrams provide a flowchart-style representation of actions and control flow; they focus on what happens, not on the acting entity." },
+
+    { q: "Which symbol denotes a decision/merge in an activity diagram?",
+      options: ["Rounded rectangle","Diamond","Thick bar","Circle with X"], correct: 1,
+      why: "Decision points and merges are drawn with diamonds to encode conditional sequences." },
+
+    { q: "In activity diagrams, which element models parallel execution?",
+      options: [
+        "Fork/Join with thick synchronization bars",
+        "Dashed arrow",
+        "Inheritance triangle",
+        "Use-case ellipse"
+      ], correct: 0,
+      why: "Parallelism is represented with thick bars: fork to split concurrent paths; join to synchronize." },
+
+    { q: "Which is TRUE about activity diagrams per the lecture?",
+      options: [
+        "They must always show actors on the swimlanes.",
+        "They can describe a use case, the logic of an operation, or an entire system.",
+        "They replace sequence diagrams.",
+        "They must include database schemas."
+      ], correct: 1,
+      why: "They are versatile: describe use cases, operation logic, or whole systems." },
+
+    { q: "Where do activity diagrams commonly come from in the workflow?",
+      options: [
+        "Directly from deployment diagrams",
+        "Transitioning from use case scenarios to concrete flows",
+        "After coding only",
+        "From statecharts exclusively"
+      ], correct: 1,
+      why: "The lecture shows a pipeline from requirements → use cases → activity diagrams, etc." },
+
+    // Sequence diagrams
+    { q: "Sequence diagrams combine information about…",
+      options: [
+        "Only activities",
+        "Objects and activities they perform over time",
+        "Only classes without time",
+        "Database tables"
+      ], correct: 1,
+      why: "Sequence diagrams show object lifelines and the time-ordered messages between them." },
+
+    { q: "The vertical dotted line under an object in a sequence diagram represents…",
+      options: ["Object inheritance","Time (lifeline)","Network latency","Thread count"], correct: 1,
+      why: "It is the lifeline showing the existence of the object over time." },
+
+    { q: "A self-call (reflexive message) is used to…",
+      options: [
+        "Model an object calling one of its own methods",
+        "Indicate class inheritance",
+        "Show database joins",
+        "Mark object deletion"
+      ], correct: 0,
+      why: "Reflexive messages document internal method calls within the same object." },
+
+    { q: "Which statement is correct about messages in sequence diagrams?",
+      options: [
+        "Only synchronous messages exist",
+        "Both synchronous and asynchronous messages are supported",
+        "Messages are not allowed to return values",
+        "Actors cannot send messages"
+      ], correct: 1,
+      why: "The lecture shows synchronous and asynchronous messages, returns, and actor initiation." },
+
+    { q: "Where can a sequence be initiated from?",
+      options: [
+        "Only from inside the system",
+        "External actors or other classes may start a sequence by sending an initial message",
+        "Only timers",
+        "Only UI gestures"
+      ], correct: 1,
+      why: "Slides illustrate external actors/classes starting processes via initial messages." },
+
+    // State diagrams
+    { q: "State machine models describe…",
+      options: [
+        "System behaviour in response to events, transitioning between states",
+        "Static database schemas",
+        "Only performance metrics",
+        "Hardware wiring"
+      ], correct: 0,
+      why: "They capture event-driven transitions among named states with actions." },
+
+    { q: "Which pairing is correct for state modelling?",
+      options: [
+        "Event → causes transition; Action → consequence executed during transition",
+        "Action → causes transition; Event → consequence",
+        "State → always initial; Transition → always final",
+        "Composite state → cannot contain substates"
+      ], correct: 0,
+      why: "Terminology: events trigger transitions; actions are performed as a result; composite states can be decomposed." },
+
+    { q: "In the microwave oven example, which is a valid state?",
+      options: [
+        "SQL Connected",
+        "Half power",
+        "Buffering",
+        "Kernel Panic"
+      ], correct: 1,
+      why: "The oven states include Waiting, Half power, Full power, Set time, Disabled, Enabled, Operation." },
+
+    { q: "Which stimulus belongs to the microwave oven example?",
+      options: [
+        "Deploy",
+        "Number (numeric key pressed)",
+        "Scale out",
+        "Crash"
+      ], correct: 1,
+      why: "Stimuli include Half power, Full power, Timer, Number, Door open/closed, Start, Cancel." },
+
+    { q: "What should NOT occur when the microwave door is open (per example)?",
+      options: [
+        "Display current time",
+        "Operate/cook",
+        "Show 'Not ready'",
+        "Turn interior light on"
+      ], correct: 1,
+      why: "Safety rule: the oven should not operate when the door is open." },
+
+    // Software reuse & components
+    { q: "A software component is described as…",
+      options: [
+        "An arbitrary code snippet",
+        "A self-contained bundle of state/behaviour with well-defined interfaces (services)",
+        "Only a UI widget",
+        "A database row"
+      ], correct: 1,
+      why: "Definition: component encapsulates behaviour/state behind provided/required interfaces." },
+
+    { q: "Provided vs Required interfaces mean…",
+      options: [
+        "Provided: services the component offers; Required: services it needs",
+        "Provided: services it needs; Required: services it offers",
+        "Both mean the same",
+        "Only provided interfaces exist"
+      ], correct: 0,
+      why: "Components expose provided interfaces and declare required ones they depend on." },
+
+    { q: "Which is a benefit of software reuse listed in the lecture?",
+      options: [
+        "Increased reliability and reduced process risk",
+        "Guaranteed zero defects",
+        "Eliminates documentation needs",
+        "Avoids all integration work"
+      ], correct: 0,
+      why: "Benefits include reliability, reduced risk, effective use of specialists, standards compliance, accelerated development." },
+
+    { q: "Which is a problem with reuse noted in the slides?",
+      options: [
+        "Too many unit tests",
+        "Lack of tool support; higher maintenance; costly libraries; effort to understand/adapt; Not-invented-here",
+        "Excessive performance",
+        "Over-documentation only"
+      ], correct: 1,
+      why: "All are directly listed as reuse challenges." },
+
+    { q: "Which levels of reuse are mentioned?",
+      options: [
+        "Only object reuse",
+        "System, application, component, object/function reuse",
+        "Process and HR reuse",
+        "Hardware and network reuse"
+      ], correct: 1,
+      why: "Lecture enumerates these four levels." },
+
+    { q: "General-purpose vs application-specific components: which is correct?",
+      options: [
+        "General-purpose components provide common functionality for many apps; application-specific implement particular domain logic",
+        "Both are identical",
+        "General-purpose are always UI only",
+        "Application-specific must be open-source"
+      ], correct: 0,
+      why: "Definitions as per slides." },
+
+    { q: "In the print service example, a component may expose operations like…",
+      options: [
+        "Register/Unregister, GetQueue, Remove, Transfer",
+        "malloc/free",
+        "SELECT/INSERT",
+        "chmod/chown"
+      ], correct: 0,
+      why: "Slides list print-related provided/required interface operations in the example." },
+
+    { q: "Which statement about component dependencies is encouraged?",
+      options: [
+        "Component responsibilities should be clear and resilient to changes in others",
+        "Components should freely mutate APIs",
+        "Components should hide interfaces",
+        "Dependencies must be hard-coded"
+      ], correct: 0,
+      why: "Slides recommend clear responsibilities and limited coupling via interfaces." },
+
+    { q: "Which diagram best models event-driven responses of a system?",
+      options: ["Activity diagram","Sequence diagram","State diagram","Deployment diagram"], correct: 2,
+      why: "State diagrams model behaviour in response to events and transitions." },
+
+    { q: "Which diagram best shows time-ordered collaboration between objects?",
+      options: ["Class diagram","Sequence diagram","Use case diagram","Component diagram"], correct: 1,
+      why: "Sequence diagrams depict interactions and message order across object lifelines." },
+
+    { q: "Which diagram is most suitable to elaborate the steps within a use case scenario like PAY-BILL?",
+      options: ["Activity diagram","State diagram","Package diagram","ER diagram"], correct: 0,
+      why: "Activity diagrams visualise the flow of actions inside a scenario such as PAY-BILL." }
+  ];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class=\"qtitle\">Q${idx+1}. ${item.q}</h3><span class=\"badge\">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset on render
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class=\"letter\">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0; render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+
+  render();
+  </script>
+</body>
+</html>
