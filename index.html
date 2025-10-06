@@ -108,11 +108,33 @@
       </article>
     `).join('');
 
+    // grid.addEventListener('click', (e) => {
+    //   const b = e.target.closest('button[data-notes]');
+    //   if (!b) return;
+    //   document.getElementById('mdPath').value = b.dataset.notes;
+    //   loadFromPath(b.dataset.notes);
+    // });
+
     grid.addEventListener('click', (e) => {
       const b = e.target.closest('button[data-notes]');
       if (!b) return;
-      document.getElementById('mdPath').value = b.dataset.notes;
-      loadFromPath(b.dataset.notes);
+      
+      // Get the value of the data-notes attribute
+      let relativePath = b.dataset.notes;
+
+      // Resolve the path relative to the current location of index.html
+      const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+
+      // Adjust the relative path if necessary (e.g., if it's already relative)
+      if (!relativePath.startsWith('http') && !relativePath.startsWith('/')) {
+        relativePath = basePath + '/' + relativePath;
+      }
+
+      // Update the input field with the full path
+      document.getElementById('mdPath').value = relativePath;
+
+      // Load the content from the adjusted path
+      loadFromPath(relativePath);
     });
 
     // ---- Markdown loader ----
