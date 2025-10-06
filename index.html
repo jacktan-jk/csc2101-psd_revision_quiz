@@ -43,6 +43,23 @@
     .md pre { background:#0a1020; border:1px solid #1f2937; padding:10px; border-radius:10px; overflow:auto }
     .md ul { margin:.4em 0 .6em 1.2em }
     .md li { margin:.2em 0 }
+
+    /* Fullscreen styles */
+    #mdOut:fullscreen { 
+      background:#0b1328; 
+      border:none; 
+      width:100vw; 
+      height:100vh; 
+      max-height:none; 
+      padding:20px; 
+      border-radius:0; 
+      box-sizing:border-box; 
+    }
+    /* Slightly larger type in fullscreen for readability */
+    #mdOut:fullscreen .md h1{font-size:26px}
+    #mdOut:fullscreen .md h2{font-size:22px}
+    #mdOut:fullscreen .md h3{font-size:20px}
+    #mdOut:fullscreen p{font-size:16px}
   </style>
 </head>
 <body>
@@ -75,6 +92,7 @@
           <button class="btn primary" id="loadBtn" title="Fetch and render the Markdown file">Load</button>
           <input type="file" id="filePick" accept=".md,.txt,.markdown" style="display:none" />
           <button class="btn" id="pickBtn" title="Preview a local .md without hosting">Open .md file…</button>
+          <button class="btn" id="fsBtn" title="Toggle fullscreen for the notes viewer">⛶</button>
         </div>
       </header>
       <article id="mdOut" class="md">
@@ -108,32 +126,15 @@
       </article>
     `).join('');
 
-    // grid.addEventListener('click', (e) => {
-    //   const b = e.target.closest('button[data-notes]');
-    //   if (!b) return;
-    //   document.getElementById('mdPath').value = b.dataset.notes;
-    //   loadFromPath(b.dataset.notes);
-    // });
-
     grid.addEventListener('click', (e) => {
       const b = e.target.closest('button[data-notes]');
       if (!b) return;
-      
-      // Get the value of the data-notes attribute
       let relativePath = b.dataset.notes;
-
-      // Resolve the path relative to the current location of index.html
       const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-
-      // Adjust the relative path if necessary (e.g., if it's already relative)
       if (!relativePath.startsWith('http') && !relativePath.startsWith('/')) {
         relativePath = basePath + '/' + relativePath;
       }
-
-      // Update the input field with the full path
       document.getElementById('mdPath').value = relativePath;
-
-      // Load the content from the adjusted path
       loadFromPath(relativePath);
     });
 
@@ -167,38 +168,42 @@
 
     // ---- Minimal Markdown -> HTML (safe-ish, no external libs) ----
     function mdRender(src) {
-      // Escape HTML first
       let s = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-      // Code fences ```
       s = s.replace(/```([\s\S]*?)```/g, (m, code) => `@@CODEBLOCK_${btoa(code)}@@`);
-
-      // Headings #..######
       for (let i=6;i>=1;i--) {
         const re = new RegExp(`^${'#'.repeat(i)}\\s+(.+)$`, 'gm');
         s = s.replace(re, (_, t) => `<h${i}>${t.trim()}</h${i}>`);
       }
-
-      // Bold **text** and italic *text*
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/(^|\W)\*([^*]+)\*(?=\W|$)/g, '$1<em>$2</em>');
-
-      // Inline code `code`
       s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-      // Lists (- ) basic
       s = s.replace(/^(?:-\s+.+(?:\n|$))+?/gm, block => {
         const items = block.trim().split(/\n/).map(l => l.replace(/^[-]\s+/, '').trim()).map(t => `<li>${t}</li>`).join('');
         return `<ul>${items}</ul>`;
       });
-
-      // Paragraphs: wrap loose lines not already HTML blocks
       s = s.split(/\n{2,}/).map(chunk => /<\/?(h\d|ul|li|pre|code)/.test(chunk) ? chunk : `<p>${chunk.replace(/\n/g,'<br>')}</p>`).join('\n');
-
-      // Restore code blocks
       s = s.replace(/@@CODEBLOCK_([A-Za-z0-9+/=]+)@@/g, (m, b64) => `<pre><code>${atob(b64)}</code></pre>`);
-
       return s;
+    }
+
+    // ---- Fullscreen toggling ----
+    const fsBtn = document.getElementById('fsBtn');
+    fsBtn.addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', syncFsButton);
+
+    function toggleFullscreen() {
+      const el = document.getElementById('mdOut');
+      if (!document.fullscreenElement) {
+        el.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+
+    function syncFsButton() {
+      const active = !!document.fullscreenElement;
+      fsBtn.textContent = active ? 'Exit Fullscreen' : '⛶';
+      fsBtn.classList.toggle('primary', active);
     }
   </script>
 </body>
