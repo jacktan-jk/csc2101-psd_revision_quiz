@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 9 MCQ Quiz: Sprint Ceremonies & Agile Techniques</title>
+  <style>
+    :root { --maxw: 980px; --accent: #7c3aed; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#ede9fe; color:#5b21b6; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#c4b5fd; }
+    .opt.correct { border-color:#7c3aed; background:#f5f3ff; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#5b21b6 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 9 MCQ Quiz — Sprint Ceremonies & Agile Techniques</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 9: Sprint Ceremonies and Agile Techniques (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    {
+      q: "What is the primary goal of a sprint planning meeting?",
+      options: [
+        "To finalise the project’s budget",
+        "To decide which product backlog items will be developed and set a sprint goal",
+        "To review only the previous sprint’s performance metrics",
+        "To design the user interface"
+      ],
+      correct: 1,
+      why: "Sprint planning analyses the product backlog and selects items to achieve a clear goal for the upcoming sprint."
+    },
+    {
+      q: "During a sprint review, what activity typically occurs?",
+      options: [
+        "The team picks new user stories for the next sprint",
+        "Completed work is demonstrated to stakeholders to gather feedback",
+        "Tasks are assigned to individuals",
+        "Team grievances are discussed in detail"
+      ],
+      correct: 1,
+      why: "The sprint review showcases the increment to stakeholders and invites feedback for product backlog updates."
+    },
+    {
+      q: "The sprint retrospective meeting is focused on…",
+      options: [
+        "Delivering new features to users",
+        "Reflecting on the last sprint to identify what went well, what didn’t and how to improve",
+        "Planning backlog items",
+        "Calculating sprint velocity"
+      ],
+      correct: 1,
+      why: "The retrospective is a team meeting to learn from the last sprint and plan process improvements."
+    },
+    {
+      q: "Which of the following is a retrospective technique mentioned in the lecture?",
+      options: [
+        "Fishbone diagram",
+        "Start/Stop/Continue template",
+        "Waterfall chart",
+        "PERT analysis"
+      ],
+      correct: 1,
+      why: "The slides list several templates such as Start/Stop/Continue, Mad/Sad/Glad and Sailboat for organising retrospective feedback."
+    },
+    {
+      q: "In Extreme Programming (XP), how often are new versions of the software built and deployed?",
+      options: [
+        "Once per year",
+        "Multiple times per day with increments released every two weeks",
+        "Only after all features are complete",
+        "Whenever managers decide"
+      ],
+      correct: 1,
+      why: "XP advocates frequent releases: developers integrate and build code several times daily and deliver working increments every one to two weeks."
+    },
+    {
+      q: "Which practice is central to XP and encourages developers to work together at one workstation?",
+      options: [
+        "Code review",
+        "Pair programming",
+        "Solo programming",
+        "Shift left testing"
+      ],
+      correct: 1,
+      why: "XP promotes pair programming where two developers collaboratively write code, enhancing quality and shared understanding."
+    },
+    {
+      q: "What principle of XP emphasises that everyone can modify any code and no single person owns a specific part?",
+      options: [
+        "Collective code ownership",
+        "Strict code control",
+        "Documentation first",
+        "Domain‑driven design"
+      ],
+      correct: 0,
+      why: "Collective code ownership means any team member can improve any part of the codebase, reducing bottlenecks and encouraging responsibility."
+    },
+    {
+      q: "What question is commonly asked during a sprint retrospective meeting to encourage continuous improvement?",
+      options: [
+        "What test coverage did we achieve?",
+        "What should we start, stop and continue?",
+        "How can we reduce hardware cost?",
+        "Who is to blame for delays?"
+      ],
+      correct: 1,
+      why: "Templates like Start/Stop/Continue or Mad/Sad/Glad encourage the team to think about actions to begin, cease or maintain in the next sprint."
+    },
+    {
+      q: "Which activity is not part of the sprint planning meeting as described in the lecture?",
+      options: [
+        "Analysing the product backlog",
+        "Selecting a sprint goal",
+        "Splitting user stories into tasks",
+        "Reviewing the long‑term company budget"
+      ],
+      correct: 3,
+      why: "Sprint planning focuses on backlog items, goals and tasks; budget decisions are outside its scope."
+    },
+    {
+      q: "Sprint planning results in which two main artefacts?",
+      options: [
+        "A sprint goal and a sprint backlog of tasks",
+        "A final product release and a contract",
+        "A new budget and marketing plan",
+        "A risk register"
+      ],
+      correct: 0,
+      why: "The meeting produces a sprint goal describing the mission and a sprint backlog listing the tasks to accomplish it."
+    },
+    {
+      q: "What is the typical agenda for a sprint review meeting?",
+      options: [
+        "Demonstrate completed work and gather feedback from stakeholders",
+        "Assign tasks for the next sprint",
+        "Discuss team emotions",
+        "Set company policies"
+      ],
+      correct: 0,
+      why: "During the review the team shows the increment to stakeholders and adjusts the backlog based on their feedback."
+    },
+    {
+      q: "Who participates in the sprint retrospective?",
+      options: [
+        "The scrum master, product owner and development team",
+        "Only developers",
+        "External customers only",
+        "Marketing team only"
+      ],
+      correct: 0,
+      why: "The retrospective involves the whole Scrum team – scrum master, product owner and developers – to improve the process together."
+    },
+    {
+      q: "The retrospective template \"Mad/Sad/Glad\" encourages participants to discuss:",
+      options: [
+        "Feelings about what frustrated them, disappointed them and made them happy",
+        "The budget",
+        "Future features",
+        "Hardware issues"
+      ],
+      correct: 0,
+      why: "Mad/Sad/Glad helps the team articulate emotions, which can reveal underlying issues and successes."
+    },
+    {
+      q: "What is the purpose of grouping similar sticky notes during a retrospective?",
+      options: [
+        "To identify common themes and focus discussion",
+        "To decorate the room",
+        "To assign blame",
+        "To count story points"
+      ],
+      correct: 0,
+      why: "Clustering similar comments highlights patterns and helps the team concentrate on the most significant topics."
+    },
+    {
+      q: "In the Sailboat retrospective format, what do the anchors represent?",
+      options: [
+        "Obstacles that slow the team down",
+        "Items that propel the team forward",
+        "Completed features",
+        "Customer feedback"
+      ],
+      correct: 0,
+      why: "Anchors symbolise impediments or risks hindering progress, whereas the wind represents helpful factors."
+    },
+    {
+      q: "According to the lecture, after grouping and voting on issues in a retrospective, the team should:",
+      options: [
+        "Discuss root causes and agree on concrete actions for improvement",
+        "End the meeting immediately",
+        "Reassign blame",
+        "Increase workload without changes"
+      ],
+      correct: 0,
+      why: "Identifying root causes and deciding tangible next steps ensures the retrospective leads to meaningful change."
+    },
+    {
+      q: "Sprint planning meeting length is typically proportional to:",
+      options: [
+        "The length of the sprint, such as one hour per week of sprint",
+        "The number of developers",
+        "Lines of code",
+        "Customer satisfaction rating"
+      ],
+      correct: 0,
+      why: "Longer sprints warrant longer planning sessions; a common rule is one hour of planning per week of sprint."
+    },
+    {
+      q: "In Extreme Programming, what does test‑driven development involve?",
+      options: [
+        "Writing tests before writing the code and then writing the minimal code to pass tests",
+        "Waiting until all code is complete before testing",
+        "Writing tests after deployment",
+        "Avoiding tests to save time"
+      ],
+      correct: 0,
+      why: "TDD is an XP practice where tests guide the implementation and ensure the code meets specifications."
+    },
+    {
+      q: "XP’s emphasis on small, frequent releases aims to:",
+      options: [
+        "Deliver working software quickly and obtain feedback",
+        "Avoid stakeholder involvement",
+        "Delay integration",
+        "Increase big‑bang releases"
+      ],
+      correct: 0,
+      why: "Small releases enable rapid learning from users and reduce the risk associated with large changes."
+    },
+    {
+      q: "Pair programming benefits include:",
+      options: [
+        "Improved code quality and knowledge sharing",
+        "Slower progress and less collaboration",
+        "Fewer tests",
+        "Elimination of planning"
+      ],
+      correct: 0,
+      why: "Two developers working together can spot defects earlier and spread understanding of the system."
+    },
+    {
+      q: "Collective code ownership in XP means:",
+      options: [
+        "Any developer can modify any part of the codebase",
+        "Only senior developers can modify code",
+        "Code is owned by individuals",
+        "Testers own the code"
+      ],
+      correct: 0,
+      why: "Collective ownership prevents bottlenecks and encourages shared responsibility for quality."
+    },
+    {
+      q: "What is the purpose of refactoring in XP?",
+      options: [
+        "To improve code structure without changing behaviour",
+        "To add new features",
+        "To merge branches",
+        "To slow down development"
+      ],
+      correct: 0,
+      why: "Refactoring tidies code and supports simple design, allowing new features to be added more easily."
+    },
+    {
+      q: "Which statement about the difference between a sprint review and a sprint retrospective is correct?",
+      options: [
+        "A sprint review focuses on the product and stakeholder feedback, while the retrospective focuses on the process and team improvement",
+        "Both meetings address the same topics",
+        "The retrospective is public while the review is private",
+        "The review happens before the sprint"
+      ],
+      correct: 0,
+      why: "The review looks outward at what was built; the retrospective looks inward at how the team worked."
+    },
+    {
+      q: "During sprint planning, the team estimates tasks and:",
+      options: [
+        "Commits to a workload based on their velocity and capacity",
+        "Chooses tasks at random",
+        "Commits to as many tasks as possible to impress stakeholders",
+        "Ignores velocity"
+      ],
+      correct: 0,
+      why: "The team uses historical velocity and availability to decide how much work can realistically be completed."
+    },
+    {
+      q: "The \"Start/Stop/Continue\" retrospective template prompts team members to suggest:",
+      options: [
+        "Actions to begin, stop and maintain",
+        "Lines of code",
+        "Budget cuts",
+        "Holidays"
+      ],
+      correct: 0,
+      why: "It helps the team identify behaviours to adopt, cease or keep doing."
+    },
+    {
+      q: "Which of the following is NOT a principle of Extreme Programming?",
+      options: [
+        "Customer involvement",
+        "Small frequent releases",
+        "Pair programming",
+        "Waterfall development"
+      ],
+      correct: 3,
+      why: "XP rejects waterfall in favour of iterative, customer‑centric practices."
+    },
+    {
+      q: "In XP, who writes acceptance tests?",
+      options: [
+        "The customer defines acceptance tests to confirm stories meet requirements",
+        "Developers alone",
+        "The scrum master",
+        "The marketing team"
+      ],
+      correct: 0,
+      why: "Customers or their proxies create acceptance tests to ensure the delivered features satisfy their needs."
+    },
+    {
+      q: "What does sustainable pace mean in XP?",
+      options: [
+        "Developers should work at a rate that is maintainable long‑term without overtime",
+        "Team members should work as fast as possible",
+        "Work should only be done on weekends",
+        "Pace should vary unpredictably"
+      ],
+      correct: 0,
+      why: "Sustainable pace encourages a balanced workload to prevent burnout and maintain quality."
+    },
+    {
+      q: "During retrospective voting, how do participants identify priority items?",
+      options: [
+        "They place dot stickers or mark votes next to items they feel are most important",
+        "They count lines of code",
+        "They ask the manager to pick",
+        "They vote by leaving the room"
+      ],
+      correct: 0,
+      why: "Dot voting helps the team collectively decide which issues warrant discussion."
+    },
+    {
+      q: "What is one reason to use the \"4Ls\" (Liked, Learned, Lacked, Longed for) template?",
+      options: [
+        "To structure discussion around positives, learnings, missing elements and desired improvements",
+        "To discuss story points",
+        "To set salary",
+        "To determine velocity"
+      ],
+      correct: 0,
+      why: "The 4Ls helps the team reflect on different dimensions of their experience and identify actions."
+    },
+    {
+      q: "When using the Sailboat retrospective, what do the wind and rocks represent?",
+      options: [
+        "The wind represents positive forces moving the team forward and rocks represent risks ahead",
+        "The wind symbolises obstacles",
+        "Rocks are deliverables",
+        "There is no symbolic meaning"
+      ],
+      correct: 0,
+      why: "In the Sailboat metaphor, wind propels the boat (team), while rocks are dangers to navigate around."
+    },
+    {
+      q: "In XP, how often is integration performed?",
+      options: [
+        "Frequently, multiple times per day",
+        "At the end of the project",
+        "Once per sprint",
+        "Only after QA approval"
+      ],
+      correct: 0,
+      why: "Continuous integration in XP means merging and testing code often to catch problems early."
+    },
+    {
+      q: "Which XP practice encourages removal of unnecessary design complexity?",
+      options: [
+        "Simple design",
+        "Feature bloat",
+        "Big up‑front design",
+        "Domain modelling"
+      ],
+      correct: 0,
+      why: "Simple design insists on building only what is needed now, avoiding speculative features."
+    },
+    {
+      q: "What is the \"planning game\" in XP?",
+      options: [
+        "A collaborative process where the customer and developers prioritise and estimate user stories",
+        "A video game used for team bonding",
+        "Managers assign tasks",
+        "Gamified time tracking"
+      ],
+      correct: 0,
+      why: "The planning game involves customers ranking stories by value and developers estimating effort to select work."
+    },
+    {
+      q: "In XP, what is an \"on‑site customer\" practice?",
+      options: [
+        "Having a real customer representative available to answer questions and make decisions with the team",
+        "Delivering code at the customer's site",
+        "Having developers work at client's offices",
+        "None of the above"
+      ],
+      correct: 0,
+      why: "An on‑site customer provides continuous feedback and clarifies requirements throughout development."
+    },
+    {
+      q: "Which retrospective technique uses categories \"Liked, Learned, Lacked, Longed for\"?",
+      options: [
+        "4Ls",
+        "Sailboat",
+        "SWOT",
+        "Fishbone"
+      ],
+      correct: 0,
+      why: "The 4Ls template explicitly prompts the team to identify things they liked, learned, lacked and longed for."
+    },
+    {
+      q: "When splitting user stories during sprint planning, why is it important?",
+      options: [
+        "It makes large stories manageable and allows accurate estimation and commitment",
+        "It increases complexity",
+        "It reduces collaboration",
+        "It delays the sprint"
+      ],
+      correct: 0,
+      why: "Breaking down stories into smaller pieces helps ensure they can be completed within a sprint and estimated reliably."
+    },
+    {
+      q: "Why is it important to time‑box the sprint planning meeting?",
+      options: [
+        "To prevent endless discussion and ensure decisions are made efficiently",
+        "To restrict team collaboration",
+        "To satisfy management",
+        "It is not recommended"
+      ],
+      correct: 0,
+      why: "Time‑boxing encourages focus and prevents planning from consuming more time than necessary."
+    },
+    {
+      q: "In a retrospective, what is the goal of discussing root causes of problems rather than symptoms?",
+      options: [
+        "To identify underlying issues and develop effective solutions",
+        "To assign blame",
+        "To avoid taking action",
+        "To highlight individuals’ faults"
+      ],
+      correct: 0,
+      why: "Understanding root causes helps the team address the true source of problems rather than treating superficial effects."
+    },
+    {
+      q: "How does pair programming support knowledge transfer in XP?",
+      options: [
+        "By having two developers share the task, they share ideas and spread understanding of the code",
+        "It isolates knowledge",
+        "It reduces quality",
+        "It increases secrecy"
+      ],
+      correct: 0,
+      why: "Pair programming rotates partners and disseminates expertise across the team, reducing information silos."
+    },
+    {
+      q: "When conducting a retrospective, why should the team create a safe environment?",
+      options: [
+        "To encourage honest feedback without fear of blame",
+        "To hide mistakes",
+        "To make decisions unilaterally",
+        "To satisfy compliance"
+      ],
+      correct: 0,
+      why: "Psychological safety enables team members to speak openly about issues and improvements."
+    },
+    {
+      q: "How does test‑driven development help support simple design?",
+      options: [
+        "Writing tests first forces developers to write only enough code to satisfy the tests and prevents unnecessary complexity",
+        "It leads to large design",
+        "It delays coding",
+        "It eliminates need for design"
+      ],
+      correct: 0,
+      why: "TDD encourages the simplest solution that meets the test requirements, avoiding over‑engineering."
+    },
+    {
+      q: "In XP, what does continuous integration emphasise?",
+      options: [
+        "Regularly merging and testing code to detect issues early",
+        "Merging branches only at project end",
+        "Avoiding integration",
+        "Deleting history"
+      ],
+      correct: 0,
+      why: "Continuous integration ensures small changes are integrated and tested often, reducing integration headaches."
+    },
+    {
+      q: "Which step is included in the sprint retrospective process?",
+      options: [
+        "Team members populate a board with observations and group similar items before voting",
+        "The product owner reprioritises the product backlog",
+        "Individual developers are assigned tasks for the next sprint backlog",
+        "Stakeholders decide the sprint goal"
+      ],
+      correct: 0,
+      why: "The retrospective process involves the team capturing observations, grouping them, voting on priorities and discussing root causes before deciding actions."
+    },
+    {
+      q: "What is the purpose of the 'Mad, Sad, Glad' retrospective template?",
+      options: [
+        "To categorise feedback based on whether events made the team mad, sad or glad",
+        "To assign specific tasks to developers",
+        "To calculate team velocity",
+        "To collect user stories from customers"
+      ],
+      correct: 0,
+      why: "The 'Mad, Sad, Glad' exercise encourages team members to share emotions associated with the sprint, providing insight into morale and pain points."
+    },
+    {
+      q: "What does the 'Five Whys' technique aim to accomplish during retrospectives?",
+      options: [
+        "Identify the root cause of an issue by repeatedly asking why it occurs",
+        "Estimate story points",
+        "Design the system architecture",
+        "Rewrite outdated test cases"
+      ],
+      correct: 0,
+      why: "By asking 'why?' multiple times, the team digs beneath symptoms to uncover underlying causes of problems."
+    },
+    {
+      q: "After a retrospective, action items should be prioritised by feasibility, ROI and priority, and each item assigned an owner. Which acronym summarises this follow‑up process?",
+      options: [
+        "PACT",
+        "SWOT",
+        "MoSCoW",
+        "RACI"
+      ],
+      correct: 0,
+      why: "PACT stands for Prioritise, Assign an owner, Create tickets and (T) review/revisit past decisions during the next retrospective."
+    },
+    {
+      q: "One potential issue with infrequent retrospective meetings is that:",
+      options: [
+        "Problems can linger because details and context are forgotten before they are addressed",
+        "Velocity will automatically increase",
+        "It eliminates the need for daily stand‑ups",
+        "The backlog becomes unmanageable"
+      ],
+      correct: 0,
+      why: "When retrospectives are held only every few weeks, issues may persist and important context may be lost, reducing the effectiveness of improvement actions."
+    },
+    {
+      q: "In Extreme Programming (XP), which practice ensures that code is continually improved and simplified?",
+      options: [
+        "Continuous refactoring",
+        "Big up‑front design",
+        "Avoiding tests",
+        "Weekly releases only"
+      ],
+      correct: 0,
+      why: "XP emphasises simplicity and encourages developers to refactor their code continually to keep the design clean and maintainable."
+    },
+    {
+      q: "Which XP value highlights responsiveness to changing requirements over following a strict plan?",
+      options: [
+        "Responding to change over following a plan",
+        "Individuals and interactions over processes and tools",
+        "Working software over comprehensive documentation",
+        "Customer collaboration over contract negotiation"
+      ],
+      correct: 0,
+      why: "XP aligns with the Agile Manifesto, which values responding to change over following a plan, enabling teams to adapt to new information."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      item.__answered = false;
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+    data.__answered = true;
+    state.answered++;
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  render();
+  </script>
+</body>
+</html>

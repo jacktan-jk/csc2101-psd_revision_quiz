@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 6 MCQ Quiz: Software Architecture</title>
+  <style>
+    :root { --maxw: 980px; --accent: #1e3a8a; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#dbeafe; color:#1e40af; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#bfdbfe; }
+    .opt.correct { border-color:#2563eb; background:#eff6ff; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#1e40af }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 6 MCQ Quiz — Software Architecture</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 6: Software Architecture (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    {
+      q: "Which statement best defines software architecture?",
+      options: [
+        "Detailed algorithm design",
+        "The organisation of a system’s high‑level structure, components and connections",
+        "User interface layout only",
+        "Database schema design"
+      ],
+      correct: 1,
+      why: "Software architecture focuses on the high‑level organisation of components and their interactions, not low‑level algorithms or UI layouts."
+    },
+    {
+      q: "What is a key advantage of adopting a layered architecture?",
+      options: [
+        "It improves performance by allowing direct access between any layers",
+        "It supports incremental development and maintenance through well‑defined layers",
+        "It eliminates the need for defined interfaces",
+        "It simplifies only data modeling"
+      ],
+      correct: 1,
+      why: "The lecture notes that layered architectures help with incremental development and maintenance because each layer has a clear role and interacts only with adjacent layers."
+    },
+    {
+      q: "In the MVC pattern, which component is responsible for managing application data and notifying views of changes?",
+      options: [
+        "Model",
+        "View",
+        "Controller",
+        "Router"
+      ],
+      correct: 0,
+      why: "The model encapsulates data and business logic and informs the views when state changes so they can update accordingly."
+    },
+    {
+      q: "Which is a disadvantage of the repository pattern mentioned in the lecture?",
+      options: [
+        "Components become directly coupled to a central data store, which may become a bottleneck",
+        "It removes the need for concurrency control",
+        "It guarantees easy maintenance and modification",
+        "It automatically distributes data across the network"
+      ],
+      correct: 0,
+      why: "A central repository simplifies shared data access but can lead to tight coupling and performance bottlenecks if many components compete for the same resource."
+    },
+    {
+      q: "Which architecture pattern suits systems that require independent development of presentation and data layers?",
+      options: [
+        "Client‑server",
+        "Pipe‑and‑filter",
+        "Model‑View‑Controller (MVC)",
+        "Peer‑to‑peer"
+      ],
+      correct: 2,
+      why: "The MVC pattern decouples the view from the model so that the user interface and data logic can evolve independently."
+    },
+    {
+      q: "Peer‑to‑peer architecture is characterized by what property?",
+      options: [
+        "A central server controls all clients",
+        "Each node acts both as client and server, sharing resources with peers",
+        "A strict layered structure",
+        "No communication between peers"
+      ],
+      correct: 1,
+      why: "Peer‑to‑peer systems are decentralised: every node can request and provide services, forming an egalitarian network."
+    },
+    {
+      q: "Which is a challenge of the layered architecture as per the lecture?",
+      options: [
+        "Assigning responsibilities to the correct layer can be difficult and may affect performance",
+        "It prevents incremental development",
+        "It allows unlimited direct interaction between all layers",
+        "It reduces portability of the system"
+      ],
+      correct: 0,
+      why: "While layering supports modularity, the notes caution that misplacing functionality or forcing requests through many layers can impact efficiency."
+    },
+    {
+      q: "When is the pipe‑and‑filter architecture most appropriate?",
+      options: [
+        "For interactive graphical user interfaces",
+        "When processing data streams through a sequence of transformations",
+        "When storing large amounts of shared data",
+        "For mobile client–server apps"
+      ],
+      correct: 1,
+      why: "Pipe‑and‑filter is ideal for data‑processing systems where each component transforms data and passes it along to the next stage."
+    },
+    {
+      q: "Which of the following is NOT a primary advantage of using software architecture patterns?",
+      options: [
+        "They foster communication among stakeholders",
+        "They reduce development cost",
+        "They ensure the high‑level structure is hidden from developers",
+        "They promote reuse"
+      ],
+      correct: 2,
+      why: "Patterns provide a common vocabulary and facilitate reuse, but they do not hide the high‑level structure; rather, they make it explicit."
+    },
+    {
+      q: "Why are architectural changes considered expensive in software development?",
+      options: [
+        "Because they require rewriting only the user interface",
+        "Because they affect core design decisions and ripple through the system",
+        "Because they require more memory",
+        "Because they are performed automatically"
+      ],
+      correct: 1,
+      why: "Changing the architecture touches core system structures, leading to widespread modifications and higher cost."
+    },
+    {
+      q: "In a layered architecture, how do layers interact?",
+      options: [
+        "Each layer communicates only with the layer directly below",
+        "Each layer can call any other layer",
+        "Lower layers depend on higher layers",
+        "There is no defined interaction"
+      ],
+      correct: 0,
+      why: "In layered architectures, a layer uses services of the layer beneath it and provides services to the layer above, preserving structure."
+    },
+    {
+      q: "Which architecture pattern centralizes system data and allows components to access a shared store?",
+      options: [
+        "Repository",
+        "Client‑server",
+        "Model‑View‑Controller",
+        "Peer‑to‑peer"
+      ],
+      correct: 0,
+      why: "The repository pattern uses a central data store that all components interact with."
+    },
+    {
+      q: "What is a potential drawback of the client‑server architecture highlighted in the lecture?",
+      options: [
+        "Scalability is limited because servers can be replicated",
+        "The server can become a single point of failure if overloaded",
+        "Clients cannot connect over a network",
+        "It ensures equal responsibilities for clients and servers"
+      ],
+      correct: 1,
+      why: "A central server may become a bottleneck or single point of failure; load balancing and redundancy are required to mitigate this."
+    },
+    {
+      q: "The MVC pattern is particularly beneficial when:",
+      options: [
+        "The user interface rarely changes",
+        "Data and presentation need to evolve independently",
+        "There is only one type of view",
+        "A central data store is required"
+      ],
+      correct: 1,
+      why: "MVC decouples the view from the model, allowing both UI and data logic to be developed and modified separately."
+    },
+    {
+      q: "Which pattern is well‑suited for systems such as compilers that transform data through a series of steps?",
+      options: [
+        "Pipe‑and‑filter",
+        "Client‑server",
+        "Layered",
+        "Repository"
+      ],
+      correct: 0,
+      why: "Compilers often use a sequence of transformations (lexing, parsing, code generation) that match the pipe‑and‑filter pattern."
+    },
+    {
+      q: "When using the repository pattern, which challenge must be carefully managed?",
+      options: [
+        "Data consistency and concurrency across the shared repository",
+        "Ensuring each component has its own local data",
+        "Guaranteeing that no component communicates with the repository",
+        "Avoiding all network communication"
+      ],
+      correct: 0,
+      why: "With a shared store, concurrency control and maintaining consistent data among competing components can be challenging."
+    },
+    {
+      q: "What is a key characteristic of the client‑server pattern according to the lecture?",
+      options: [
+        "Clients and servers have the same responsibilities",
+        "Clients request services and servers provide them",
+        "The architecture eliminates the need for networking",
+        "Data is never stored centrally"
+      ],
+      correct: 1,
+      why: "In client‑server architecture, servers expose services over a network and clients consume those services."
+    },
+    {
+      q: "In a peer‑to‑peer architecture, what is one of the main benefits?",
+      options: [
+        "Central control ensures data integrity",
+        "All peers can share resources leading to improved scalability",
+        "The architecture prohibits new peers from joining",
+        "It eliminates the need for protocols"
+      ],
+      correct: 1,
+      why: "Peer‑to‑peer systems scale well because each participant contributes resources and there is no central bottleneck."
+    },
+    {
+      q: "Which pattern allows functionality to be extended by loading modules?",
+      options: [
+        "Plugin",
+        "Pipe‑and‑filter",
+        "Layered",
+        "Model‑View‑Controller"
+      ],
+      correct: 0,
+      why: "A plugin architecture supports extensibility by dynamically loading modules to add or change functionality."
+    },
+    {
+      q: "Why should responsibilities be placed carefully across layers?",
+      options: [
+        "Misplacing them can degrade performance and break modularity",
+        "It simplifies the design automatically",
+        "It increases independence between unrelated modules",
+        "It ensures better performance in all cases"
+      ],
+      correct: 0,
+      why: "Putting logic in the wrong layer may force requests through unnecessary layers and harm modularity and efficiency."
+    },
+    {
+      q: "Which pattern might be used when high network reliability cannot be guaranteed and nodes may join or leave frequently?",
+      options: [
+        "Peer‑to‑peer",
+        "Layered",
+        "Model‑View‑Controller",
+        "Repository"
+      ],
+      correct: 0,
+      why: "Peer‑to‑peer systems are decentralised and accommodate dynamic membership and unreliable networks better than centralised architectures."
+    },
+    {
+      q: "In the layered architecture, adding extra layers may:",
+      options: [
+        "Increase performance overhead",
+        "Remove the need for testing",
+        "Eliminate modularity",
+        "Guarantee easier debugging"
+      ],
+      correct: 0,
+      why: "More layers mean more indirection, which can increase the overhead of communication and processing."
+    },
+    {
+      q: "Why might the repository pattern be appealing for systems requiring collaboration among many components?",
+      options: [
+        "It allows components to share a single source of truth",
+        "It eliminates the need for communication",
+        "It ensures each component uses a completely separate dataset",
+        "It forces a strict ordering of operations"
+      ],
+      correct: 0,
+      why: "A shared repository provides a common store that many components can use concurrently to collaborate and share data."
+    },
+    {
+      q: "The lecture notes that refactoring architecture is:",
+      options: [
+        "Expensive and time‑consuming",
+        "Unimportant to maintain",
+        "Performed automatically by frameworks",
+        "Always avoided"
+      ],
+      correct: 0,
+      why: "Altering a system’s architecture typically affects many parts of the codebase, making it costly."
+    },
+    {
+      q: "Which architecture pattern is appropriate for streaming multimedia content to multiple clients?",
+      options: [
+        "Client‑server",
+        "Pipe‑and‑filter",
+        "Model‑View‑Controller",
+        "Repository"
+      ],
+      correct: 0,
+      why: "Streaming media from a central server to multiple clients fits the client‑server pattern, where the server provides the media service."
+    },
+    {
+      q: "What role does the controller play in the MVC pattern?",
+      options: [
+        "Handles user input and mediates between model and view",
+        "Stores data directly",
+        "Renders UI elements",
+        "Maintains remote connections"
+      ],
+      correct: 0,
+      why: "The controller interprets user actions and updates the model or view accordingly."
+    },
+    {
+      q: "Which architecture pattern is best when requirements include decentralisation and fault tolerance?",
+      options: [
+        "Peer‑to‑peer",
+        "Client‑server",
+        "Model‑View‑Controller",
+        "Layered"
+      ],
+      correct: 0,
+      why: "Decentralised peer‑to‑peer systems distribute responsibility and improve fault tolerance."
+    },
+    {
+      q: "What does the term “component” refer to in software architecture?",
+      options: [
+        "An encapsulated unit of functionality and data",
+        "A variable inside a function",
+        "A single line of code",
+        "A colour scheme"
+      ],
+      correct: 0,
+      why: "A component groups related functionality and data behind a defined interface for other parts of the system to use."
+    },
+    {
+      q: "Which of the following is an advantage of using architectural patterns discussed?",
+      options: [
+        "They provide a vocabulary for design, making communication easier",
+        "They restrict design creativity",
+        "They force a particular programming language",
+        "They guarantee perfect performance"
+      ],
+      correct: 0,
+      why: "Patterns help communicate design ideas and encapsulate proven solutions; they do not mandate languages or performance outcomes."
+    },
+    {
+      q: "In the layered architecture, what is typically placed at the bottom layer?",
+      options: [
+        "Core utilities or system services that other layers depend on",
+        "The presentation logic",
+        "The user interface",
+        "The business rules"
+      ],
+      correct: 0,
+      why: "Lower layers often provide low‑level services such as database access or operating‑system interactions used by higher layers."
+    },
+    {
+      q: "How does the plugin architecture enable extensibility?",
+      options: [
+        "By allowing modules to be added and removed without changing the core system",
+        "By freezing the functionality",
+        "By using a central repository",
+        "By dividing into layers"
+      ],
+      correct: 0,
+      why: "Plugins can be loaded or unloaded at runtime to extend or modify behaviour without altering core code."
+    },
+    {
+      q: "Which architecture pattern allows services to be geographically distributed and accessed over a network?",
+      options: [
+        "Client‑server",
+        "Layered",
+        "Pipe‑and‑filter",
+        "Model‑View‑Controller"
+      ],
+      correct: 0,
+      why: "Client‑server systems separate providers (servers) from consumers (clients) and communicate over networks."
+    },
+    {
+      q: "What is one potential issue when using the peer‑to‑peer architecture?",
+      options: [
+        "Difficulty ensuring consistent data across distributed nodes",
+        "Single point of failure",
+        "Complete elimination of concurrency problems",
+        "Perfect security"
+      ],
+      correct: 0,
+      why: "Distributed peers must handle replication and consistency, which can be complex, and there is no single point of failure as in client‑server."
+    },
+    {
+      q: "Why might a layered architecture be chosen during project planning?",
+      options: [
+        "It helps define clear interfaces and manage complexity",
+        "It hides dependencies",
+        "It ensures there is no need for documentation",
+        "It eliminates cost"
+      ],
+      correct: 0,
+      why: "Layering helps designers reason about and organise different concerns into discrete levels with defined interfaces."
+    },
+    {
+      q: "Which architecture pattern is appropriate when components need to subscribe to events and update automatically when data changes?",
+      options: [
+        "Model‑View‑Controller",
+        "Repository",
+        "Client‑server",
+        "Peer‑to‑peer"
+      ],
+      correct: 0,
+      why: "MVC encourages an observer relationship between model and views so that views can update when the model’s state changes."
+    },
+    {
+      q: "What is a typical use case for the pipe‑and‑filter pattern outside compilers?",
+      options: [
+        "Image processing pipelines that apply successive filters",
+        "Real‑time chat",
+        "Centralised databases",
+        "Strict layering"
+      ],
+      correct: 0,
+      why: "Filters can process images, audio or other data streams in stages, matching the pipe‑and‑filter architecture."
+    },
+    {
+      q: "Which statement about software architecture patterns is accurate?",
+      options: [
+        "Each pattern addresses particular problems and trade‑offs",
+        "Patterns guarantee no maintenance is needed",
+        "Patterns remove the need for testing",
+        "Patterns enforce a single technology stack"
+      ],
+      correct: 0,
+      why: "Every architecture pattern represents a compromise suited to particular requirements; none of them promise to solve every problem."
+    },
+    {
+      q: "Which of the following factors is *not* listed in the lecture as influencing architectural decisions?",
+      options: [
+        "Non‑functional product characteristics such as performance and reliability",
+        "Product lifetime and the need for evolvability",
+        "Number of users the system must support",
+        "The specific sorting algorithm used for a function"
+      ],
+      correct: 3,
+      why: "The lecture notes mention non‑functional characteristics, product lifetime, software reuse, number of users and software compatibility as key drivers; the choice of a sorting algorithm is an implementation detail, not an architectural concern."
+    },
+    {
+      q: "A streaming video processing system needs to perform a sequence of transformations like decoding, filtering and encoding. Which architectural pattern best supports this?",
+      options: [
+        "Pipe and filter",
+        "Peer‑to‑peer",
+        "Repository",
+        "Client‑server"
+      ],
+      correct: 0,
+      why: "Pipe‑and‑filter organises processing as a series of independent filters connected by pipes, making it ideal for data streaming through multiple stages."
+    },
+    {
+      q: "You want to build a flexible system whose core provides essential services but can be extended with optional features later without modifying the core. Which architecture pattern should you choose?",
+      options: [
+        "Plugin (microkernel)",
+        "Layered architecture",
+        "Repository",
+        "Peer‑to‑peer"
+      ],
+      correct: 0,
+      why: "A microkernel architecture provides a small core and supports optional plug‑ins that extend functionality without affecting the core or other extensions."
+    },
+    {
+      q: "For a data‑driven system generating large volumes of persistent data where data changes trigger actions, what pattern does the lecture recommend?",
+      options: [
+        "Repository",
+        "Layered",
+        "Plugin",
+        "Peer‑to‑peer"
+      ],
+      correct: 0,
+      why: "The repository pattern centralises data and propagates changes to all subsystems, making it suitable for data‑driven applications."
+    },
+    {
+      q: "Architectural decisions must consider the system’s ability to quickly scale up and down to avoid performance degradation. Which decision factor does this describe?",
+      options: [
+        "Number of users",
+        "Product lifetime",
+        "Software reuse",
+        "Non‑functional product characteristics"
+      ],
+      correct: 0,
+      why: "The lecture highlights the number of users as a factor influencing architecture: the system must handle varying user loads without degrading performance."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      item.__answered = false;
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+    data.__answered = true;
+    state.answered++;
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  render();
+  </script>
+</body>
+</html>

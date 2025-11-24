@@ -14,7 +14,6 @@
     .sub { color:#9ca3af; font-size:14px }
     main { max-width:var(--maxw); margin:16px auto 40px; padding:0 16px; display:grid; grid-template-columns: 1.1fr .9fr; gap:18px }
     @media (max-width: 900px) { main { grid-template-columns: 1fr } }
-
     .card { background:#0f172a; border:1px solid #1f2937; border-radius:14px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,.35) }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px }
     .lec { display:flex; flex-direction:column; gap:10px; padding:12px; border:1px solid #1f2937; border-radius:12px; background:#0b1328 }
@@ -26,7 +25,6 @@
     a.btn:hover, button.btn:hover { border-color:#3b82f6 }
     details { margin-top:10px; color:#9ca3af }
     details > summary { cursor:pointer }
-
     /* Notes viewer */
     .notes { display:flex; flex-direction:column; gap:10px }
     .notes header { background:transparent; border:0; padding:0 }
@@ -34,7 +32,6 @@
     .notes .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap }
     .notes input[type=text] { flex:1; min-width:160px; background:#0b1328; color:#e5e7eb; border:1px solid #1f2937; border-radius:10px; padding:8px 10px }
     .notes article { min-height:280px; max-height:70vh; overflow:auto; padding:12px; border:1px solid #1f2937; border-radius:12px; background:#0b1328 }
-
     /* Simple markdown styles */
     .md h1,.md h2,.md h3,.md h4,.md h5 { margin:.6em 0 .3em }
     .md h1{font-size:22px}.md h2{font-size:20px}.md h3{font-size:18px}
@@ -43,7 +40,6 @@
     .md pre { background:#0a1020; border:1px solid #1f2937; padding:10px; border-radius:10px; overflow:auto }
     .md ul { margin:.4em 0 .6em 1.2em }
     .md li { margin:.2em 0 }
-
     /* Fullscreen styles */
     #mdOut:fullscreen { 
       background:#0b1328; 
@@ -66,10 +62,9 @@
   <header>
     <div class="wrap">
       <h1>CSC2101 — Quizzes & Revision Notes</h1>
-      <div class="sub">Lectures 1–5 • Quick links to quizzes • Lightweight Markdown viewer for notes</div>
+      <div class="sub">Lectures 1–11 • Quick links to quizzes • Lightweight Markdown viewer for notes</div>
     </div>
   </header>
-
   <main>
     <section class="card">
       <h2 style="margin-top:0">Quizzes</h2>
@@ -78,12 +73,11 @@
         <summary>File naming convention (keep projects portable)</summary>
         <div style="margin-top:6px">
           Save each quiz HTML beside this index as:<br>
-          <code>csc_2101_lecture_1_mcq_quiz_html.html</code>, <code>csc_2101_lecture_2_mcq_quiz_html.html</code>, <code>csc_2101_lecture_3_mcq_quiz_html.html</code>, <code>csc_2101_lecture_4_mcq_quiz_html.html</code>, <code>csc_2101_lecture_5_mcq_quiz_html.html</code>.<br>
-          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec5.md</code>.
+          <code>csc_2101_lecture_1_mcq_quiz_html.html</code>, <code>csc_2101_lecture_2_mcq_quiz_html.html</code>, <code>csc_2101_lecture_3_mcq_quiz_html.html</code>, <code>csc_2101_lecture_4_mcq_quiz_html.html</code>, <code>csc_2101_lecture_5_mcq_quiz_html.html</code>, <code>csc_2101_lecture_6_mcq_quiz_html.html</code>, <code>csc_2101_lecture_8_mcq_quiz_html.html</code>, <code>csc_2101_lecture_9_mcq_quiz_html.html</code>, <code>csc_2101_lecture_10_mcq_quiz_html.html</code>, <code>csc_2101_lecture_11_mcq_quiz_html.html</code>.<br>
+          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec11.md</code>.
         </div>
       </details>
     </section>
-
     <section class="card notes">
       <header>
         <h2>Markdown Notes Viewer</h2>
@@ -96,11 +90,10 @@
         </div>
       </header>
       <article id="mdOut" class="md">
-        <p><em>Select a lecture’s “Open Notes” or load a Markdown file. If fetch fails, ensure you are serving these files over HTTP (e.g., VS Code Live Server) or use “Open .md file…”.</em></p>
+        <p><em>Select a lecture’s “Open Quiz” or load a Markdown file. If fetch fails, ensure you are serving these files over HTTP (e.g., VS Code Live Server) or use “Open .md file…”.</em></p>
       </article>
     </section>
   </main>
-
   <script>
     // ---- Data ----
     const LECTURES = [
@@ -109,8 +102,12 @@
       { no:3, title:"Functional & Non-functional Requirements", tag:"FR/NFR", quiz:"csc_2101_lecture_3_mcq_quiz_html.html", notes:"notes/lec3.md" },
       { no:4, title:"UML Class & Use Case Diagrams", tag:"UML (structural)", quiz:"csc_2101_lecture_4_mcq_quiz_html.html", notes:"notes/lec4.md" },
       { no:5, title:"UML Behavioural Modelling & Software Reuse", tag:"UML (behavioural)", quiz:"csc_2101_lecture_5_mcq_quiz_html.html", notes:"notes/lec5.md" },
+      { no:6, title:"Software Architecture", tag:"Architecture", quiz:"csc_2101_lecture_6_mcq_quiz_html.html", notes:"notes/lec6.md" },
+      { no:8, title:"Estimating & Planning", tag:"Agile planning", quiz:"csc_2101_lecture_8_mcq_quiz_html.html", notes:"notes/lec8.md" },
+      { no:9, title:"Sprint Ceremonies & Agile Techniques", tag:"Scrum & XP", quiz:"csc_2101_lecture_9_mcq_quiz_html.html", notes:"notes/lec9.md" },
+      { no:10, title:"Software Change Management", tag:"SCM & Git", quiz:"csc_2101_lecture_10_mcq_quiz_html.html", notes:"notes/lec10.md" },
+      { no:11, title:"Software Refactoring", tag:"Refactoring", quiz:"csc_2101_lecture_11_mcq_quiz_html.html", notes:"notes/lec11.md" },
     ];
-
     // ---- Render lecture cards ----
     const grid = document.getElementById('lecGrid');
     grid.innerHTML = LECTURES.map(l => `
@@ -125,7 +122,6 @@
         </div>
       </article>
     `).join('');
-
     grid.addEventListener('click', (e) => {
       const b = e.target.closest('button[data-notes]');
       if (!b) return;
@@ -137,12 +133,10 @@
       document.getElementById('mdPath').value = relativePath;
       loadFromPath(relativePath);
     });
-
     // ---- Markdown loader ----
     const out = document.getElementById('mdOut');
     const pathInput = document.getElementById('mdPath');
     document.getElementById('loadBtn').addEventListener('click', () => loadFromPath(pathInput.value.trim()));
-
     // Local file picker (no server needed)
     const filePick = document.getElementById('filePick');
     document.getElementById('pickBtn').addEventListener('click', () => filePick.click());
@@ -152,7 +146,6 @@
       out.innerHTML = mdRender(text);
       out.scrollTop = 0;
     });
-
     async function loadFromPath(p) {
       if (!p) return;
       try {
@@ -165,7 +158,6 @@
         out.innerHTML = `<p style="color:#fca5a5"><strong>Could not load:</strong> ${p}. ${err.message}. If opening directly from the file system, your browser may block fetches. Use the “Open .md file…” button or run a local server.</p>`;
       }
     }
-
     // ---- Minimal Markdown -> HTML (safe-ish, no external libs) ----
     function mdRender(src) {
       let s = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -185,12 +177,10 @@
       s = s.replace(/@@CODEBLOCK_([A-Za-z0-9+/=]+)@@/g, (m, b64) => `<pre><code>${atob(b64)}</code></pre>`);
       return s;
     }
-
     // ---- Fullscreen toggling ----
     const fsBtn = document.getElementById('fsBtn');
     fsBtn.addEventListener('click', toggleFullscreen);
     document.addEventListener('fullscreenchange', syncFsButton);
-
     function toggleFullscreen() {
       const el = document.getElementById('mdOut');
       if (!document.fullscreenElement) {
@@ -199,7 +189,6 @@
         document.exitFullscreen?.();
       }
     }
-
     function syncFsButton() {
       const active = !!document.fullscreenElement;
       fsBtn.textContent = active ? 'Exit Fullscreen' : '⛶';

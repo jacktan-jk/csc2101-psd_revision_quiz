@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 11 MCQ Quiz: Software Refactoring</title>
+  <style>
+    :root { --maxw: 980px; --accent: #d97706; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#fef3c7; color:#92400e; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#fde68a; }
+    .opt.correct { border-color:#d97706; background:#fff7ed; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#92400e }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 11 MCQ Quiz — Software Refactoring</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 11: Software Refactoring (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    {
+      q: "What is a code smell as defined in the lecture?",
+      options: [
+        "A runtime error that crashes the program",
+        "A pattern indicating poor structure or inappropriate coupling between modules",
+        "A comment describing what the code does",
+        "An optimised algorithm"
+      ],
+      correct: 1,
+      why: "A code smell flags potential problems in design or coupling; it is not necessarily a bug but a sign the code may be hard to maintain."
+    },
+    {
+      q: "When should refactoring be considered?",
+      options: [
+        "Only after final deployment",
+        "When implementing new functionality, correcting defects, during code reviews or when understanding a software artefact",
+        "Only when management demands a rewrite",
+        "Never, because it always changes behaviour"
+      ],
+      correct: 1,
+      why: "The process is recommended whenever you add features, fix bugs, review code or need to clarify how an artefact works."
+    },
+    {
+      q: "Which code smell category involves duplicate code across methods or classes?",
+      options: [
+        "Complex structures",
+        "Cloning",
+        "Design uncertainty",
+        "Delegation"
+      ],
+      correct: 1,
+      why: "Cloning refers to copy‑and‑paste duplication. The remedy is to extract a common method."
+    },
+    {
+      q: "What refactoring technique is recommended for a ‘long method’ smell?",
+      options: [
+        "Inline the method into its caller",
+        "Extract method to split it into smaller, more understandable methods",
+        "Rename the method",
+        "Introduce global variables"
+      ],
+      correct: 1,
+      why: "Long methods are hard to understand; extracting parts into smaller methods improves readability and reuse."
+    },
+    {
+      q: "Feature envy, where a method uses data from another object more than its own, should be addressed by…",
+      options: [
+        "Moving the method to the class it envies",
+        "Deleting the method entirely",
+        "Duplicating the data in both classes",
+        "Increasing its parameter list"
+      ],
+      correct: 0,
+      why: "The slides recommend moving a feature‑envious method to the class whose data it most frequently accesses."
+    },
+    {
+      q: "Shotgun surgery is characterised by…",
+      options: [
+        "Making many unrelated changes within a single class",
+        "Making a single change that requires modifications across many different classes",
+        "Copying and pasting code blocks throughout the project",
+        "Refactoring without any tests"
+      ],
+      correct: 1,
+      why: "Shotgun surgery means one small change forces edits in multiple places; moving methods and combining responsibilities can reduce this coupling."
+    },
+    {
+      q: "What is the appropriate action for a ‘lazy class’ smell?",
+      options: [
+        "Inline the class into another and remove it",
+        "Create additional methods to justify its existence",
+        "Add more inheritance hierarchies",
+        "Simply change the class name"
+      ],
+      correct: 0,
+      why: "If a class has too little responsibility, inline its fields and methods into another class and delete it."
+    },
+    {
+      q: "Which smell arises when code uses a complex sequence of ‘if’ or switch statements, and which refactoring addresses it?",
+      options: [
+        "Primitive obsession; replace with arrays",
+        "Switch statements; replace the conditional with polymorphism",
+        "Feature envy; introduce parameter object",
+        "Message chains; inline class"
+      ],
+      correct: 1,
+      why: "Lengthy switch or conditional logic can often be simplified by using polymorphism: delegate behaviour to subclasses instead of branching."
+    },
+    {
+      q: "What does the ‘message chains’ smell represent?",
+      options: [
+        "A long parameter list in a method",
+        "Chaining method calls across multiple objects (e.g., a.b().c().d())",
+        "Duplicated switch statements",
+        "Classes with no methods"
+      ],
+      correct: 1,
+      why: "Message chains couple clients to a navigation path; refactoring suggests hiding delegates or extracting methods to shorten the chain."
+    },
+    {
+      q: "Which type of refactoring organises data by replacing primitive fields with objects?",
+      options: [
+        "Extract class",
+        "Inline method",
+        "Replace data value with object",
+        "Remove middle man"
+      ],
+      correct: 2,
+      why: "‘Replace data value with object’ groups primitive values into a richer object to capture behaviours and validation."
+    },
+    {
+      q: "Replacing a conditional with polymorphism helps by…",
+      options: [
+        "Removing duplicate conditionals by using subclass implementations",
+        "Reducing the number of classes in the system",
+        "Increasing the use of primitive types",
+        "Storing data in a shared repository"
+      ],
+      correct: 0,
+      why: "Subclasses can override behaviour, eliminating repetitive conditional logic and clarifying intent."
+    },
+    {
+      q: "Which smell occurs when a class changes for many different reasons or has responsibilities that are not cohesive?",
+      options: [
+        "Divergent change",
+        "Feature envy",
+        "Lazy class",
+        "Message chains"
+      ],
+      correct: 0,
+      why: "Divergent change indicates that a class handles too many responsibilities and should be split into focused classes."
+    },
+    {
+      q: "What refactoring is recommended for a class suffering from divergent change?",
+      options: [
+        "Extract class to separate responsibilities",
+        "Inline method",
+        "Replace array with object",
+        "Remove duplicate code"
+      ],
+      correct: 0,
+      why: "Splitting the class into smaller classes each with a single responsibility reduces coupling and makes the code easier to maintain."
+    },
+    {
+      q: "The ‘long parameter list’ smell may be addressed by…",
+      options: [
+        "Introducing a parameter object or replacing parameters with method calls",
+        "Increasing the number of parameters",
+        "Duplicating the method",
+        "Using global variables"
+      ],
+      correct: 0,
+      why: "Grouping related parameters into an object or exposing needed data through methods simplifies method signatures."
+    },
+    {
+      q: "Which smell is characterised by a class that does little but delegate to another?",
+      options: [
+        "Middle man",
+        "Message chains",
+        "Lazy class",
+        "Divergent change"
+      ],
+      correct: 0,
+      why: "A middle‑man class adds little value and should often be removed or merged with its delegate."
+    },
+    {
+      q: "What refactoring can reduce message chains?",
+      options: [
+        "Hide delegate by adding wrapper methods",
+        "Add more middle men",
+        "Duplicate the chain",
+        "Increase class size"
+      ],
+      correct: 0,
+      why: "Hiding delegates behind your own interface shortens call chains and reduces coupling to the navigation path."
+    },
+    {
+      q: "The ‘data class’ smell is defined by:",
+      options: [
+        "A class that contains only fields with getters and setters and little behaviour",
+        "A class with many methods and little data",
+        "Duplicate code across methods",
+        "Heavy use of inheritance"
+      ],
+      correct: 0,
+      why: "Data classes merely store data; adding related behaviour or combining with other classes can improve cohesion."
+    },
+    {
+      q: "What is a recommended remedy for the ‘data class’ smell?",
+      options: [
+        "Encapsulate fields and add behaviour where appropriate",
+        "Remove all methods",
+        "Convert to an array",
+        "Increase inheritance"
+      ],
+      correct: 0,
+      why: "You can add methods that operate on the data or merge the data with other classes to provide richer behaviour."
+    },
+    {
+      q: "Which smell arises when two classes perform similar functions but have different interfaces?",
+      options: [
+        "Alternative classes with different interfaces",
+        "Lazy class",
+        "Primitive obsession",
+        "Middle man"
+      ],
+      correct: 0,
+      why: "When classes provide similar services via different names or signatures, refactoring to a common interface or hierarchy simplifies usage."
+    },
+    {
+      q: "The ‘speculative generality’ smell refers to:",
+      options: [
+        "Code structures that anticipate future requirements but aren’t used",
+        "Code that is too specific",
+        "Code duplication",
+        "Long methods"
+      ],
+      correct: 0,
+      why: "Speculative generality is over‑engineering for future possibilities; such abstractions should be removed or simplified."
+    },
+    {
+      q: "Which refactoring is suggested for ‘speculative generality’?",
+      options: [
+        "Collapse hierarchy or remove unnecessary abstractions",
+        "Add more generality",
+        "Write documentation",
+        "Use design patterns everywhere"
+      ],
+      correct: 0,
+      why: "Eliminate unused layers and specialise classes to reflect actual requirements."
+    },
+    {
+      q: "In the refactoring process, why is it important to run tests after each small change?",
+      options: [
+        "To ensure behaviour remains unchanged",
+        "To increase complexity",
+        "To measure performance",
+        "To rename variables"
+      ],
+      correct: 0,
+      why: "Running tests verifies that the refactoring did not alter the program’s observable behaviour."
+    },
+    {
+      q: "What category covers smells like long method and large class?",
+      options: [
+        "Complex structures",
+        "Cloning",
+        "Delegation",
+        "Variables and parameters"
+      ],
+      correct: 0,
+      why: "These smells indicate an overly complex or monolithic structure needing decomposition."
+    },
+    {
+      q: "What is the recommended fix for shotgun surgery?",
+      options: [
+        "Move methods and data to one class or separate them logically",
+        "Increase the number of classes",
+        "Avoid writing commit messages",
+        "No action is necessary"
+      ],
+      correct: 0,
+      why: "Reducing the scattering of related code minimises the ripple effect of changes."
+    },
+    {
+      q: "Why are long methods problematic?",
+      options: [
+        "They are hard to understand and maintain",
+        "They reduce compile time",
+        "They improve readability",
+        "They are easier to test"
+      ],
+      correct: 0,
+      why: "Long methods often mix multiple responsibilities, making them difficult to comprehend and modify safely."
+    },
+    {
+      q: "Which refactoring helps simplify complex conditional expressions?",
+      options: [
+        "Decompose conditional by extracting parts into well‑named methods",
+        "Add more conditions",
+        "Convert condition to loops",
+        "Use global variables"
+      ],
+      correct: 0,
+      why: "Breaking down a complex boolean expression into named helpers clarifies intent and facilitates reuse."
+    },
+    {
+      q: "Why is ‘feature envy’ considered a smell?",
+      options: [
+        "A method that uses data from another class more than its own indicates poor encapsulation",
+        "It’s fun",
+        "It improves cohesion",
+        "It reduces coupling"
+      ],
+      correct: 0,
+      why: "It shows that the method is better placed in the class whose data it manipulates."
+    },
+    {
+      q: "According to the lecture, what is the first step of the refactoring process?",
+      options: [
+        "Identify code smells",
+        "Implement new features",
+        "Write new tests",
+        "Delete unused classes"
+      ],
+      correct: 0,
+      why: "You need to recognise problematic patterns before you can choose appropriate refactorings."
+    },
+    {
+      q: "Before adding a new feature, why might you refactor the existing code?",
+      options: [
+        "To ensure the code is clean and easier to extend",
+        "To delay the feature",
+        "To increase complexity",
+        "To hide technical debt"
+      ],
+      correct: 0,
+      why: "Improving design beforehand reduces the cost and risk of adding new behaviour."
+    },
+    {
+      q: "Which category of smells deals with variables and parameters?",
+      options: [
+        "Long parameter list and feature envy",
+        "Cloning",
+        "Control structures",
+        "Delegation"
+      ],
+      correct: 0,
+      why: "This category addresses issues like too many parameters and methods depending excessively on data from other objects."
+    },
+    {
+      q: "The refactoring ‘Extract Class’ is used when:",
+      options: [
+        "A class has grown too large and performs multiple responsibilities",
+        "There is duplicate code",
+        "There are too many primitive values",
+        "There is no code"
+      ],
+      correct: 0,
+      why: "Splitting the class into cohesive units promotes single responsibility and improves readability."
+    },
+    {
+      q: "The ‘Move Method’ refactoring is appropriate when:",
+      options: [
+        "A method uses data from another class more than its own",
+        "A method is too short",
+        "A class is lazy",
+        "There are too many parameters"
+      ],
+      correct: 0,
+      why: "Moving the method to the class whose data it frequently accesses reduces coupling and improves cohesion."
+    },
+    {
+      q: "Why would you replace data values with objects?",
+      options: [
+        "To encapsulate related behaviour and validation with the data",
+        "To reduce object count",
+        "To degrade performance",
+        "To avoid using classes"
+      ],
+      correct: 0,
+      why: "Wrapping primitives in objects allows you to add behaviour (like validation) and convey intent."
+    },
+    {
+      q: "What is meant by ‘Inline Method’ refactoring?",
+      options: [
+        "Replacing calls to a simple method with its body when the method adds no abstraction",
+        "Inserting more methods",
+        "Splitting long methods into smaller ones",
+        "Adding parameters"
+      ],
+      correct: 0,
+      why: "If a method does nothing but call another method, inlining it simplifies the call chain."
+    },
+    {
+      q: "What is ‘Encapsulate Field’ refactoring?",
+      options: [
+        "Restrict direct access to a field by providing getters and setters",
+        "Expose fields publicly",
+        "Remove the field",
+        "Duplicate the field in other classes"
+      ],
+      correct: 0,
+      why: "Encapsulating fields protects internal representation and enables validation or side‑effects."
+    },
+    {
+      q: "When might you use ‘Extract Parameter Object’?",
+      options: [
+        "When a method takes many related parameters",
+        "When there is only one parameter",
+        "When there is duplicate code",
+        "When there are no classes"
+      ],
+      correct: 0,
+      why: "Grouping related parameters into an object simplifies method signatures and passes cohesive data."
+    },
+    {
+      q: "Which smell category includes ‘lazy class’ and ‘speculative generality’?",
+      options: [
+        "Design uncertainty",
+        "Cloning",
+        "Complex structures",
+        "Control structures"
+      ],
+      correct: 0,
+      why: "Design uncertainty covers smells arising from over‑abstraction or classes that add little value."
+    },
+    {
+      q: "Why is it important to have tests before refactoring?",
+      options: [
+        "To ensure that the behaviour stays the same after making structural changes",
+        "To slow the process",
+        "To rewrite the code from scratch",
+        "To hide technical debt"
+      ],
+      correct: 0,
+      why: "Tests serve as a safety net to catch unintended changes during refactoring."
+    },
+    {
+      q: "Which smell category includes message chains and middle man?",
+      options: [
+        "Delegation",
+        "Variables and parameters",
+        "Control structures",
+        "Cloning"
+      ],
+      correct: 0,
+      why: "Both message chains and middle man relate to how a class delegates work to other objects, falling under the delegation category."
+    },
+    {
+      q: "Leaving unused code in a program because it might be needed in the future is an example of which code smell?",
+      options: [
+        "Speculative generality",
+        "Data clumps",
+        "Temporary field",
+        "Lazy class"
+      ],
+      correct: 0,
+      why: "Speculative generality refers to adding or keeping code for anticipated but currently unused features; such code should be removed or commented out."
+    },
+    {
+      q: "Magic numbers like 4 and 5 appearing in code without explanation should be handled by:",
+      options: [
+        "Replacing them with named constants and self‑documenting code",
+        "Adding lengthy inline comments but leaving the numbers unchanged",
+        "Removing the numbers entirely without replacement",
+        "Increasing the method’s length"
+      ],
+      correct: 0,
+      why: "Replacing magic numbers with well‑named constants makes the code self‑documenting and avoids confusion."
+    },
+    {
+      q: "When several methods operate on the same group of parameters such as year, month and day, which refactoring improves readability?",
+      options: [
+        "Introducing a class to encapsulate the parameters (e.g., a Date object)",
+        "Expanding the parameter list further",
+        "Duplicating the parameter list across all methods",
+        "Using global variables for the parameters"
+      ],
+      correct: 0,
+      why: "Grouping related data into its own class simplifies method signatures and clarifies intent; this addresses data clumps."
+    },
+    {
+      q: "A code line like service.getRepository().findById(id) indicates which smell?",
+      options: [
+        "Message chain",
+        "Shotgun surgery",
+        "Feature envy",
+        "Primitive obsession"
+      ],
+      correct: 0,
+      why: "Long chains of method calls through multiple objects are called message chains, making code hard to understand and maintain."
+    },
+    {
+      q: "If a Service class simply delegates a call to Repository without adding value, what smell is present and how can it be resolved?",
+      options: [
+        "Middle man; remove the Service and let clients call Repository directly",
+        "Data clumps; introduce a parameter object",
+        "Long method; extract method",
+        "Speculative generality; inline the class"
+      ],
+      correct: 0,
+      why: "A class that delegates work without adding behavior is a middle man; it should be removed and calls should go directly to the responsible class."
+    },
+    {
+      q: "Storing passwords or API keys directly in source code corresponds to which smell, and how should it be mitigated?",
+      options: [
+        "Security smell; store secrets in encrypted configuration files or environment variables",
+        "Feature envy; move methods to a different class",
+        "Lazy class; inline the class",
+        "Long parameter list; remove parameters"
+      ],
+      correct: 0,
+      why: "Hard‑coded credentials are a security smell; they should be moved out of the source code and stored securely using configuration files or environment variables."
+    },
+    {
+      q: "A long switch or if‑else chain that selects behavior based on an object's type can often be simplified by which refactoring technique?",
+      options: [
+        "Replace conditional with polymorphism",
+        "Extract class",
+        "Duplicate the switch statement",
+        "Add more conditions"
+      ],
+      correct: 0,
+      why: "Replacing conditionals with polymorphism delegates behavior to subclasses, eliminating bulky selection logic."
+    },
+    {
+      q: "When code overuses primitive data types instead of modeling concepts with objects, what is the smell and suggested fix?",
+      options: [
+        "Primitive obsession; replace the primitive value with an object that encapsulates the concept",
+        "Lazy class; inline the class",
+        "Code duplication; duplicate the primitive",
+        "Long parameter list; add more parameters"
+      ],
+      correct: 0,
+      why: "Primitive obsession can be resolved by introducing small types or classes that represent domain concepts, improving expressiveness and safety."
+    },
+    {
+      q: "Why is it essential to have a good suite of automated tests before refactoring?",
+      options: [
+        "To ensure the observable behavior remains unchanged when restructuring code",
+        "To remove all documentation",
+        "To eliminate the need for code reviews",
+        "To automatically refactor code without human involvement"
+      ],
+      correct: 0,
+      why: "Tests provide a safety net: if refactoring breaks functionality, failing tests will alert the developer before the change is shipped."
+    },
+    {
+      q: "Which refactoring simplifies method calls by bundling several parameters into a single object?",
+      options: [
+        "Introduce Parameter Object",
+        "Extract Method",
+        "Move Method",
+        "Inline Class"
+      ],
+      correct: 0,
+      why: "A parameter object collects related parameters into a single type, making calls cleaner and enforcing cohesion."
+    },
+    {
+      q: "What is the goal of replacing conditionals with polymorphism during refactoring?",
+      options: [
+        "To reduce complex switch statements by delegating behavior to subclasses",
+        "To increase the number of conditionals in the code",
+        "To ensure every class has only one method",
+        "To remove all inheritance from the design"
+      ],
+      correct: 0,
+      why: "Polymorphism allows each subclass to implement its specific behavior, eliminating the need for centralised conditionals."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      item.__answered = false;
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+    data.__answered = true;
+    state.answered++;
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  render();
+  </script>
+</body>
+</html>

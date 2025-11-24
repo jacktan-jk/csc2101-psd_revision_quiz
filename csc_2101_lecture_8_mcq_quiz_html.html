@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 8 MCQ Quiz: Estimating & Planning</title>
+  <style>
+    :root { --maxw: 980px; --accent: #065f46; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#d1fae5; color:#065f46; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#a7f3d0; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 8 MCQ Quiz — Estimating & Planning</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 8: Estimating and Planning (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    {
+      q: "What is the main benefit of using story points in agile estimation?",
+      options: [
+        "They provide an exact number of hours required for a task",
+        "They measure the relative effort and complexity of work items",
+        "They only apply to bug fixes",
+        "They represent the monetary cost of each feature"
+      ],
+      correct: 1,
+      why: "Story points are an abstract measure capturing the relative effort and complexity of user stories rather than specific hours."
+    },
+    {
+      q: "Planning poker encourages team participation by…",
+      options: [
+        "Allowing the product owner alone to assign points",
+        "Having each member privately choose a card, reveal simultaneously and discuss differences",
+        "Letting a manager decide the estimate without discussion",
+        "Assigning estimates only after coding is done"
+      ],
+      correct: 1,
+      why: "In planning poker everyone selects a card independently and the team discusses divergent estimates before re‑voting to reach a consensus."
+    },
+    {
+      q: "Sprint velocity is calculated by…",
+      options: [
+        "Averaging the story points completed over previous sprints to predict future capacity",
+        "Multiplying the number of developers by working days in the sprint",
+        "Counting the number of tasks started in a sprint",
+        "Dividing total story points by the team size"
+      ],
+      correct: 0,
+      why: "Velocity uses the average of completed story points from recent sprints to forecast how much work the team can take on."
+    },
+    {
+      q: "Which sequence of steps describes the agile estimation process mentioned in the lecture?",
+      options: [
+        "Estimate tasks after development, update the backlog, then release the product",
+        "Identify user stories, collectively assign story points, update the backlog and calculate sprint velocity",
+        "Write code first, then assign story points, then estimate velocity",
+        "Let the product owner estimate alone while the team implements"
+      ],
+      correct: 1,
+      why: "The slides outline an iterative process: capture user stories, negotiate and assign story points, update the product backlog, then use sprint velocity to plan future work."
+    },
+    {
+      q: "What characterises the Fibonacci sequence used for story point estimation?",
+      options: [
+        "It consists of consecutive integers (1,2,3,4,…) ",
+        "Each number is the sum of the two preceding numbers, creating widening gaps",
+        "Numbers are powers of ten (10,100,1000)",
+        "Numbers alternate positive and negative"
+      ],
+      correct: 1,
+      why: "Many teams use Fibonacci‑like scales (1,2,3,5,8,13…) because the gaps grow, encouraging discussion on larger tasks."
+    },
+    {
+      q: "During planning poker, after initial cards are revealed and differences discussed, what happens next?",
+      options: [
+        "The product owner decides the final number",
+        "Team members re‑estimate and repeat until a consensus or close grouping emerges",
+        "Estimation ends regardless of consensus",
+        "Cards are collected without discussion"
+      ],
+      correct: 1,
+      why: "Planning poker uses multiple rounds: after discussing divergent estimates, the team votes again to converge on a shared story point value."
+    },
+    {
+      q: "Why does agile estimation involve the whole team rather than only managers?",
+      options: [
+        "To meet regulatory requirements",
+        "To ensure team commitment, shared understanding and diverse perspectives in estimating work",
+        "Because managers lack estimation skills",
+        "To speed up coding by eliminating planning"
+      ],
+      correct: 1,
+      why: "Collective estimation promotes shared ownership, aligns expectations and leverages the team’s varied experiences."
+    },
+    {
+      q: "During project estimation, what is the purpose of the initial quick estimate step described in the lecture?",
+      options: [
+        "To commit to deadlines before any work is done",
+        "To obtain a rough idea of overall effort for planning, then refine through iteration",
+        "To skip the need for further estimation",
+        "To allocate individual tasks immediately"
+      ],
+      correct: 1,
+      why: "An initial rough estimate helps set expectations and plan, but it is refined as work progresses and the team learns more."
+    },
+    {
+      q: "Which of the following does NOT describe story points?",
+      options: [
+        "They represent relative complexity",
+        "They provide an estimate of hours",
+        "They encourage conversation on uncertainty",
+        "They are based on a non‑linear scale"
+      ],
+      correct: 1,
+      why: "Story points express effort relative to other tasks and use non‑linear scales; they are not equivalent to exact hours."
+    },
+    {
+      q: "What is the main purpose of sprint velocity?",
+      options: [
+        "To predict how much work the team can complete in future sprints",
+        "To measure developer salary",
+        "To count tasks started",
+        "To set deadlines for stakeholders"
+      ],
+      correct: 0,
+      why: "Velocity forecasts capacity by looking at how many story points the team has completed on average."
+    },
+    {
+      q: "What should the team do if a user story is too large to be estimated accurately?",
+      options: [
+        "Split it into smaller stories before assigning story points",
+        "Discard it",
+        "Assign zero points",
+        "Code it without planning"
+      ],
+      correct: 0,
+      why: "Breaking large stories into smaller, more estimable pieces improves understanding and estimation accuracy."
+    },
+    {
+      q: "Why do teams use the Fibonacci sequence or a modified scale for story point values?",
+      options: [
+        "To ensure numbers grow quickly, emphasising uncertainty on larger tasks",
+        "Because Fibonacci numbers are easier to remember",
+        "To match the number of developers",
+        "Because they correspond to weeks"
+      ],
+      correct: 0,
+      why: "Using increasing gaps between values discourages false precision on larger tasks and highlights uncertainty."
+    },
+    {
+      q: "During planning poker, why do team members reveal their cards simultaneously?",
+      options: [
+        "To avoid anchoring and bias from others’ estimates",
+        "To show who is fastest",
+        "To allow managers to overrule",
+        "To assign tasks"
+      ],
+      correct: 0,
+      why: "Revealing estimates at the same time prevents early votes from influencing others and encourages independent thinking."
+    },
+    {
+      q: "Which of the following describes a benefit of agile estimation compared to traditional time‑based estimates?",
+      options: [
+        "It emphasises collaboration and shared understanding",
+        "It eliminates any need for planning",
+        "It provides precise hour‑level commitments",
+        "It reduces team involvement"
+      ],
+      correct: 0,
+      why: "Agile estimation brings the team together to discuss complexity and fosters a shared understanding of work."
+    },
+    {
+      q: "What does capacity planning refer to during sprint planning?",
+      options: [
+        "Estimating how much work the team can realistically complete based on velocity and availability",
+        "Counting story points without considering holidays",
+        "Deciding product scope unilaterally",
+        "Creating documentation"
+      ],
+      correct: 0,
+      why: "Capacity planning uses velocity, team availability, vacations and other factors to decide how much work to commit to."
+    },
+    {
+      q: "According to the estimation strategy, what is the first step when faced with a new project?",
+      options: [
+        "Make a quick guess to approximate effort",
+        "Write all the code",
+        "Ask the client for the answer",
+        "Skip planning entirely"
+      ],
+      correct: 0,
+      why: "The strategy suggests starting with an initial guess that is refined through later iterations as the team learns more."
+    },
+    {
+      q: "After a sprint is completed, what information is used to refine future estimates?",
+      options: [
+        "Actual story points completed and any changes to velocity",
+        "The number of hours worked",
+        "Developer names",
+        "Code comments"
+      ],
+      correct: 0,
+      why: "Comparing planned and completed story points helps teams adjust velocity and improve subsequent estimates."
+    },
+    {
+      q: "Why is relative sizing (story points) often preferred over absolute time estimates early in a project?",
+      options: [
+        "Team members may not yet know how long tasks take, but can compare them to each other",
+        "Absolute time is always accurate",
+        "It makes sprint planning slower",
+        "It removes the need to break down tasks"
+      ],
+      correct: 0,
+      why: "Early in a project, teams lack detailed knowledge, so comparing tasks relative to one another is more reliable than guessing hours."
+    },
+    {
+      q: "What does the term “T‑shirt sizing” refer to in agile estimation?",
+      options: [
+        "Using categories like XS, S, M, L, XL to represent increasing effort",
+        "Measuring developer shirt sizes",
+        "Counting story points in units of T‑shirts",
+        "Ranking tasks alphabetically"
+      ],
+      correct: 0,
+      why: "Some teams use qualitative labels (e.g., S,M,L) to indicate relative size rather than numerical values."
+    },
+    {
+      q: "In planning poker, who typically describes each user story before estimation begins?",
+      options: [
+        "The product owner",
+        "The scrum master",
+        "Developers",
+        "QA testers"
+      ],
+      correct: 0,
+      why: "The product owner explains the story’s context and acceptance criteria so the team can estimate effectively."
+    },
+    {
+      q: "If the team cannot converge on a story point value after several rounds, what should they do?",
+      options: [
+        "Discuss assumptions further or split the story",
+        "Average everyone’s number automatically",
+        "Choose the highest number",
+        "Cancel the task"
+      ],
+      correct: 0,
+      why: "Divergent estimates often indicate misunderstandings; further conversation or breaking down the story can resolve this."
+    },
+    {
+      q: "What is the purpose of updating the product backlog after assigning story points?",
+      options: [
+        "To reflect current priorities and planned effort",
+        "To record developer attendance",
+        "To track marketing metrics",
+        "To finalise budgets"
+      ],
+      correct: 0,
+      why: "Revising the backlog ensures priorities align with the estimated effort and guides future planning."
+    },
+    {
+      q: "In agile estimation, which factor is considered when comparing user stories?",
+      options: [
+        "Effort, complexity and uncertainty relative to other stories",
+        "Developer personal preference",
+        "Colour of the user story card",
+        "Project manager’s favourite tasks"
+      ],
+      correct: 0,
+      why: "Relative estimation accounts for factors like complexity, risk and effort compared to known reference stories."
+    },
+    {
+      q: "Which of these steps is NOT part of the planning poker process?",
+      options: [
+        "Each member selects a card",
+        "Team reveals cards simultaneously",
+        "Only managers vote",
+        "Team discusses differences"
+      ],
+      correct: 2,
+      why: "Planning poker relies on participation from everyone; managers do not vote alone."
+    },
+    {
+      q: "Why might teams re‑estimate story points mid‑project?",
+      options: [
+        "Because understanding of the scope improves as work progresses",
+        "To change numbers arbitrarily",
+        "To keep velocity constant",
+        "To inflate metrics"
+      ],
+      correct: 0,
+      why: "As the team learns more about the domain and requirements, they may refine estimates for better planning."
+    },
+    {
+      q: "What is a disadvantage of using very granular scales (e.g., 1–100) for story points?",
+      options: [
+        "People may spend unnecessary time debating minor differences",
+        "It improves accuracy",
+        "It eliminates discussion",
+        "It speeds up estimation"
+      ],
+      correct: 0,
+      why: "Large ranges encourage false precision and distract from meaningful relative differences."
+    },
+    {
+      q: "If a user story is estimated as a “13” on the Fibonacci scale, what does this indicate?",
+      options: [
+        "It is significantly larger and more complex than a story rated “3” or “5”",
+        "It can be completed in 13 hours",
+        "It is the thirteenth priority",
+        "It requires 13 developers"
+      ],
+      correct: 0,
+      why: "Higher numbers signal greater effort and uncertainty compared to smaller values in the sequence."
+    },
+    {
+      q: "In agile estimation, what does sprint velocity combined with remaining story points help predict?",
+      options: [
+        "The number of sprints required to complete the product backlog",
+        "The weather",
+        "Hardware requirements",
+        "QA pass rates"
+      ],
+      correct: 0,
+      why: "Dividing the remaining effort by average velocity gives an approximate number of sprints to complete the work."
+    },
+    {
+      q: "Which of the following describes an initial quick estimate?",
+      options: [
+        "A rough assessment used to plan ahead, refined later as more information is available",
+        "A final commitment",
+        "A number taken from previous projects regardless of differences",
+        "A value chosen randomly"
+      ],
+      correct: 0,
+      why: "Initial estimates are intentionally rough and serve as a starting point for planning rather than a firm promise."
+    },
+    {
+      q: "The estimation strategy described in the lecture emphasises iterative refinement. Why is this necessary?",
+      options: [
+        "Because initial guesses are often wrong and improvements occur through learning and feedback",
+        "Because it delays the project",
+        "Because it eliminates unpredictability entirely",
+        "Because it reduces team discussions"
+      ],
+      correct: 0,
+      why: "Through repeated estimation cycles, the team gains knowledge, corrects inaccuracies and converges on more realistic forecasts."
+    },
+    {
+      q: "What is the purpose of re‑estimation during the project?",
+      options: [
+        "To update estimates as more information becomes available and improve forecasting accuracy",
+        "To change the user stories arbitrarily",
+        "To reduce story point values every sprint regardless of progress",
+        "To replace planning poker entirely"
+      ],
+      correct: 0,
+      why: "Re‑estimation helps the team refine their understanding of work as they learn, enabling better sprint planning and project forecasts."
+    },
+    {
+      q: "Which statement correctly distinguishes between the product backlog and the sprint backlog?",
+      options: [
+        "The product backlog contains all desired work for the project, while the sprint backlog is a subset of tasks the team commits to complete in the current sprint",
+        "The product backlog is fixed after project initiation, whereas the sprint backlog is owned by management",
+        "The sprint backlog lists every possible feature for the product, whereas the product backlog lists only tasks for the current sprint",
+        "The sprint backlog is prioritised by the product owner, while the product backlog is prioritised by the developers"
+      ],
+      correct: 0,
+      why: "The product backlog is a prioritised list of all desired work maintained by the product owner; the sprint backlog contains the tasks selected by the team for the upcoming sprint."
+    },
+    {
+      q: "What is the primary purpose of a sprint burndown chart?",
+      options: [
+        "To track the remaining work in a sprint and help the team predict whether they will complete the sprint goal on time",
+        "To assign tasks to individual developers",
+        "To rank backlog items by business value",
+        "To set deadlines for the next project release"
+      ],
+      correct: 0,
+      why: "Burndown charts plot the remaining story points or hours against the sprint timeline, providing visibility into progress and helping the team adjust if they are behind schedule."
+    },
+    {
+      q: "During planning poker, why do team members reveal their cards simultaneously after a round of discussion?",
+      options: [
+        "To reduce anchoring and encourage independent judgement in assigning story points",
+        "To let the product owner decide the estimate",
+        "To embarrass team members who choose high points",
+        "To measure sprint velocity automatically"
+      ],
+      correct: 0,
+      why: "Simultaneous reveal prevents participants from anchoring their estimates based on others’ votes, promoting honest and independent assessment of effort."
+    },
+    {
+      q: "In the lab’s example, Login (3 points), Registration (5 points) and Make Booking (8 points) were completed, while Cancel Booking and Payment were not fully done. What was the team’s velocity for that sprint?",
+      options: [
+        "16",
+        "20",
+        "11",
+        "8"
+      ],
+      correct: 0,
+      why: "Velocity is the sum of story points for user stories that are 100% complete; here 3 + 5 + 8 = 16."
+    },
+    {
+      q: "Which template is used to write user stories, as emphasised in the lecture and labs?",
+      options: [
+        "As a (user role), I want to (activity), so that (business value)",
+        "Given–when–then",
+        "I will implement (task) by (deadline)",
+        "Pseudo code specifying implementation details"
+      ],
+      correct: 0,
+      why: "User stories are phrased from the perspective of the user to capture the role, the action and the business value they gain."
+    },
+    {
+      q: "When using Fibonacci numbers for story points, what does the lecture suggest about large items?",
+      options: [
+        "Larger features may receive values such as 20, 40 or even 100 to reflect increased effort",
+        "Fibonacci numbers must correspond to exact durations in hours",
+        "Any number above 13 is forbidden",
+        "Story points should be assigned at random to avoid bias"
+      ],
+      correct: 0,
+      why: "The modified Fibonacci sequence extends beyond 13 (e.g., 20, 40, 100) to represent epics or themes requiring much greater effort."
+    },
+    {
+      q: "What is the purpose of calculating the average velocity of the last three sprints?",
+      options: [
+        "To forecast how many sprints remain for the project and plan releases",
+        "To evaluate individual developers’ performance",
+        "To decide the length of future sprints",
+        "To determine the number of daily stand‑ups required"
+      ],
+      correct: 0,
+      why: "Average velocity provides a realistic expectation of future throughput, enabling the team and stakeholders to estimate the remaining work and schedule milestones."
+    },
+    {
+      q: "During sprint planning, what happens to the product backlog items?",
+      options: [
+        "The team breaks down selected user stories into concrete tasks and commits to completing them in the sprint backlog",
+        "The entire product backlog is approved for development without change",
+        "The product owner determines each team member’s task allocation",
+        "The sprint planning meeting sets the total number of sprints for the project"
+      ],
+      correct: 0,
+      why: "The sprint planning meeting involves the team selecting high‑priority stories from the product backlog, decomposing them into tasks and agreeing on the amount of work they can realistically complete."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      item.__answered = false;
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+    data.__answered = true;
+    state.answered++;
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  render();
+  </script>
+</body>
+</html>

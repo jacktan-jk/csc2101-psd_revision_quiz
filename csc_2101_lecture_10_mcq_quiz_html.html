@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2101 – Lecture 10 MCQ Quiz: Software Change Management</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0d9488; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .pill { background:#ccfbf1; color:#0f766e; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; text-align:left }
+    .opt:hover { border-color:#99f6e4; }
+    .opt.correct { border-color:#0d9488; background:#ecfdf5; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#0f766e }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Lecture 10 MCQ Quiz — Software Change Management</h1>
+      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Lecture 10: Software Change Management (slides). For study practice only.
+  </footer>
+
+  <script>
+  const QUESTIONS = [
+    {
+      q: "Why do software teams use version control systems (VCS) according to the lecture?",
+      options: [
+        "To avoid writing comments in code",
+        "To track changes, collaborate effectively and revert versions when needed",
+        "To enforce a strict coding style across teams",
+        "To automatically fix bugs in the software"
+      ],
+      correct: 1,
+      why: "Version control provides history, supports collaboration, and allows rollbacks when issues arise."
+    },
+    {
+      q: "Which statement accurately contrasts centralized and distributed version control?",
+      options: [
+        "Centralized systems rely on a single repository while distributed systems allow each developer to have a full local repository",
+        "Distributed systems require always being connected to a central server",
+        "Centralized systems store multiple complete copies on each machine",
+        "Distributed systems cannot share code between developers"
+      ],
+      correct: 0,
+      why: "In a centralized model there is one authoritative repository; distributed systems like Git clone the entire history so developers can work offline and sync changes."
+    },
+    {
+      q: "In Git, what uniquely identifies each commit?",
+      options: [
+        "The author’s email address",
+        "A timestamp only",
+        "A SHA‑1 hash and metadata including parent links",
+        "The number of lines changed"
+      ],
+      correct: 2,
+      why: "Git computes a hash from the contents and metadata of each commit and stores parent pointers to create the version graph."
+    },
+    {
+      q: "What is the purpose of branching in version control?",
+      options: [
+        "To permanently delete code history",
+        "To allow parallel development by diverging the version graph",
+        "To lock the repository so others can’t commit",
+        "To compress the repository size"
+      ],
+      correct: 1,
+      why: "Branches let teams work on features or experiments independently without affecting the main line until merging."
+    },
+    {
+      q: "According to the lecture, what is a recommended quality for a good commit message?",
+      options: [
+        "Include multiple unrelated changes in one commit",
+        "Describe the purpose and why the change was made succinctly",
+        "Use only emojis for brevity",
+        "Omit the subject line entirely"
+      ],
+      correct: 1,
+      why: "Good commit messages are concise yet explain what changed and why, aiding future maintainers."
+    },
+    {
+      q: "When resolving merge conflicts, which Git command helps examine differences between commits?",
+      options: [
+        "git diff",
+        "git init",
+        "git gc",
+        "git remote add"
+      ],
+      correct: 0,
+      why: "git diff shows line‑by‑line differences between commits or working copies, useful for resolving conflicts."
+    },
+    {
+      q: "What does ‘git checkout -b new‑feature’ do?",
+      options: [
+        "Deletes the new‑feature branch",
+        "Creates and switches to a new branch named new‑feature",
+        "Merges new‑feature into the current branch",
+        "Pushes changes to the remote repository"
+      ],
+      correct: 1,
+      why: "The option -b both creates and checks out the new branch in one step."
+    },
+    {
+      q: "What is the typical life‑cycle state sequence for a file in Git?",
+      options: [
+        "Untracked → unmodified → modified → staged → committed",
+        "Tracked → deleted → staged",
+        "Unmodified → compressed → encrypted → stored",
+        "Compiled → executed → archived"
+      ],
+      correct: 0,
+      why: "Files are untracked initially, then tracked and modified; staging prepares them for the next commit."
+    },
+    {
+      q: "Which question does a version control system help answer?",
+      options: [
+        "When a change was made and by whom",
+        "How many CPU cores the server has",
+        "The colour of the user interface",
+        "The sales numbers for the product"
+      ],
+      correct: 0,
+      why: "SCM records who changed what and when, enabling accountability and history tracking."
+    },
+    {
+      q: "In centralized version control, what happens if the central server becomes unavailable?",
+      options: [
+        "Developers cannot commit or retrieve updates until it is restored",
+        "Work continues unaffected because each developer has a full copy",
+        "Each developer has a full copy of history",
+        "All data is stored in the cloud automatically"
+      ],
+      correct: 0,
+      why: "Centralised systems have a single authoritative server; if it is down, team members cannot sync their changes."
+    },
+    {
+      q: "Why is it advantageous that distributed systems like Git allow developers to work offline?",
+      options: [
+        "Developers can commit locally without a central server",
+        "They cannot share changes at all",
+        "They must be online to make commits",
+        "It reduces security"
+      ],
+      correct: 0,
+      why: "With a local repository containing the full history, developers can commit and explore history offline and push later."
+    },
+    {
+      q: "What does Git’s snapshot model mean?",
+      options: [
+        "Each commit stores a complete snapshot of the files, not just differences",
+        "Git stores only diffs between versions",
+        "Git uses a single file for all versions",
+        "Git does not track file content"
+      ],
+      correct: 0,
+      why: "Git records the state of every file in each commit, although it efficiently stores unchanged data."
+    },
+    {
+      q: "In Git, what is a branch?",
+      options: [
+        "A movable pointer to a specific commit",
+        "A copy of the entire repository on another server",
+        "A bug",
+        "An external plugin"
+      ],
+      correct: 0,
+      why: "A branch is simply a name pointing to a commit; as new commits are added, the pointer moves forward."
+    },
+    {
+      q: "The HEAD pointer in Git refers to:",
+      options: [
+        "The current checked‑out commit and branch",
+        "The last tag",
+        "A remote server",
+        "The root of the file system"
+      ],
+      correct: 0,
+      why: "HEAD indicates the snapshot you have checked out – usually the tip of the current branch."
+    },
+    {
+      q: "Which command creates a new branch without switching to it?",
+      options: [
+        "git branch new‑branch",
+        "git checkout new‑branch",
+        "git merge",
+        "git commit -b new‑branch"
+      ],
+      correct: 0,
+      why: "git branch creates a new branch pointer, whereas git checkout -b both creates and switches."
+    },
+    {
+      q: "Why should commit messages avoid including multiple unrelated changes?",
+      options: [
+        "It makes the history harder to understand and revert",
+        "It compresses the repository",
+        "It improves merge speed",
+        "It is mandated by Git"
+      ],
+      correct: 0,
+      why: "Keeping changes focussed allows easier reverts and clearer understanding of the history."
+    },
+    {
+      q: "What is an example of a good commit message subject line?",
+      options: [
+        "Fix bug in login form",
+        "Fixed",
+        "Various changes",
+        "Updated stuff"
+      ],
+      correct: 0,
+      why: "A concise imperative summary (e.g., 'Fix bug in login form') conveys what the commit does."
+    },
+    {
+      q: "Which Git command deletes a branch?",
+      options: [
+        "git branch -d branch‑name",
+        "git delete branch‑name",
+        "git rm branch branch‑name",
+        "git branch new"
+      ],
+      correct: 0,
+      why: "git branch -d removes a local branch pointer after it has been merged or is no longer needed."
+    },
+    {
+      q: "When two branches modify the same lines of a file, merging will likely result in:",
+      options: [
+        "A merge conflict requiring manual resolution",
+        "An automatic merge with no issues",
+        "The deletion of both changes",
+        "The creation of multiple copies"
+      ],
+      correct: 0,
+      why: "Conflicting changes to the same lines cannot be merged automatically; developers must resolve them manually."
+    },
+    {
+      q: "Which Git command helps list the commit history with messages and authors?",
+      options: [
+        "git log",
+        "git diff",
+        "git init",
+        "git status"
+      ],
+      correct: 0,
+      why: "git log displays a list of commits with their messages and metadata."
+    },
+    {
+      q: "If a file is untracked in Git, what must you do before committing it?",
+      options: [
+        "Use git add to stage it",
+        "Use git rm",
+        "Use git merge",
+        "Use git fetch"
+      ],
+      correct: 0,
+      why: "git add tells Git to start tracking the file and include its current contents in the next commit."
+    },
+    {
+      q: "How can you view which files are staged and not staged?",
+      options: [
+        "git status",
+        "git push",
+        "git merge",
+        "git reset"
+      ],
+      correct: 0,
+      why: "git status shows the working tree state including staged and unstaged changes."
+    },
+    {
+      q: "In Git, what is meant by a ‘fast‑forward’ merge?",
+      options: [
+        "When the branch being merged is directly ahead of the current branch and no new commit is created",
+        "A merge that rewrites history",
+        "A merge that introduces conflicts",
+        "A merge that deletes commits"
+      ],
+      correct: 0,
+      why: "If the target branch has not diverged, Git can simply move the branch pointer forward without creating a merge commit."
+    },
+    {
+      q: "Which of the following is not part of typical commit metadata?",
+      options: [
+        "Code file size",
+        "Author",
+        "Timestamp",
+        "Parent commit(s)"
+      ],
+      correct: 0,
+      why: "Metadata includes author, date and parent but not metrics like file size."
+    },
+    {
+      q: "Why should a commit message body explain why a change was made?",
+      options: [
+        "So future maintainers understand context and rationale",
+        "So Git can run tests",
+        "So it increases repository size",
+        "So it hides changes"
+      ],
+      correct: 0,
+      why: "Explaining the motivation helps others understand decisions and avoid reverting necessary changes."
+    },
+    {
+      q: "According to the lecture, how can you resolve merge conflicts?",
+      options: [
+        "By opening the conflicted file, editing to choose the correct content and staging the resolved file",
+        "By running git init again",
+        "By deleting the repository",
+        "By ignoring the conflict"
+      ],
+      correct: 0,
+      why: "Conflicts require manual intervention: edit the file to keep the right changes and then stage and commit the result."
+    },
+    {
+      q: "When a file is in the ‘staged’ state, what does that mean?",
+      options: [
+        "The file’s current version has been added to the index and will be included in the next commit",
+        "It is being executed",
+        "It has been deleted",
+        "It is in the remote repository"
+      ],
+      correct: 0,
+      why: "Staging prepares the modified file’s contents for the next commit."
+    },
+    {
+      q: "Why is version control important for collaboration?",
+      options: [
+        "It allows multiple people to work on code, merge their changes and avoid conflicts",
+        "It restricts access",
+        "It forces sequential editing",
+        "It eliminates peer review"
+      ],
+      correct: 0,
+      why: "VCS tools enable parallel work, maintain a shared history and provide mechanisms to resolve conflicting changes."
+    },
+    {
+      q: "What is a merge conflict marker in a file?",
+      options: [
+        "Text like ‘<<<<<<<’, ‘=======’, ‘>>>>>>>’ inserted by Git to highlight conflicting changes",
+        "A hidden file",
+        "A compiled binary",
+        "A commit message"
+      ],
+      correct: 0,
+      why: "During a conflict Git annotates the conflicting sections so developers can choose which parts to keep."
+    },
+    {
+      q: "According to best practices, when writing commit messages, the subject line should:",
+      options: [
+        "Be in the imperative mood and under about 50 characters",
+        "Include all details in one line",
+        "Use past‑tense description",
+        "Include emojis only"
+      ],
+      correct: 0,
+      why: "A concise imperative subject summarises what the commit will do."
+    },
+    {
+      q: "Which Git command combines two branches and creates a new commit representing their union?",
+      options: [
+        "git merge",
+        "git reset",
+        "git fetch",
+        "git add"
+      ],
+      correct: 0,
+      why: "git merge integrates the histories of two branches and creates a merge commit when necessary."
+    },
+    {
+      q: "When you create a branch using git checkout -b new‑feature, Git automatically:",
+      options: [
+        "Makes HEAD point to the new branch",
+        "Deletes the main branch",
+        "Pushes to remote",
+        "Stages all files"
+      ],
+      correct: 0,
+      why: "git checkout -b both creates the branch and switches HEAD to it."
+    },
+    {
+      q: "How can you compare your working directory to the last commit?",
+      options: [
+        "git diff HEAD",
+        "git log",
+        "git branch",
+        "git init"
+      ],
+      correct: 0,
+      why: "git diff HEAD shows changes in the working directory relative to the latest commit."
+    },
+    {
+      q: "In the lecture, version control is described as simplifying collaboration because:",
+      options: [
+        "It records history, identifies who changed what and supports integrating contributions",
+        "It prevents others from editing files",
+        "It automates requirement gathering",
+        "It ensures no bugs exist"
+      ],
+      correct: 0,
+      why: "SCM tools keep track of changes and help coordinate teamwork."
+    },
+    {
+      q: "What is a commit hash used for?",
+      options: [
+        "Uniquely identifying a specific commit",
+        "Counting lines of code",
+        "Setting file permissions",
+        "Indicating branch names"
+      ],
+      correct: 0,
+      why: "Hashes serve as permanent identifiers for commits and can be used to reference them."
+    },
+    {
+      q: "Why is it useful to view differences between commits using git diff?",
+      options: [
+        "To understand what changed and resolve conflicts",
+        "To automatically commit",
+        "To compile code",
+        "To update remote branches"
+      ],
+      correct: 0,
+      why: "Examining diffs helps developers review changes and reconcile differences during merges."
+    },
+    {
+      q: "Which state does a file enter after being modified but before git add?",
+      options: [
+        "Modified",
+        "Staged",
+        "Untracked",
+        "Committed"
+      ],
+      correct: 0,
+      why: "Once edited, a tracked file is considered modified until staged."
+    },
+    {
+      q: "Which Git command shows the current branches and their pointers?",
+      options: [
+        "git branch",
+        "git status",
+        "git log",
+        "git diff"
+      ],
+      correct: 0,
+      why: "git branch lists existing branches and highlights which one HEAD points to."
+    },
+    {
+      q: "How does distributed version control help with backup and redundancy?",
+      options: [
+        "Each clone contains the full history, so if one repository is lost, others still have all data",
+        "It doesn’t help",
+        "It keeps no backups",
+        "It saves only remote"
+      ],
+      correct: 0,
+      why: "Because every clone has the complete history, the loss of one does not result in losing all versions."
+    },
+    {
+      q: "According to commit message guidelines, the body should be separated from the subject line by:",
+      options: [
+        "A blank line to improve readability",
+        "A period",
+        "A dash",
+        "A semicolon"
+      ],
+      correct: 0,
+      why: "A blank line distinguishes the concise summary from the detailed explanation."
+    },
+    {
+      q: "What is the effect of ‘git branch -d feature’ once a feature branch has been merged?",
+      options: [
+        "It deletes the local branch pointer",
+        "It deletes the remote branch",
+        "It removes commit history",
+        "It modifies HEAD"
+      ],
+      correct: 0,
+      why: "git branch -d cleans up local branches after they’re merged into another branch."
+    },
+    {
+      q: "Which state indicates a file is not yet under version control?",
+      options: [
+        "Untracked",
+        "Modified",
+        "Staged",
+        "Committed"
+      ],
+      correct: 0,
+      why: "Untracked files are not part of the repository until added."
+    },
+    {
+      q: "In Git, what is the purpose of ‘git revert’?",
+      options: [
+        "To create a new commit that undoes changes of a previous commit",
+        "To delete commit history",
+        "To rename a branch",
+        "To initialise a repository"
+      ],
+      correct: 0,
+      why: "git revert safely undoes the effects of a commit by creating a new inverse commit."
+    },
+    {
+      q: "How does ‘git revert’ differ from ‘git reset’?",
+      options: [
+        "Revert creates a new commit to undo changes, while reset rewrites history by moving the branch pointer",
+        "Revert deletes history, whereas reset preserves it",
+        "They are identical and both rewrite history",
+        "Reset only works on remote repositories"
+      ],
+      correct: 0,
+      why: "git revert is safe for shared branches because it records a new commit that reverses earlier changes; git reset moves the branch pointer, potentially altering history and is unsafe on shared branches."
+    },
+    {
+      q: "Which file state indicates that a file has been modified and added to the staging area, ready to be committed?",
+      options: [
+        "Staged",
+        "Untracked",
+        "Unmodified",
+        "Deleted"
+      ],
+      correct: 0,
+      why: "Files in the staged state have been added to the staging area via git add and are ready to be included in the next commit."
+    },
+    {
+      q: "What distinguishes a centralised version control system like SVN from a distributed system like Git?",
+      options: [
+        "There is a single central repository that all clients commit to",
+        "Every developer has a full copy of the repository",
+        "Commits do not require a network connection",
+        "Branches do not exist in centralised systems"
+      ],
+      correct: 0,
+      why: "Centralised systems use a single master repository; distributed systems give each developer a complete copy and allow offline commits."
+    },
+    {
+      q: "In a managed team workflow, why do developers submit changes via pull requests instead of pushing directly to the main repository?",
+      options: [
+        "To allow peers or a configuration manager to review and approve changes before integration",
+        "To bypass version control restrictions",
+        "To automatically merge without review",
+        "To reduce collaboration among team members"
+      ],
+      correct: 0,
+      why: "Pull requests enable code review, discussion and quality checks before changes are merged into the shared codebase."
+    },
+    {
+      q: "Which Git command both creates a new branch and switches to it?",
+      options: [
+        "git checkout -b <branch_name>",
+        "git branch <branch_name> then git commit -m <branch_name>",
+        "git merge <branch_name>",
+        "git init <branch_name>"
+      ],
+      correct: 0,
+      why: "git checkout -b creates a new branch and checks it out in a single step."
+    },
+    {
+      q: "What is one advantage of distributed version control systems mentioned in the lecture?",
+      options: [
+        "Developers can commit locally without a network connection and later sync with the remote repository",
+        "Merge conflicts are impossible",
+        "They track only one file at a time",
+        "There is only one central copy of the code"
+      ],
+      correct: 0,
+      why: "Distributed systems like Git allow developers to work offline and commit locally, improving flexibility and resiliency."
+    },
+    {
+      q: "Which metadata is included in a Git commit?",
+      options: [
+        "A unique hash ID, parent commit reference, author, timestamp and commit message",
+        "The compiler version and file paths only",
+        "The programming language used",
+        "A list of all remote repositories"
+      ],
+      correct: 0,
+      why: "Each commit records its hash, a pointer to its parent, the author, date and message, enabling traceability and history reconstruction."
+    },
+    {
+      q: "What happens when a merge conflict occurs in Git?",
+      options: [
+        "Git pauses the merge and marks conflicting sections for manual resolution",
+        "Git automatically resolves all differences",
+        "Git deletes one of the branches involved",
+        "Git resets the repository to a previous state"
+      ],
+      correct: 0,
+      why: "When two branches modify the same lines differently, Git stops the merge so the developer can decide which changes to keep."
+    },
+    {
+      q: "In a collaborative workflow where all developers can push to the shared repository, what should you do before pushing your own changes?",
+      options: [
+        "Pull and merge others’ changes so your local copy is up to date and conflicts are resolved",
+        "Delete all local branches",
+        "Reset the repository history",
+        "Avoid writing commit messages"
+      ],
+      correct: 0,
+      why: "Synchronising with the remote repository ensures your changes are applied on top of the latest work, reducing the likelihood of conflicts."
+    },
+    {
+      q: "Which Git operation rewrites history and should be avoided on shared branches?",
+      options: [
+        "git reset",
+        "git revert",
+        "git commit",
+        "git pull"
+      ],
+      correct: 0,
+      why: "git reset moves branch pointers and can discard commits, which is disruptive when others depend on the shared history; git revert instead preserves history."
+    }
+  ];
+
+  const state = { score: 0, answered: 0 };
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+
+  function render() {
+    quizEl.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      item.__answered = false;
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+    const data = QUESTIONS[qIndex];
+    if (data.__answered) return;
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+    data.__answered = true;
+    state.answered++;
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      options[data.correct].classList.add('correct');
+    }
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = QUESTIONS[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = 0;
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  render();
+  </script>
+</body>
+</html>
