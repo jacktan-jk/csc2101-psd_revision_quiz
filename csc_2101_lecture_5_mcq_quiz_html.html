@@ -63,219 +63,267 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    // Activity diagrams
+    const QUESTIONS = [
+    // 1
     { q: "What does an activity diagram primarily show?",
       options: [
-        "Network topology",
         "Procedural flow of actions (what happens), not who does it",
+        "Network topology",
         "Class hierarchy only",
         "Deployment architecture"
-      ], correct: 1,
-      why: "Activity diagrams provide a flowchart-style representation of actions and control flow; they focus on what happens, not on the acting entity." },
-
+      ], correct: 0,
+      why: "Activity diagrams provide a flowchart-style representation of actions and control flow; they focus on what happens, not on the acting entity."
+    },
+    // 2
     { q: "Which symbol denotes a decision/merge in an activity diagram?",
-      options: ["Rounded rectangle","Diamond","Thick bar","Circle with X"], correct: 1,
-      why: "Decision points and merges are drawn with diamonds to encode conditional sequences." },
-
+      options: [
+        "Rounded rectangle",
+        "Thick bar",
+        "Diamond",
+        "Circle with X"
+      ], correct: 2,
+      why: "Decision points and merges are drawn with diamonds to encode conditional sequences."
+    },
+    // 3
     { q: "In activity diagrams, which element models parallel execution?",
       options: [
-        "Fork/Join with thick synchronization bars",
         "Dashed arrow",
         "Inheritance triangle",
+        "Fork/Join with thick synchronization bars",
         "Use-case ellipse"
-      ], correct: 0,
-      why: "Parallelism is represented with thick bars: fork to split concurrent paths; join to synchronize." },
-
+      ], correct: 2,
+      why: "Parallelism is represented with thick bars: fork to split concurrent paths; join to synchronize."
+    },
+    // 4
     { q: "Which is TRUE about activity diagrams per the lecture?",
       options: [
         "They must always show actors on the swimlanes.",
-        "They can describe a use case, the logic of an operation, or an entire system.",
         "They replace sequence diagrams.",
-        "They must include database schemas."
-      ], correct: 1,
-      why: "They are versatile: describe use cases, operation logic, or whole systems." },
-
+        "They must include database schemas.",
+        "They can describe a use case, the logic of an operation, or an entire system."
+      ], correct: 3,
+      why: "They are versatile: describe use cases, operation logic, or whole systems."
+    },
+    // 5
     { q: "Where do activity diagrams commonly come from in the workflow?",
       options: [
-        "Directly from deployment diagrams",
         "Transitioning from use case scenarios to concrete flows",
+        "Directly from deployment diagrams",
         "After coding only",
         "From statecharts exclusively"
-      ], correct: 1,
-      why: "The lecture shows a pipeline from requirements → use cases → activity diagrams, etc." },
-
-    // Sequence diagrams
-    { q: "Sequence diagrams combine information about…",
+      ], correct: 0,
+      why: "The lecture shows a pipeline from requirements \u2192 use cases \u2192 activity diagrams, etc."
+    },
+    // 6
+    { q: "Sequence diagrams combine information about\u2026",
       options: [
         "Only activities",
-        "Objects and activities they perform over time",
         "Only classes without time",
+        "Objects and activities they perform over time",
         "Database tables"
-      ], correct: 1,
-      why: "Sequence diagrams show object lifelines and the time-ordered messages between them." },
-
-    { q: "The vertical dotted line under an object in a sequence diagram represents…",
-      options: ["Object inheritance","Time (lifeline)","Network latency","Thread count"], correct: 1,
-      why: "It is the lifeline showing the existence of the object over time." },
-
-    { q: "A self-call (reflexive message) is used to…",
+      ], correct: 2,
+      why: "Sequence diagrams show object lifelines and the time-ordered messages between them."
+    },
+    // 7
+    { q: "The vertical dotted line under an object in a sequence diagram represents\u2026",
       options: [
-        "Model an object calling one of its own methods",
+        "Object inheritance",
+        "Network latency",
+        "Time (lifeline)",
+        "Thread count"
+      ], correct: 2,
+      why: "It is the lifeline showing the existence of the object over time."
+    },
+    // 8
+    { q: "A self-call (reflexive message) is used to\u2026",
+      options: [
         "Indicate class inheritance",
         "Show database joins",
-        "Mark object deletion"
-      ], correct: 0,
-      why: "Reflexive messages document internal method calls within the same object." },
-
+        "Mark object deletion",
+        "Model an object calling one of its own methods"
+      ], correct: 3,
+      why: "Reflexive messages document internal method calls within the same object."
+    },
+    // 9
     { q: "Which statement is correct about messages in sequence diagrams?",
       options: [
-        "Only synchronous messages exist",
         "Both synchronous and asynchronous messages are supported",
+        "Only synchronous messages exist",
         "Messages are not allowed to return values",
         "Actors cannot send messages"
-      ], correct: 1,
-      why: "The lecture shows synchronous and asynchronous messages, returns, and actor initiation." },
-
+      ], correct: 0,
+      why: "The lecture shows synchronous and asynchronous messages, returns, and actor initiation."
+    },
+    // 10
     { q: "Where can a sequence be initiated from?",
       options: [
         "Only from inside the system",
-        "External actors or other classes may start a sequence by sending an initial message",
         "Only timers",
+        "External actors or other classes may start a sequence by sending an initial message",
         "Only UI gestures"
-      ], correct: 1,
-      why: "Slides illustrate external actors/classes starting processes via initial messages." },
-
-    // State diagrams
-    { q: "State machine models describe…",
+      ], correct: 2,
+      why: "Slides illustrate external actors/classes starting processes via initial messages."
+    },
+    // 11
+    { q: "State machine models describe\u2026",
       options: [
-        "System behaviour in response to events, transitioning between states",
         "Static database schemas",
         "Only performance metrics",
+        "System behaviour in response to events, transitioning between states",
         "Hardware wiring"
-      ], correct: 0,
-      why: "They capture event-driven transitions among named states with actions." },
-
+      ], correct: 2,
+      why: "They capture event-driven transitions among named states with actions."
+    },
+    // 12
     { q: "Which pairing is correct for state modelling?",
       options: [
-        "Event → causes transition; Action → consequence executed during transition",
-        "Action → causes transition; Event → consequence",
-        "State → always initial; Transition → always final",
-        "Composite state → cannot contain substates"
-      ], correct: 0,
-      why: "Terminology: events trigger transitions; actions are performed as a result; composite states can be decomposed." },
-
+        "Action \u2192 causes transition; Event \u2192 consequence",
+        "State \u2192 always initial; Transition \u2192 always final",
+        "Composite state \u2192 cannot contain substates",
+        "Event \u2192 causes transition; Action \u2192 consequence executed during transition"
+      ], correct: 3,
+      why: "Terminology: events trigger transitions; actions are performed as a result; composite states can be decomposed."
+    },
+    // 13
     { q: "In the microwave oven example, which is a valid state?",
       options: [
-        "SQL Connected",
         "Half power",
+        "SQL Connected",
         "Buffering",
         "Kernel Panic"
-      ], correct: 1,
-      why: "The oven states include Waiting, Half power, Full power, Set time, Disabled, Enabled, Operation." },
-
+      ], correct: 0,
+      why: "The oven states include Waiting, Half power, Full power, Set time, Disabled, Enabled, Operation."
+    },
+    // 14
     { q: "Which stimulus belongs to the microwave oven example?",
       options: [
         "Deploy",
-        "Number (numeric key pressed)",
         "Scale out",
+        "Number (numeric key pressed)",
         "Crash"
-      ], correct: 1,
-      why: "Stimuli include Half power, Full power, Timer, Number, Door open/closed, Start, Cancel." },
-
+      ], correct: 2,
+      why: "Stimuli include Half power, Full power, Timer, Number, Door open/closed, Start, Cancel."
+    },
+    // 15
     { q: "What should NOT occur when the microwave door is open (per example)?",
       options: [
         "Display current time",
-        "Operate/cook",
         "Show 'Not ready'",
+        "Operate/cook",
         "Turn interior light on"
-      ], correct: 1,
-      why: "Safety rule: the oven should not operate when the door is open." },
-
-    // Software reuse & components
-    { q: "A software component is described as…",
+      ], correct: 2,
+      why: "Safety rule: the oven should not operate when the door is open."
+    },
+    // 16
+    { q: "A software component is described as\u2026",
       options: [
         "An arbitrary code snippet",
-        "A self-contained bundle of state/behaviour with well-defined interfaces (services)",
         "Only a UI widget",
-        "A database row"
-      ], correct: 1,
-      why: "Definition: component encapsulates behaviour/state behind provided/required interfaces." },
-
-    { q: "Provided vs Required interfaces mean…",
+        "A database row",
+        "A self-contained bundle of state/behaviour with well-defined interfaces (services)"
+      ], correct: 3,
+      why: "Definition: component encapsulates behaviour/state behind provided/required interfaces."
+    },
+    // 17
+    { q: "Provided vs Required interfaces mean\u2026",
       options: [
-        "Provided: services the component offers; Required: services it needs",
         "Provided: services it needs; Required: services it offers",
+        "Provided: services the component offers; Required: services it needs",
         "Both mean the same",
         "Only provided interfaces exist"
-      ], correct: 0,
-      why: "Components expose provided interfaces and declare required ones they depend on." },
-
+      ], correct: 1,
+      why: "Components expose provided interfaces and declare required ones they depend on."
+    },
+    // 18
     { q: "Which is a benefit of software reuse listed in the lecture?",
       options: [
-        "Increased reliability and reduced process risk",
         "Guaranteed zero defects",
+        "Increased reliability and reduced process risk",
         "Eliminates documentation needs",
         "Avoids all integration work"
-      ], correct: 0,
-      why: "Benefits include reliability, reduced risk, effective use of specialists, standards compliance, accelerated development." },
-
+      ], correct: 1,
+      why: "Benefits include reliability, reduced risk, effective use of specialists, standards compliance, accelerated development."
+    },
+    // 19
     { q: "Which is a problem with reuse noted in the slides?",
       options: [
         "Too many unit tests",
-        "Lack of tool support; higher maintenance; costly libraries; effort to understand/adapt; Not-invented-here",
         "Excessive performance",
+        "Lack of tool support; higher maintenance; costly libraries; effort to understand/adapt; Not-invented-here",
         "Over-documentation only"
-      ], correct: 1,
-      why: "All are directly listed as reuse challenges." },
-
+      ], correct: 2,
+      why: "All are directly listed as reuse challenges."
+    },
+    // 20
     { q: "Which levels of reuse are mentioned?",
       options: [
         "Only object reuse",
-        "System, application, component, object/function reuse",
         "Process and HR reuse",
-        "Hardware and network reuse"
-      ], correct: 1,
-      why: "Lecture enumerates these four levels." },
-
+        "Hardware and network reuse",
+        "System, application, component, object/function reuse"
+      ], correct: 3,
+      why: "Lecture enumerates these four levels."
+    },
+    // 21
     { q: "General-purpose vs application-specific components: which is correct?",
       options: [
-        "General-purpose components provide common functionality for many apps; application-specific implement particular domain logic",
         "Both are identical",
+        "General-purpose components provide common functionality for many apps; application-specific implement particular domain logic",
         "General-purpose are always UI only",
         "Application-specific must be open-source"
-      ], correct: 0,
-      why: "Definitions as per slides." },
-
-    { q: "In the print service example, a component may expose operations like…",
+      ], correct: 1,
+      why: "Definitions as per slides."
+    },
+    // 22
+    { q: "In the print service example, a component may expose operations like\u2026",
       options: [
-        "Register/Unregister, GetQueue, Remove, Transfer",
         "malloc/free",
+        "Register/Unregister, GetQueue, Remove, Transfer",
         "SELECT/INSERT",
         "chmod/chown"
-      ], correct: 0,
-      why: "Slides list print-related provided/required interface operations in the example." },
-
+      ], correct: 1,
+      why: "Slides list print-related provided/required interface operations in the example."
+    },
+    // 23
     { q: "Which statement about component dependencies is encouraged?",
       options: [
-        "Component responsibilities should be clear and resilient to changes in others",
         "Components should freely mutate APIs",
         "Components should hide interfaces",
+        "Component responsibilities should be clear and resilient to changes in others",
         "Dependencies must be hard-coded"
-      ], correct: 0,
-      why: "Slides recommend clear responsibilities and limited coupling via interfaces." },
-
+      ], correct: 2,
+      why: "Slides recommend clear responsibilities and limited coupling via interfaces."
+    },
+    // 24
     { q: "Which diagram best models event-driven responses of a system?",
-      options: ["Activity diagram","Sequence diagram","State diagram","Deployment diagram"], correct: 2,
-      why: "State diagrams model behaviour in response to events and transitions." },
-
+      options: [
+        "Activity diagram",
+        "Sequence diagram",
+        "Deployment diagram",
+        "State diagram"
+      ], correct: 3,
+      why: "State diagrams model behaviour in response to events and transitions."
+    },
+    // 25
     { q: "Which diagram best shows time-ordered collaboration between objects?",
-      options: ["Class diagram","Sequence diagram","Use case diagram","Component diagram"], correct: 1,
-      why: "Sequence diagrams depict interactions and message order across object lifelines." },
-
+      options: [
+        "Sequence diagram",
+        "Class diagram",
+        "Use case diagram",
+        "Component diagram"
+      ], correct: 0,
+      why: "Sequence diagrams depict interactions and message order across object lifelines."
+    },
+    // 26
     { q: "Which diagram is most suitable to elaborate the steps within a use case scenario like PAY-BILL?",
-      options: ["Activity diagram","State diagram","Package diagram","ER diagram"], correct: 0,
-      why: "Activity diagrams visualise the flow of actions inside a scenario such as PAY-BILL." }
+      options: [
+        "State diagram",
+        "Activity diagram",
+        "Package diagram",
+        "ER diagram"
+      ], correct: 1,
+      why: "Activity diagrams visualise the flow of actions inside a scenario such as PAY-BILL."
+    }
   ];
 
   const state = { score: 0, answered: 0 };

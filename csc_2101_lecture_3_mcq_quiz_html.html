@@ -63,227 +63,257 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    // Evolving requirements & risks
+    const QUESTIONS = [
+    // 1
     { q: "Which is NOT listed as a potential risk when gathering requirements?",
       options: [
+        "Excessive modularity of code",
         "Misunderstanding business context",
         "Misunderstanding system domain",
-        "Cultural differences between customers and teams",
-        "Excessive modularity of code"
-      ], correct: 3,
-      why: "Slides list misunderstandings, culture differences, and vague requirements—not ‘excessive modularity’." },
-
-    { q: "The ‘moving target problem’ refers to…",
+        "Cultural differences between customers and teams"
+      ], correct: 0,
+      why: "Slides list misunderstandings, culture differences, and vague requirements\u2014not \u2018excessive modularity\u2019."
+    },
+    // 2
+    { q: "The \u2018moving target problem\u2019 refers to\u2026",
       options: [
         "Team members changing jobs",
+        "Hardware specs changing post\u2011release",
         "Requirements changing while development is underway and the need to track those changes",
-        "Hardware specs changing post‑release",
         "Source control branching conflicts"
-      ], correct: 1,
-      why: "The lecture defines it as requirements changing during development and tracking those changes." },
-
-    { q: "Requirement engineering is described as an iterative process of…",
+      ], correct: 2,
+      why: "The lecture defines it as requirements changing during development and tracking those changes."
+    },
+    // 3
+    { q: "Requirement engineering is described as an iterative process of\u2026",
       options: [
         "Design, coding, deployment",
-        "Elicitation, specification, and validation",
         "Testing, packaging, marketing",
+        "Elicitation, specification, and validation",
         "Recruitment, training, and budgeting"
-      ], correct: 1,
-      why: "Elicitation → specification → validation in iterations." },
-
-    // Elicitation techniques
+      ], correct: 2,
+      why: "Elicitation \u2192 specification \u2192 validation in iterations."
+    },
+    // 4
     { q: "Which two techniques are explicitly highlighted for ongoing requirement elicitation?",
-      options: ["Interview and survey","Pair programming and TDD","Heuristics and proofs","Benchmarking and capacity planning"], correct: 0,
-      why: "Interview and survey are named as common techniques." },
-
-    { q: "Good question design during elicitation aims to…",
       options: [
-        "Resolve uncertainty and identify new requirements, coordinated across the team",
+        "Pair programming and TDD",
+        "Heuristics and proofs",
+        "Benchmarking and capacity planning",
+        "Interview and survey"
+      ], correct: 3,
+      why: "Interview and survey are named as common techniques."
+    },
+    // 5
+    { q: "Good question design during elicitation aims to\u2026",
+      options: [
         "Impress the client with jargon",
+        "Resolve uncertainty and identify new requirements, coordinated across the team",
         "Avoid rehearsal to save time",
         "Focus only on architecture"
-      ], correct: 0,
-      why: "Slides recommend structured questions, coordination, and rehearsal." },
-
-    // User stories, actors
-    { q: "A user story template from the slides is…",
-      options: [
-        "As a [actor], I want [action], so that [rationale]",
-        "Who, What, Where, When, Why",
-        "Given‑When‑Then only",
-        "Problem‑Agitate‑Solve"
-      ], correct: 0,
-      why: "That exact template is shown with examples." },
-
-    { q: "An actor is defined as…",
-      options: [
-        "Only a human end‑user",
-        "A person, device, or entity that interacts with the software",
-        "A UML stereotype",
-        "Any stakeholder with budget control"
       ], correct: 1,
-      why: "Actor may be person, device, or entity interacting with the system." },
-
-    // Documentation forms
+      why: "Slides recommend structured questions, coordination, and rehearsal."
+    },
+    // 6
+    { q: "A user story template from the slides is\u2026",
+      options: [
+        "Who, What, Where, When, Why",
+        "As a [actor], I want [action], so that [rationale]",
+        "Given\u2011When\u2011Then only",
+        "Problem\u2011Agitate\u2011Solve"
+      ], correct: 1,
+      why: "That exact template is shown with examples."
+    },
+    // 7
+    { q: "An actor is defined as\u2026",
+      options: [
+        "Only a human end\u2011user",
+        "A UML stereotype",
+        "A person, device, or entity that interacts with the software",
+        "Any stakeholder with budget control"
+      ], correct: 2,
+      why: "Actor may be person, device, or entity interacting with the system."
+    },
+    // 8
     { q: "Which is NOT listed as a form of requirement documentation?",
-      options: ["Natural language","Structured natural language (user stories)","UML diagrams","Gantt charts"], correct: 3,
-      why: "Slides list natural language, user stories, pseudocode, UML (class/use‑case/activity/sequence/state)—not Gantt charts." },
-
+      options: [
+        "Gantt charts",
+        "Natural language",
+        "Structured natural language (user stories)",
+        "UML diagrams"
+      ], correct: 0,
+      why: "Slides list natural language, user stories, pseudocode, UML (class/use\u2011case/activity/sequence/state)\u2014not Gantt charts."
+    },
+    // 9
     { q: "Which prioritisation scheme is covered?",
-      options: ["RICE","MoSCoW","Kano","ICE"], correct: 1,
-      why: "MoSCoW: Must, Should, Could, Won’t (for now)." },
-
-    // FR vs NFR
-    { q: "Functional requirements primarily specify…",
+      options: [
+        "MoSCoW",
+        "RICE",
+        "Kano",
+        "ICE"
+      ], correct: 0,
+      why: "MoSCoW: Must, Should, Could, Won\u2019t (for now)."
+    },
+    // 10
+    { q: "Functional requirements primarily specify\u2026",
       options: [
         "How well the system performs",
-        "What the system should do: inputs, outputs, stored data, computations, reactions",
         "Legal compliance only",
+        "What the system should do: inputs, outputs, stored data, computations, reactions",
         "Which team writes the code"
-      ], correct: 1,
-      why: "FR describe intended behaviours: inputs/outputs/data/computations/reactions." },
-
-    { q: "Non‑functional requirements primarily specify…",
+      ], correct: 2,
+      why: "FR describe intended behaviours: inputs/outputs/data/computations/reactions."
+    },
+    // 11
+    { q: "Non\u2011functional requirements primarily specify\u2026",
       options: [
-        "Quality attributes and external constraints such as reliability, performance, usability, security",
         "Exact SQL schema",
         "UI colour palette",
+        "Quality attributes and external constraints such as reliability, performance, usability, security",
         "Test case IDs"
-      ], correct: 0,
-      why: "NFR = quality attributes & constraints; critical to usability/effectiveness." },
-
+      ], correct: 2,
+      why: "NFR = quality attributes & constraints; critical to usability/effectiveness."
+    },
+    // 12
     { q: "Which example illustrates how FR and NFR can blur?",
       options: [
         "System shall use microservices",
-        "System shall include user authorisation with username/password to ensure data protection",
         "System shall be written in Rust",
-        "System shall use OAuth 2.0"
-      ], correct: 1,
-      why: "‘Protect data from unauthorised access’ reads NFR; specifying login function becomes an FR detail." },
-
-    // Measuring NFR
+        "System shall use OAuth 2.0",
+        "System shall include user authorisation with username/password to ensure data protection"
+      ], correct: 3,
+      why: "\u2018Protect data from unauthorised access\u2019 reads NFR; specifying login function becomes an FR detail."
+    },
+    // 13
     { q: "Why must NFR be measurable?",
       options: [
-        "To support subjective debates",
         "So they can be verified at system testing with clear metrics, conditions, and thresholds",
+        "To support subjective debates",
         "Because unit tests always cover them",
-        "To avoid trade‑offs"
-      ], correct: 1,
-      why: "Slides emphasise measurability, operating conditions, and thresholds; typically validated at system test level." },
-
+        "To avoid trade\u2011offs"
+      ], correct: 0,
+      why: "Slides emphasise measurability, operating conditions, and thresholds; typically validated at system test level."
+    },
+    // 14
     { q: "Which set correctly pairs a property with a typical measure?",
       options: [
-        "Reliability — Mean time to failure",
-        "Ease of use — CPU utilisation",
-        "Portability — Frames per second",
-        "Robustness — Lines of code"
-      ], correct: 0,
-      why: "Examples list MTTF for reliability; other pairings are mismatches." },
-
+        "Ease of use \u2014 CPU utilisation",
+        "Reliability \u2014 Mean time to failure",
+        "Portability \u2014 Frames per second",
+        "Robustness \u2014 Lines of code"
+      ], correct: 1,
+      why: "Examples list MTTF for reliability; other pairings are mismatches."
+    },
+    // 15
     { q: "Which is a valid quantified usability requirement from the slides?",
       options: [
         "The UI should be good",
-        "Four of five users shall complete a booking within 5 minutes after a 2‑hour introduction",
         "Users will love the app",
+        "Four of five users shall complete a booking within 5 minutes after a 2\u2011hour introduction",
         "Everyone finishes tasks instantly"
-      ], correct: 1,
-      why: "Quantified: proportion, time, training duration." },
-
+      ], correct: 2,
+      why: "Quantified: proportion, time, training duration."
+    },
+    // 16
     { q: "Which is a valid quantified reliability example?",
       options: [
         "Defect rate shall be low",
         "Down time shall be minimal",
-        "System defect rate < 1 failure per 1,000 hours of operation",
-        "System never fails"
-      ], correct: 2,
-      why: "Slides give numeric reliability targets like failures per operating hours; avoid vague terms." },
-
-    { q: "Security testing methods highlighted include…",
+        "System never fails",
+        "System defect rate < 1 failure per 1,000 hours of operation"
+      ], correct: 3,
+      why: "Slides give numeric reliability targets like failures per operating hours; avoid vague terms."
+    },
+    // 17
+    { q: "Security testing methods highlighted include\u2026",
       options: [
-        "Fuzz testing, SQL injection testing, port scanning, and penetration testing",
         "Unit testing and linting only",
+        "Fuzz testing, SQL injection testing, port scanning, and penetration testing",
         "A/B testing",
         "Heuristic evaluation only"
-      ], correct: 0,
-      why: "All listed under security testing methods/approaches." },
-
+      ], correct: 1,
+      why: "All listed under security testing methods/approaches."
+    },
+    // 18
     { q: "Which is a plausible security metric from the slides?",
       options: [
-        "Time and resources to penetration; successful penetrations per year",
         "Pixels per inch",
+        "Time and resources to penetration; successful penetrations per year",
         "Number of UI themes",
-        "Daily stand‑up duration"
-      ], correct: 0,
-      why: "Security metrics include time/resources to penetration, unpatched vulnerabilities, attack surface, etc." },
-
-    { q: "Performance testing should specify…",
+        "Daily stand\u2011up duration"
+      ], correct: 1,
+      why: "Security metrics include time/resources to penetration, unpatched vulnerabilities, attack surface, etc."
+    },
+    // 19
+    { q: "Performance testing should specify\u2026",
       options: [
         "Only average response time without conditions",
-        "Throughput/response metrics with operating conditions and thresholds (limit vs stress)",
         "Stakeholder names",
+        "Throughput/response metrics with operating conditions and thresholds (limit vs stress)",
         "Licensing terms"
-      ], correct: 1,
-      why: "Slides list throughput/response and thresholds including limit and stress behaviour." },
-
+      ], correct: 2,
+      why: "Slides list throughput/response and thresholds including limit and stress behaviour."
+    },
+    // 20
     { q: "Which is a valid performance requirement example from the slides?",
       options: [
         "System should be fast",
-        "Process 100 payment transactions per second at peak load",
         "Pages should feel snappy",
-        "Zero latency always"
-      ], correct: 1,
-      why: "Concrete throughput target is provided in the examples." },
-
-    // Usability
-    { q: "Usability sub‑attributes listed include…",
+        "Zero latency always",
+        "Process 100 payment transactions per second at peak load"
+      ], correct: 3,
+      why: "Concrete throughput target is provided in the examples."
+    },
+    // 21
+    { q: "Usability sub\u2011attributes listed include\u2026",
       options: [
-        "Learnability, operability, likeability, user satisfaction",
         "Compressibility, serialisability",
+        "Learnability, operability, likeability, user satisfaction",
         "Refactorability, testability only",
         "Integrability, shippability only"
-      ], correct: 0,
-      why: "These are directly named as usability metrics." },
-
-    // MoSCoW priorities
-    { q: "In MoSCoW, ‘Should Have’ means…",
+      ], correct: 1,
+      why: "These are directly named as usability metrics."
+    },
+    // 22
+    { q: "In MoSCoW, \u2018Should Have\u2019 means\u2026",
       options: [
         "Critical to current delivery",
-        "Important but not vital; large impact on success",
         "Desirable with minor impact if left out",
+        "Important but not vital; large impact on success",
         "Out of scope for current timeframe"
-      ], correct: 1,
-      why: "Matches the MoSCoW definitions on the slide." },
-
-    // FR examples
+      ], correct: 2,
+      why: "Matches the MoSCoW definitions on the slide."
+    },
+    // 23
     { q: "Which is a correct FR example from the clinic system?",
       options: [
         "System shall be reliable",
-        "User can search appointment lists for all clinics",
         "System shall be easy to use",
+        "User can search appointment lists for all clinics",
         "CPU usage shall be <50%"
-      ], correct: 1,
-      why: "Clinic example lists searchable appointment lists as a functional requirement." },
-
-    // Thresholds & operating conditions
-    { q: "When defining NFR tests, you should specify…",
+      ], correct: 2,
+      why: "Clinic example lists searchable appointment lists as a functional requirement."
+    },
+    // 24
+    { q: "When defining NFR tests, you should specify\u2026",
       options: [
         "Only a target number",
-        "Property, metric, operating conditions, and threshold",
         "A persona name",
-        "Price of the product"
-      ], correct: 1,
-      why: "Slides prescribe all four: property, metric, operating conditions, threshold." },
-
-    // Trade‑offs
-    { q: "Quantification guidance suggests…",
+        "Price of the product",
+        "Property, metric, operating conditions, and threshold"
+      ], correct: 3,
+      why: "Slides prescribe all four: property, metric, operating conditions, threshold."
+    },
+    // 25
+    { q: "Quantification guidance suggests\u2026",
       options: [
+        "Values need rationale, stakeholders must understand trade\u2011offs, and priorities must be ranked",
         "Precise numbers are always known early",
-        "Values need rationale, stakeholders must understand trade‑offs, and priorities must be ranked",
         "Avoid ranking requirements",
         "Use subjective adjectives to stay flexible"
-      ], correct: 1,
-      why: "Quantification: provide rationale, acknowledge trade‑offs, rank and prioritise; precise numbers may be unknown initially." }
+      ], correct: 0,
+      why: "Quantification: provide rationale, acknowledge trade\u2011offs, rank and prioritise; precise numbers may be unknown initially."
+    }
   ];
 
   const state = { score: 0, answered: 0 };

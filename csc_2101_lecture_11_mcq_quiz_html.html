@@ -63,555 +63,505 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    {
-      q: "What is a code smell as defined in the lecture?",
+    const QUESTIONS = [
+    // 1
+    { q: "What is a code smell as defined in the lecture?",
       options: [
         "A runtime error that crashes the program",
         "A pattern indicating poor structure or inappropriate coupling between modules",
         "A comment describing what the code does",
         "An optimised algorithm"
-      ],
-      correct: 1,
+      ], correct: 1,
       why: "A code smell flags potential problems in design or coupling; it is not necessarily a bug but a sign the code may be hard to maintain."
     },
-    {
-      q: "When should refactoring be considered?",
+    // 2
+    { q: "When should refactoring be considered?",
       options: [
         "Only after final deployment",
         "When implementing new functionality, correcting defects, during code reviews or when understanding a software artefact",
         "Only when management demands a rewrite",
         "Never, because it always changes behaviour"
-      ],
-      correct: 1,
+      ], correct: 1,
       why: "The process is recommended whenever you add features, fix bugs, review code or need to clarify how an artefact works."
     },
-    {
-      q: "Which code smell category involves duplicate code across methods or classes?",
+    // 3
+    { q: "Which code smell category involves duplicate code across methods or classes?",
       options: [
         "Complex structures",
-        "Cloning",
         "Design uncertainty",
-        "Delegation"
-      ],
-      correct: 1,
-      why: "Cloning refers to copy‑and‑paste duplication. The remedy is to extract a common method."
+        "Delegation",
+        "Cloning"
+      ], correct: 3,
+      why: "Cloning refers to copy\u2011and\u2011paste duplication. The remedy is to extract a common method."
     },
-    {
-      q: "What refactoring technique is recommended for a ‘long method’ smell?",
+    // 4
+    { q: "What refactoring technique is recommended for a \u2018long method\u2019 smell?",
       options: [
-        "Inline the method into its caller",
         "Extract method to split it into smaller, more understandable methods",
+        "Inline the method into its caller",
         "Rename the method",
         "Introduce global variables"
-      ],
-      correct: 1,
+      ], correct: 0,
       why: "Long methods are hard to understand; extracting parts into smaller methods improves readability and reuse."
     },
-    {
-      q: "Feature envy, where a method uses data from another object more than its own, should be addressed by…",
+    // 5
+    { q: "Feature envy, where a method uses data from another object more than its own, should be addressed by\u2026",
       options: [
         "Moving the method to the class it envies",
         "Deleting the method entirely",
         "Duplicating the data in both classes",
         "Increasing its parameter list"
-      ],
-      correct: 0,
-      why: "The slides recommend moving a feature‑envious method to the class whose data it most frequently accesses."
+      ], correct: 0,
+      why: "The slides recommend moving a feature\u2011envious method to the class whose data it most frequently accesses."
     },
-    {
-      q: "Shotgun surgery is characterised by…",
+    // 6
+    { q: "Shotgun surgery is characterised by\u2026",
       options: [
         "Making many unrelated changes within a single class",
         "Making a single change that requires modifications across many different classes",
         "Copying and pasting code blocks throughout the project",
         "Refactoring without any tests"
-      ],
-      correct: 1,
+      ], correct: 1,
       why: "Shotgun surgery means one small change forces edits in multiple places; moving methods and combining responsibilities can reduce this coupling."
     },
-    {
-      q: "What is the appropriate action for a ‘lazy class’ smell?",
+    // 7
+    { q: "What is the appropriate action for a \u2018lazy class\u2019 smell?",
       options: [
-        "Inline the class into another and remove it",
         "Create additional methods to justify its existence",
         "Add more inheritance hierarchies",
-        "Simply change the class name"
-      ],
-      correct: 0,
+        "Simply change the class name",
+        "Inline the class into another and remove it"
+      ], correct: 3,
       why: "If a class has too little responsibility, inline its fields and methods into another class and delete it."
     },
-    {
-      q: "Which smell arises when code uses a complex sequence of ‘if’ or switch statements, and which refactoring addresses it?",
+    // 8
+    { q: "Which smell arises when code uses a complex sequence of \u2018if\u2019 or switch statements, and which refactoring addresses it?",
       options: [
-        "Primitive obsession; replace with arrays",
         "Switch statements; replace the conditional with polymorphism",
+        "Primitive obsession; replace with arrays",
         "Feature envy; introduce parameter object",
         "Message chains; inline class"
-      ],
-      correct: 1,
+      ], correct: 0,
       why: "Lengthy switch or conditional logic can often be simplified by using polymorphism: delegate behaviour to subclasses instead of branching."
     },
-    {
-      q: "What does the ‘message chains’ smell represent?",
+    // 9
+    { q: "What does the \u2018message chains\u2019 smell represent?",
       options: [
         "A long parameter list in a method",
         "Chaining method calls across multiple objects (e.g., a.b().c().d())",
         "Duplicated switch statements",
         "Classes with no methods"
-      ],
-      correct: 1,
+      ], correct: 1,
       why: "Message chains couple clients to a navigation path; refactoring suggests hiding delegates or extracting methods to shorten the chain."
     },
-    {
-      q: "Which type of refactoring organises data by replacing primitive fields with objects?",
+    // 10
+    { q: "Which type of refactoring organises data by replacing primitive fields with objects?",
       options: [
         "Extract class",
         "Inline method",
         "Replace data value with object",
         "Remove middle man"
-      ],
-      correct: 2,
-      why: "‘Replace data value with object’ groups primitive values into a richer object to capture behaviours and validation."
+      ], correct: 2,
+      why: "\u2018Replace data value with object\u2019 groups primitive values into a richer object to capture behaviours and validation."
     },
-    {
-      q: "Replacing a conditional with polymorphism helps by…",
+    // 11
+    { q: "Replacing a conditional with polymorphism helps by\u2026",
       options: [
-        "Removing duplicate conditionals by using subclass implementations",
         "Reducing the number of classes in the system",
         "Increasing the use of primitive types",
-        "Storing data in a shared repository"
-      ],
-      correct: 0,
+        "Storing data in a shared repository",
+        "Removing duplicate conditionals by using subclass implementations"
+      ], correct: 3,
       why: "Subclasses can override behaviour, eliminating repetitive conditional logic and clarifying intent."
     },
-    {
-      q: "Which smell occurs when a class changes for many different reasons or has responsibilities that are not cohesive?",
+    // 12
+    { q: "Which smell occurs when a class changes for many different reasons or has responsibilities that are not cohesive?",
       options: [
         "Divergent change",
         "Feature envy",
         "Lazy class",
         "Message chains"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Divergent change indicates that a class handles too many responsibilities and should be split into focused classes."
     },
-    {
-      q: "What refactoring is recommended for a class suffering from divergent change?",
+    // 13
+    { q: "What refactoring is recommended for a class suffering from divergent change?",
       options: [
         "Extract class to separate responsibilities",
         "Inline method",
         "Replace array with object",
         "Remove duplicate code"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Splitting the class into smaller classes each with a single responsibility reduces coupling and makes the code easier to maintain."
     },
-    {
-      q: "The ‘long parameter list’ smell may be addressed by…",
+    // 14
+    { q: "The \u2018long parameter list\u2019 smell may be addressed by\u2026",
       options: [
-        "Introducing a parameter object or replacing parameters with method calls",
         "Increasing the number of parameters",
         "Duplicating the method",
+        "Introducing a parameter object or replacing parameters with method calls",
         "Using global variables"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Grouping related parameters into an object or exposing needed data through methods simplifies method signatures."
     },
-    {
-      q: "Which smell is characterised by a class that does little but delegate to another?",
+    // 15
+    { q: "Which smell is characterised by a class that does little but delegate to another?",
       options: [
-        "Middle man",
         "Message chains",
         "Lazy class",
-        "Divergent change"
-      ],
-      correct: 0,
-      why: "A middle‑man class adds little value and should often be removed or merged with its delegate."
+        "Divergent change",
+        "Middle man"
+      ], correct: 3,
+      why: "A middle\u2011man class adds little value and should often be removed or merged with its delegate."
     },
-    {
-      q: "What refactoring can reduce message chains?",
+    // 16
+    { q: "What refactoring can reduce message chains?",
       options: [
         "Hide delegate by adding wrapper methods",
         "Add more middle men",
         "Duplicate the chain",
         "Increase class size"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Hiding delegates behind your own interface shortens call chains and reduces coupling to the navigation path."
     },
-    {
-      q: "The ‘data class’ smell is defined by:",
+    // 17
+    { q: "The \u2018data class\u2019 smell is defined by:",
       options: [
         "A class that contains only fields with getters and setters and little behaviour",
         "A class with many methods and little data",
         "Duplicate code across methods",
         "Heavy use of inheritance"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Data classes merely store data; adding related behaviour or combining with other classes can improve cohesion."
     },
-    {
-      q: "What is a recommended remedy for the ‘data class’ smell?",
+    // 18
+    { q: "What is a recommended remedy for the \u2018data class\u2019 smell?",
       options: [
-        "Encapsulate fields and add behaviour where appropriate",
         "Remove all methods",
         "Convert to an array",
+        "Encapsulate fields and add behaviour where appropriate",
         "Increase inheritance"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "You can add methods that operate on the data or merge the data with other classes to provide richer behaviour."
     },
-    {
-      q: "Which smell arises when two classes perform similar functions but have different interfaces?",
+    // 19
+    { q: "Which smell arises when two classes perform similar functions but have different interfaces?",
       options: [
-        "Alternative classes with different interfaces",
         "Lazy class",
         "Primitive obsession",
-        "Middle man"
-      ],
-      correct: 0,
+        "Middle man",
+        "Alternative classes with different interfaces"
+      ], correct: 3,
       why: "When classes provide similar services via different names or signatures, refactoring to a common interface or hierarchy simplifies usage."
     },
-    {
-      q: "The ‘speculative generality’ smell refers to:",
+    // 20
+    { q: "The \u2018speculative generality\u2019 smell refers to:",
       options: [
-        "Code structures that anticipate future requirements but aren’t used",
+        "Code structures that anticipate future requirements but aren\u2019t used",
         "Code that is too specific",
         "Code duplication",
         "Long methods"
-      ],
-      correct: 0,
-      why: "Speculative generality is over‑engineering for future possibilities; such abstractions should be removed or simplified."
+      ], correct: 0,
+      why: "Speculative generality is over\u2011engineering for future possibilities; such abstractions should be removed or simplified."
     },
-    {
-      q: "Which refactoring is suggested for ‘speculative generality’?",
+    // 21
+    { q: "Which refactoring is suggested for \u2018speculative generality\u2019?",
       options: [
         "Collapse hierarchy or remove unnecessary abstractions",
         "Add more generality",
         "Write documentation",
         "Use design patterns everywhere"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Eliminate unused layers and specialise classes to reflect actual requirements."
     },
-    {
-      q: "In the refactoring process, why is it important to run tests after each small change?",
+    // 22
+    { q: "In the refactoring process, why is it important to run tests after each small change?",
       options: [
-        "To ensure behaviour remains unchanged",
         "To increase complexity",
         "To measure performance",
+        "To ensure behaviour remains unchanged",
         "To rename variables"
-      ],
-      correct: 0,
-      why: "Running tests verifies that the refactoring did not alter the program’s observable behaviour."
+      ], correct: 2,
+      why: "Running tests verifies that the refactoring did not alter the program\u2019s observable behaviour."
     },
-    {
-      q: "What category covers smells like long method and large class?",
+    // 23
+    { q: "What category covers smells like long method and large class?",
       options: [
-        "Complex structures",
         "Cloning",
         "Delegation",
-        "Variables and parameters"
-      ],
-      correct: 0,
+        "Variables and parameters",
+        "Complex structures"
+      ], correct: 3,
       why: "These smells indicate an overly complex or monolithic structure needing decomposition."
     },
-    {
-      q: "What is the recommended fix for shotgun surgery?",
+    // 24
+    { q: "What is the recommended fix for shotgun surgery?",
       options: [
         "Move methods and data to one class or separate them logically",
         "Increase the number of classes",
         "Avoid writing commit messages",
         "No action is necessary"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Reducing the scattering of related code minimises the ripple effect of changes."
     },
-    {
-      q: "Why are long methods problematic?",
+    // 25
+    { q: "Why are long methods problematic?",
       options: [
         "They are hard to understand and maintain",
         "They reduce compile time",
         "They improve readability",
         "They are easier to test"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Long methods often mix multiple responsibilities, making them difficult to comprehend and modify safely."
     },
-    {
-      q: "Which refactoring helps simplify complex conditional expressions?",
+    // 26
+    { q: "Which refactoring helps simplify complex conditional expressions?",
       options: [
-        "Decompose conditional by extracting parts into well‑named methods",
         "Add more conditions",
         "Convert condition to loops",
+        "Decompose conditional by extracting parts into well\u2011named methods",
         "Use global variables"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Breaking down a complex boolean expression into named helpers clarifies intent and facilitates reuse."
     },
-    {
-      q: "Why is ‘feature envy’ considered a smell?",
+    // 27
+    { q: "Why is \u2018feature envy\u2019 considered a smell?",
       options: [
-        "A method that uses data from another class more than its own indicates poor encapsulation",
-        "It’s fun",
+        "It\u2019s fun",
         "It improves cohesion",
-        "It reduces coupling"
-      ],
-      correct: 0,
+        "It reduces coupling",
+        "A method that uses data from another class more than its own indicates poor encapsulation"
+      ], correct: 3,
       why: "It shows that the method is better placed in the class whose data it manipulates."
     },
-    {
-      q: "According to the lecture, what is the first step of the refactoring process?",
+    // 28
+    { q: "According to the lecture, what is the first step of the refactoring process?",
       options: [
         "Identify code smells",
         "Implement new features",
         "Write new tests",
         "Delete unused classes"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "You need to recognise problematic patterns before you can choose appropriate refactorings."
     },
-    {
-      q: "Before adding a new feature, why might you refactor the existing code?",
+    // 29
+    { q: "Before adding a new feature, why might you refactor the existing code?",
       options: [
         "To ensure the code is clean and easier to extend",
         "To delay the feature",
         "To increase complexity",
         "To hide technical debt"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Improving design beforehand reduces the cost and risk of adding new behaviour."
     },
-    {
-      q: "Which category of smells deals with variables and parameters?",
+    // 30
+    { q: "Which category of smells deals with variables and parameters?",
       options: [
-        "Long parameter list and feature envy",
         "Cloning",
         "Control structures",
+        "Long parameter list and feature envy",
         "Delegation"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "This category addresses issues like too many parameters and methods depending excessively on data from other objects."
     },
-    {
-      q: "The refactoring ‘Extract Class’ is used when:",
+    // 31
+    { q: "The refactoring \u2018Extract Class\u2019 is used when:",
       options: [
-        "A class has grown too large and performs multiple responsibilities",
         "There is duplicate code",
         "There are too many primitive values",
-        "There is no code"
-      ],
-      correct: 0,
+        "There is no code",
+        "A class has grown too large and performs multiple responsibilities"
+      ], correct: 3,
       why: "Splitting the class into cohesive units promotes single responsibility and improves readability."
     },
-    {
-      q: "The ‘Move Method’ refactoring is appropriate when:",
+    // 32
+    { q: "The \u2018Move Method\u2019 refactoring is appropriate when:",
       options: [
         "A method uses data from another class more than its own",
         "A method is too short",
         "A class is lazy",
         "There are too many parameters"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Moving the method to the class whose data it frequently accesses reduces coupling and improves cohesion."
     },
-    {
-      q: "Why would you replace data values with objects?",
+    // 33
+    { q: "Why would you replace data values with objects?",
       options: [
         "To encapsulate related behaviour and validation with the data",
         "To reduce object count",
         "To degrade performance",
         "To avoid using classes"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Wrapping primitives in objects allows you to add behaviour (like validation) and convey intent."
     },
-    {
-      q: "What is meant by ‘Inline Method’ refactoring?",
+    // 34
+    { q: "What is meant by \u2018Inline Method\u2019 refactoring?",
       options: [
-        "Replacing calls to a simple method with its body when the method adds no abstraction",
         "Inserting more methods",
         "Splitting long methods into smaller ones",
+        "Replacing calls to a simple method with its body when the method adds no abstraction",
         "Adding parameters"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "If a method does nothing but call another method, inlining it simplifies the call chain."
     },
-    {
-      q: "What is ‘Encapsulate Field’ refactoring?",
+    // 35
+    { q: "What is \u2018Encapsulate Field\u2019 refactoring?",
       options: [
-        "Restrict direct access to a field by providing getters and setters",
         "Expose fields publicly",
         "Remove the field",
-        "Duplicate the field in other classes"
-      ],
-      correct: 0,
-      why: "Encapsulating fields protects internal representation and enables validation or side‑effects."
+        "Duplicate the field in other classes",
+        "Restrict direct access to a field by providing getters and setters"
+      ], correct: 3,
+      why: "Encapsulating fields protects internal representation and enables validation or side\u2011effects."
     },
-    {
-      q: "When might you use ‘Extract Parameter Object’?",
+    // 36
+    { q: "When might you use \u2018Extract Parameter Object\u2019?",
       options: [
         "When a method takes many related parameters",
         "When there is only one parameter",
         "When there is duplicate code",
         "When there are no classes"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Grouping related parameters into an object simplifies method signatures and passes cohesive data."
     },
-    {
-      q: "Which smell category includes ‘lazy class’ and ‘speculative generality’?",
+    // 37
+    { q: "Which smell category includes \u2018lazy class\u2019 and \u2018speculative generality\u2019?",
       options: [
         "Design uncertainty",
         "Cloning",
         "Complex structures",
         "Control structures"
-      ],
-      correct: 0,
-      why: "Design uncertainty covers smells arising from over‑abstraction or classes that add little value."
+      ], correct: 0,
+      why: "Design uncertainty covers smells arising from over\u2011abstraction or classes that add little value."
     },
-    {
-      q: "Why is it important to have tests before refactoring?",
+    // 38
+    { q: "Why is it important to have tests before refactoring?",
       options: [
-        "To ensure that the behaviour stays the same after making structural changes",
         "To slow the process",
         "To rewrite the code from scratch",
+        "To ensure that the behaviour stays the same after making structural changes",
         "To hide technical debt"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Tests serve as a safety net to catch unintended changes during refactoring."
     },
-    {
-      q: "Which smell category includes message chains and middle man?",
+    // 39
+    { q: "Which smell category includes message chains and middle man?",
       options: [
-        "Delegation",
         "Variables and parameters",
         "Control structures",
-        "Cloning"
-      ],
-      correct: 0,
+        "Cloning",
+        "Delegation"
+      ], correct: 3,
       why: "Both message chains and middle man relate to how a class delegates work to other objects, falling under the delegation category."
     },
-    {
-      q: "Leaving unused code in a program because it might be needed in the future is an example of which code smell?",
+    // 40
+    { q: "Leaving unused code in a program because it might be needed in the future is an example of which code smell?",
       options: [
         "Speculative generality",
         "Data clumps",
         "Temporary field",
         "Lazy class"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Speculative generality refers to adding or keeping code for anticipated but currently unused features; such code should be removed or commented out."
     },
-    {
-      q: "Magic numbers like 4 and 5 appearing in code without explanation should be handled by:",
+    // 41
+    { q: "Magic numbers like 4 and 5 appearing in code without explanation should be handled by:",
       options: [
-        "Replacing them with named constants and self‑documenting code",
+        "Replacing them with named constants and self\u2011documenting code",
         "Adding lengthy inline comments but leaving the numbers unchanged",
         "Removing the numbers entirely without replacement",
-        "Increasing the method’s length"
-      ],
-      correct: 0,
-      why: "Replacing magic numbers with well‑named constants makes the code self‑documenting and avoids confusion."
+        "Increasing the method\u2019s length"
+      ], correct: 0,
+      why: "Replacing magic numbers with well\u2011named constants makes the code self\u2011documenting and avoids confusion."
     },
-    {
-      q: "When several methods operate on the same group of parameters such as year, month and day, which refactoring improves readability?",
+    // 42
+    { q: "When several methods operate on the same group of parameters such as year, month and day, which refactoring improves readability?",
       options: [
-        "Introducing a class to encapsulate the parameters (e.g., a Date object)",
         "Expanding the parameter list further",
         "Duplicating the parameter list across all methods",
+        "Introducing a class to encapsulate the parameters (e.g., a Date object)",
         "Using global variables for the parameters"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Grouping related data into its own class simplifies method signatures and clarifies intent; this addresses data clumps."
     },
-    {
-      q: "A code line like service.getRepository().findById(id) indicates which smell?",
+    // 43
+    { q: "A code line like service.getRepository().findById(id) indicates which smell?",
       options: [
-        "Message chain",
         "Shotgun surgery",
         "Feature envy",
-        "Primitive obsession"
-      ],
-      correct: 0,
+        "Primitive obsession",
+        "Message chain"
+      ], correct: 3,
       why: "Long chains of method calls through multiple objects are called message chains, making code hard to understand and maintain."
     },
-    {
-      q: "If a Service class simply delegates a call to Repository without adding value, what smell is present and how can it be resolved?",
+    // 44
+    { q: "If a Service class simply delegates a call to Repository without adding value, what smell is present and how can it be resolved?",
       options: [
         "Middle man; remove the Service and let clients call Repository directly",
         "Data clumps; introduce a parameter object",
         "Long method; extract method",
         "Speculative generality; inline the class"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "A class that delegates work without adding behavior is a middle man; it should be removed and calls should go directly to the responsible class."
     },
-    {
-      q: "Storing passwords or API keys directly in source code corresponds to which smell, and how should it be mitigated?",
+    // 45
+    { q: "Storing passwords or API keys directly in source code corresponds to which smell, and how should it be mitigated?",
       options: [
         "Security smell; store secrets in encrypted configuration files or environment variables",
         "Feature envy; move methods to a different class",
         "Lazy class; inline the class",
         "Long parameter list; remove parameters"
-      ],
-      correct: 0,
-      why: "Hard‑coded credentials are a security smell; they should be moved out of the source code and stored securely using configuration files or environment variables."
+      ], correct: 0,
+      why: "Hard\u2011coded credentials are a security smell; they should be moved out of the source code and stored securely using configuration files or environment variables."
     },
-    {
-      q: "A long switch or if‑else chain that selects behavior based on an object's type can often be simplified by which refactoring technique?",
+    // 46
+    { q: "A long switch or if\u2011else chain that selects behavior based on an object's type can often be simplified by which refactoring technique?",
       options: [
-        "Replace conditional with polymorphism",
         "Extract class",
         "Duplicate the switch statement",
+        "Replace conditional with polymorphism",
         "Add more conditions"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Replacing conditionals with polymorphism delegates behavior to subclasses, eliminating bulky selection logic."
     },
-    {
-      q: "When code overuses primitive data types instead of modeling concepts with objects, what is the smell and suggested fix?",
+    // 47
+    { q: "When code overuses primitive data types instead of modeling concepts with objects, what is the smell and suggested fix?",
       options: [
-        "Primitive obsession; replace the primitive value with an object that encapsulates the concept",
         "Lazy class; inline the class",
         "Code duplication; duplicate the primitive",
-        "Long parameter list; add more parameters"
-      ],
-      correct: 0,
+        "Long parameter list; add more parameters",
+        "Primitive obsession; replace the primitive value with an object that encapsulates the concept"
+      ], correct: 3,
       why: "Primitive obsession can be resolved by introducing small types or classes that represent domain concepts, improving expressiveness and safety."
     },
-    {
-      q: "Why is it essential to have a good suite of automated tests before refactoring?",
+    // 48
+    { q: "Why is it essential to have a good suite of automated tests before refactoring?",
       options: [
         "To ensure the observable behavior remains unchanged when restructuring code",
         "To remove all documentation",
         "To eliminate the need for code reviews",
         "To automatically refactor code without human involvement"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "Tests provide a safety net: if refactoring breaks functionality, failing tests will alert the developer before the change is shipped."
     },
-    {
-      q: "Which refactoring simplifies method calls by bundling several parameters into a single object?",
+    // 49
+    { q: "Which refactoring simplifies method calls by bundling several parameters into a single object?",
       options: [
         "Introduce Parameter Object",
         "Extract Method",
         "Move Method",
         "Inline Class"
-      ],
-      correct: 0,
+      ], correct: 0,
       why: "A parameter object collects related parameters into a single type, making calls cleaner and enforcing cohesion."
     },
-    {
-      q: "What is the goal of replacing conditionals with polymorphism during refactoring?",
+    // 50
+    { q: "What is the goal of replacing conditionals with polymorphism during refactoring?",
       options: [
-        "To reduce complex switch statements by delegating behavior to subclasses",
         "To increase the number of conditionals in the code",
         "To ensure every class has only one method",
+        "To reduce complex switch statements by delegating behavior to subclasses",
         "To remove all inheritance from the design"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Polymorphism allows each subclass to implement its specific behavior, eliminating the need for centralised conditionals."
     }
   ];
