@@ -63,186 +63,246 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
+    const QUESTIONS = [
     // 1
     { q: "Which statement best defines Software Engineering in this lecture?",
       options: [
+        "A discipline aiming to produce high\u2011quality software, on time and within budget, that satisfies user needs.",
         "Writing efficient algorithms only.",
-        "A discipline aiming to produce high‑quality software, on time and within budget, that satisfies user needs.",
         "The study of computer hardware integration.",
         "Debugging legacy systems for maintainability."
-      ], correct: 1,
-      why: "The lecture defines Software Engineering as a discipline whose aim is the production of high‑quality software, delivered on time and within budget, satisfying user needs."
+      ], correct: 0,
+      why: "The lecture defines Software Engineering as a discipline whose aim is the production of high\u2011quality software, delivered on time and within budget, satisfying user needs."
     },
     // 2
-    { q: "Which items together constitute ‘software’ in professional development?",
+    { q: "Which items together constitute \u2018software\u2019 in professional development?",
       options: [
         "Programs only.",
-        "Programs and compilers only.",
         "Programs plus documentation, libraries, support websites, and configuration data.",
+        "Programs and compilers only.",
         "Only executable binaries and their source code."
-      ], correct: 2,
+      ], correct: 1,
       why: "Software = programs + documentation, libraries, support sites, and configuration data in the lecture."
     },
     // 3
     { q: "Which is NOT listed as a common complaint about software projects?",
-      options: ["Over budget","Over time","Too modular","Difficult to maintain"], correct: 2,
-      why: "Complaints include over budget/time, unreliable, not meeting requirements, difficult maintenance, poor performance, and never delivered—‘too modular’ is not listed."
+      options: [
+        "Over budget",
+        "Over time",
+        "Difficult to maintain",
+        "Too modular"
+      ], correct: 3,
+      why: "Complaints include over budget/time, unreliable, not meeting requirements, difficult maintenance, poor performance, and never delivered\u2014\u2018too modular\u2019 is not listed."
     },
     // 4
     { q: "Which quality attribute concerns processing time, memory use, responsiveness, and power?",
-      options: ["Maintainability","Efficiency","Reliability","Security"], correct: 1,
+      options: [
+        "Maintainability",
+        "Reliability",
+        "Security",
+        "Efficiency"
+      ], correct: 3,
       why: "Efficiency covers processing time, memory utilisation, responsiveness, and power requirements."
     },
     // 5
-    { q: "Which SDLC activity comes first in the lecture’s typical flow?",
-      options: ["Testing","Requirement specification","Maintenance","Deployment"], correct: 1,
-      why: "The lecture sequence: Requirement specification → Analysis & Design → Implementation → Testing → Deployment → Maintenance."
+    { q: "Which SDLC activity comes first in the lecture\u2019s typical flow?",
+      options: [
+        "Requirement specification",
+        "Testing",
+        "Maintenance",
+        "Deployment"
+      ], correct: 0,
+      why: "The lecture sequence: Requirement specification \u2192 Analysis & Design \u2192 Implementation \u2192 Testing \u2192 Deployment \u2192 Maintenance."
     },
     // 6
-    { q: "According to the cost approximation at SDLC, which phase consumes the largest proportion over a product’s lifetime?",
-      options: ["Implementation","Testing","Maintenance","Requirements"], correct: 2,
-      why: "The chart emphasises Maintenance dominates total cost across a system’s life."
+    { q: "According to the cost approximation at SDLC, which phase consumes the largest proportion over a product\u2019s lifetime?",
+      options: [
+        "Implementation",
+        "Maintenance",
+        "Testing",
+        "Requirements"
+      ], correct: 1,
+      why: "The chart emphasises Maintenance dominates total cost across a system\u2019s life."
     },
     // 7
-    { q: "Pick the BEST description of the Waterfall model’s suitability from the lecture.",
+    { q: "Pick the BEST description of the Waterfall model\u2019s suitability from the lecture.",
       options: [
         "Small research projects with unclear goals.",
-        "Well‑defined requirements, adequate resources, experienced team, not too large/complex, no urgent need for any part.",
-        "High‑risk projects needing frequent releases.",
-        "Any project using cutting‑edge technology with high uncertainty."
-      ], correct: 1,
-      why: "Waterfall: well‑defined requirements, adequate resources, good expertise, not too large/complex, no urgent urgency."
+        "High\u2011risk projects needing frequent releases.",
+        "Well\u2011defined requirements, adequate resources, experienced team, not too large/complex, no urgent need for any part.",
+        "Any project using cutting\u2011edge technology with high uncertainty."
+      ], correct: 2,
+      why: "Waterfall: well\u2011defined requirements, adequate resources, good expertise, not too large/complex, no urgent urgency."
     },
     // 8
     { q: "In the Incremental model, what is delivered first?",
-      options: ["A fully detailed design for all features.","A throw‑away prototype only.","A core product addressing basic requirements.","A maintenance plan."], correct: 2,
+      options: [
+        "A fully detailed design for all features.",
+        "A throw\u2011away prototype only.",
+        "A maintenance plan.",
+        "A core product addressing basic requirements."
+      ], correct: 3,
       why: "Start with a core product addressing basic requirements, then add prioritised features in increments."
     },
     // 9
     { q: "When is the Incremental model particularly appropriate per the lecture?",
       options: [
-        "Requirements are fixed and won’t change.",
         "Need to deliver limited functionality quickly; some details will change; new tech; or team not fully skilled.",
-        "Low‑risk, low‑complexity tasks only.",
-        "Never; it’s deprecated."
-      ], correct: 1,
+        "Requirements are fixed and won\u2019t change.",
+        "Low\u2011risk, low\u2011complexity tasks only.",
+        "Never; it\u2019s deprecated."
+      ], correct: 0,
       why: "Lecture lists: reasonably defined but evolving requirements, need quick limited functionality, new tech, or less skilled teams."
     },
     // 10
     { q: "Which grouping BEST describes Evolutionary process models in the lecture?",
       options: [
         "Strictly sequential phases with no iteration.",
-        "A combination of iterative and incremental development to accommodate change over time.",
         "Random feature drops with no planning.",
-        "A security‑only process."
-      ], correct: 1,
+        "A combination of iterative and incremental development to accommodate change over time.",
+        "A security\u2011only process."
+      ], correct: 2,
       why: "Evolutionary models are iterative + incremental to support evolving products."
     },
     // 11
     { q: "Which two models are cited as examples of Evolutionary models?",
-      options: ["Waterfall & V‑Model","Prototyping & Spiral","Agile & Waterfall","Incremental & Big‑Bang"], correct: 1,
+      options: [
+        "Waterfall & V\u2011Model",
+        "Agile & Waterfall",
+        "Prototyping & Spiral",
+        "Incremental & Big\u2011Bang"
+      ], correct: 2,
       why: "Lecture: Prototyping and Spiral are examples under Evolutionary process models."
     },
     // 12
     { q: "Prototyping model tends to suit which scenario?",
       options: [
-        "Small or low‑cost systems with unclear/incomplete requirements and actively involved customers; team lacks expertise.",
-        "Mission‑critical systems with fixed requirements.",
+        "Mission\u2011critical systems with fixed requirements.",
         "Mature products with no stakeholder access.",
-        "Ultra‑large regulated systems with stable specs."
-      ], correct: 0,
-      why: "The slide lists small/low‑cost, unclear requirements, active customer involvement, and lack of expertise."
+        "Ultra\u2011large regulated systems with stable specs.",
+        "Small or low\u2011cost systems with unclear/incomplete requirements and actively involved customers; team lacks expertise."
+      ], correct: 3,
+      why: "The slide lists small/low\u2011cost, unclear requirements, active customer involvement, and lack of expertise."
     },
     // 13
-    { q: "Spiral model is especially suitable for…",
-      options: ["Low‑risk classroom exercises.","High‑risk projects, frequent releases, large/complex systems with unclear requirements.","Static websites.","Short hackathon prototypes only."], correct: 1,
-      why: "Lecture: Spiral → high risk, frequent releases, large/complex with unclear requirements."
+    { q: "Spiral model is especially suitable for\u2026",
+      options: [
+        "High\u2011risk projects, frequent releases, large/complex systems with unclear requirements.",
+        "Low\u2011risk classroom exercises.",
+        "Static websites.",
+        "Short hackathon prototypes only."
+      ], correct: 0,
+      why: "Lecture: Spiral \u2192 high risk, frequent releases, large/complex with unclear requirements."
     },
     // 14
-    { q: "Which statement about Plan‑Driven vs Agile (per lecture) is true?",
+    { q: "Which statement about Plan\u2011Driven vs Agile (per lecture) is true?",
       options: [
         "Requirements and design are always completed before coding in both.",
+        "Plan\u2011driven methods never use documentation.",
         "In Agile, requirements and design are developed together incrementally.",
-        "Plan‑driven methods never use documentation.",
         "Agile forbids any planning."
-      ], correct: 1,
+      ], correct: 2,
       why: "Slide notes: in Agile, requirements and design evolve together."
     },
     // 15
     { q: "Which pair accurately contrasts Product vs Process per the lecture?",
       options: [
         "Product: how produced; Process: what is produced.",
-        "Product: what is produced; Process: how it is produced.",
         "Both mean the same thing.",
+        "Product: what is produced; Process: how it is produced.",
         "Product refers only to documentation; Process is only code."
-      ], correct: 1,
+      ], correct: 2,
       why: "Lecture distinguishes product (what) and process (how)."
     },
     // 16
     { q: "Which list contains core SE activities in the Software Development Life Cycle as presented?",
       options: [
-        "Spec → Design/Analysis → Implementation → Testing → Deployment → Maintenance",
-        "Brainstorm → Coding → Shipping",
-        "Design → Marketing → Sales",
-        "Procurement → Logistics → HR"
-      ], correct: 0,
-      why: "Matches the lecture’s SDLC flow."
+        "Brainstorm \u2192 Coding \u2192 Shipping",
+        "Design \u2192 Marketing \u2192 Sales",
+        "Procurement \u2192 Logistics \u2192 HR",
+        "Spec \u2192 Design/Analysis \u2192 Implementation \u2192 Testing \u2192 Deployment \u2192 Maintenance"
+      ], correct: 3,
+      why: "Matches the lecture\u2019s SDLC flow."
     },
     // 17
-    { q: "Which is a characteristic of ‘good software’ called out in the lecture?",
-      options: ["Includes a flashy UI only.","Delivers required functionality/performance; maintainable, dependable, and usable.","Has zero documentation.","Optimised only for developer convenience."], correct: 1,
+    { q: "Which is a characteristic of \u2018good software\u2019 called out in the lecture?",
+      options: [
+        "Delivers required functionality/performance; maintainable, dependable, and usable.",
+        "Includes a flashy UI only.",
+        "Has zero documentation.",
+        "Optimised only for developer convenience."
+      ], correct: 0,
       why: "Good software: required functionality/performance; maintainable, dependable, usable."
     },
     // 18
-    { q: "Which layer concept appears in the lecture’s ‘Software Engineering Layers’?",
-      options: ["Process layer over methods and tools.","Only hardware layer is relevant.","Legal layer above UI.","Gamification layer."], correct: 0,
+    { q: "Which layer concept appears in the lecture\u2019s \u2018Software Engineering Layers\u2019?",
+      options: [
+        "Only hardware layer is relevant.",
+        "Process layer over methods and tools.",
+        "Legal layer above UI.",
+        "Gamification layer."
+      ], correct: 1,
       why: "SE Layers slide shows process/methods/tools layering (with quality focus)."
     },
     // 19
-    { q: "What does ‘Dependability & Security’ emphasise in the product characteristics slide?",
+    { q: "What does \u2018Dependability & Security\u2019 emphasise in the product characteristics slide?",
       options: [
         "Avoiding any documentation.",
-        "Preventing damage at failure and blocking malicious access.",
         "Maximising frame rate.",
+        "Preventing damage at failure and blocking malicious access.",
         "Reducing licensing costs only."
-      ], correct: 1,
+      ], correct: 2,
       why: "Dependable software should not cause damages at failure; prevent malicious access/damage."
     },
     // 20
     { q: "Which statement about software costs is highlighted?",
       options: [
         "Hardware costs dominate overall.",
-        "Maintenance is usually more expensive than development; on PCs, software often costs more than hardware.",
         "Testing is always costliest by far.",
-        "Development always dwarfs maintenance."
-      ], correct: 1,
+        "Development always dwarfs maintenance.",
+        "Maintenance is usually more expensive than development; on PCs, software often costs more than hardware."
+      ], correct: 3,
       why: "Lecture: software often dominates system costs; maintenance often exceeds development."
     },
     // 21
     { q: "In the Incremental approach, what can differ between increments per the lecture?",
-      options: ["Programming language only.","Process model used in each increment.","Team composition only.","Nothing; all increments must be identical."], correct: 1,
+      options: [
+        "Process model used in each increment.",
+        "Programming language only.",
+        "Team composition only.",
+        "Nothing; all increments must be identical."
+      ], correct: 0,
       why: "Slide notes: different process models can be used per increment."
     },
     // 22
-    { q: "Which option reflects the ‘core product’ idea correctly?",
-      options: ["A minimal set meeting basic needs, with more functionality added later by priority.","All features fully implemented at once.","A marketing document.","Only backend services without any UI."], correct: 0,
+    { q: "Which option reflects the \u2018core product\u2019 idea correctly?",
+      options: [
+        "All features fully implemented at once.",
+        "A minimal set meeting basic needs, with more functionality added later by priority.",
+        "A marketing document.",
+        "Only backend services without any UI."
+      ], correct: 1,
       why: "Start with a core product; later increments add prioritised features."
     },
     // 23
-    { q: "Which scenario from the lecture’s example suggests mixing models?",
+    { q: "Which scenario from the lecture\u2019s example suggests mixing models?",
       options: [
-        "Large system, well‑defined requirements; one small low‑cost part lacking team expertise; active customers for that small part.",
-        "Tiny script with a one‑hour deadline.",
+        "Tiny script with a one\u2011hour deadline.",
         "Lecture notes compilation.",
+        "Large system, well\u2011defined requirements; one small low\u2011cost part lacking team expertise; active customers for that small part.",
         "A photo gallery website."
-      ], correct: 0,
+      ], correct: 2,
       why: "Example proposes Incremental overall; Waterfall within increments; Prototyping for the small uncertain part."
     },
     // 24
     { q: "Which practice approach is emphasised for achieving good outcomes?",
-      options: ["Ad‑hoc heroics.","Repeatable practices across the full life‑cycle.","Skipping validation.","Avoiding user needs for scope control."], correct: 1,
-      why: "Lecture highlights repeatable practices spanning the full life‑cycle."
+      options: [
+        "Ad\u2011hoc heroics.",
+        "Skipping validation.",
+        "Avoiding user needs for scope control.",
+        "Repeatable practices across the full life\u2011cycle."
+      ], correct: 3,
+      why: "Lecture highlights repeatable practices spanning the full life\u2011cycle."
     }
   ];
 

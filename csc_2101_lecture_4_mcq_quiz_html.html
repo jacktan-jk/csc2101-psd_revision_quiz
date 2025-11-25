@@ -63,212 +63,257 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    // Overview & diagram types
-    { q: "Which statement best matches the lecture’s definition of UML modelling?",
+    const QUESTIONS = [
+    // 1
+    { q: "Which statement best matches the lecture\u2019s definition of UML modelling?",
       options: [
-        "Programming language for back-end services.",
         "Graphical notation (UML) to represent a system; five core diagram types cover essentials.",
+        "Programming language for back-end services.",
         "A database ER-only technique.",
         "A code generator that replaces design."
-      ], correct: 1,
-      why: "UML is a graphical notation; lecture notes that five diagram types (Class, Use Case, Activity, Sequence, State) capture essentials." },
-
+      ], correct: 0,
+      why: "UML is a graphical notation; lecture notes that five diagram types (Class, Use Case, Activity, Sequence, State) capture essentials."
+    },
+    // 2
     { q: "Which grouping is correct?",
       options: [
         "Structural models: show dynamic behaviour; Behavioural: show organization of components.",
-        "Structural models: show organization/relationships; Behavioural: show dynamic behaviour in response to stimuli.",
         "Both structural and behavioural show only data stores.",
+        "Structural models: show organization/relationships; Behavioural: show dynamic behaviour in response to stimuli.",
         "Neither is part of UML."
-      ], correct: 1,
-      why: "Slides define structural vs behavioural as organization/relationships vs dynamic responses." },
-
+      ], correct: 2,
+      why: "Slides define structural vs behavioural as organization/relationships vs dynamic responses."
+    },
+    // 3
     { q: "Data-driven vs Event-driven modelling distinction?",
       options: [
-        "Data-driven shows sequence from input to output; Event-driven shows responses to external/internal events.",
         "Both are identical.",
         "Event-driven focuses only on databases.",
+        "Data-driven shows sequence from input to output; Event-driven shows responses to external/internal events.",
         "Data-driven only for GUI design."
-      ], correct: 0,
-      why: "Lecture contrasts entire processing sequence vs reactions to events under assumptions." },
-
-    // Class diagram fundamentals
-    { q: "Class diagram primarily shows…",
+      ], correct: 2,
+      why: "Lecture contrasts entire processing sequence vs reactions to events under assumptions."
+    },
+    // 4
+    { q: "Class diagram primarily shows\u2026",
       options: [
         "Network topologies.",
-        "Object classes and associations between them.",
         "Only UI screens.",
-        "Deployment nodes."
-      ], correct: 1,
-      why: "Class diagrams depict classes and relationships (associations, aggregation, generalization)." },
-
+        "Deployment nodes.",
+        "Object classes and associations between them."
+      ], correct: 3,
+      why: "Class diagrams depict classes and relationships (associations, aggregation, generalization)."
+    },
+    // 5
     { q: "Which is a correct class/object statement?",
       options: [
-        "Object is the template; class is an instance.",
         "Class models a collection of objects with identical properties; object is an instance of a class.",
+        "Object is the template; class is an instance.",
         "Class equals package.",
         "Object equals attribute."
+      ], correct: 0,
+      why: "Slide \u2018Class Diagram \u2013 Objects\u2019."
+    },
+    // 6
+    { q: "Binary association relates\u2026",
+      options: [
+        "Three classes",
+        "Two classes",
+        "Four or more classes",
+        "Two packages only"
       ], correct: 1,
-      why: "Slide ‘Class Diagram – Objects’." },
-
-    // Association & multiplicity
-    { q: "Binary association relates…",
-      options: ["Two classes","Three classes","Four or more classes","Two packages only"], correct: 0,
-      why: "Binary relates two; ternary relates three; higher-order >3." },
-
+      why: "Binary relates two; ternary relates three; higher-order >3."
+    },
+    // 7
     { q: "Which multiplicity means zero to many?",
-      options: ["1..*","0..*","1..1","1..3"], correct: 1,
-      why: "0..* indicates zero or more instances." },
-
-    { q: "Interpret ‘1..*’ at one end of an association:",
+      options: [
+        "1..*",
+        "1..1",
+        "0..*",
+        "1..3"
+      ], correct: 2,
+      why: "0..* indicates zero or more instances."
+    },
+    // 8
+    { q: "Interpret \u20181..*\u2019 at one end of an association:",
       options: [
         "Exactly one.",
-        "At least one, potentially many.",
         "Zero or one.",
-        "At most one."
-      ], correct: 1,
-      why: "‘1..*’ = lower bound 1, no upper bound." },
-
+        "At most one.",
+        "At least one, potentially many."
+      ], correct: 3,
+      why: "\u20181..*\u2019 = lower bound 1, no upper bound."
+    },
+    // 9
     { q: "Which is TRUE about association attributes?",
       options: [
-        "Associations cannot have attributes.",
         "Associations may have attributes like Quantity on a Use relation.",
+        "Associations cannot have attributes.",
         "Only classes have attributes.",
         "Attributes are only for generalization."
-      ], correct: 1,
-      why: "Lecture provides example of association attribute ‘Quantity’." },
-
-    { q: "Mathematical representation of associations in slides demonstrates…",
+      ], correct: 0,
+      why: "Lecture provides example of association attribute \u2018Quantity\u2019."
+    },
+    // 10
+    { q: "Mathematical representation of associations in slides demonstrates\u2026",
       options: [
-        "Enumerating valid tuples (e.g., (Company, Employee)) consistent with multiplicities.",
         "SQL joins only.",
+        "Enumerating valid tuples (e.g., (Company, Employee)) consistent with multiplicities.",
         "Graph traversal algorithms.",
         "Compiler parsing."
-      ], correct: 0,
-      why: "Slides enumerate sets of tuples that satisfy multiplicity constraints." },
-
-    // Aggregation & generalization
-    { q: "Aggregation models…",
+      ], correct: 1,
+      why: "Slides enumerate sets of tuples that satisfy multiplicity constraints."
+    },
+    // 11
+    { q: "Aggregation models\u2026",
       options: [
         "General classification hierarchy.",
-        "Part–whole relationships where each part belongs to a whole.",
         "Runtime object creation.",
+        "Part\u2013whole relationships where each part belongs to a whole.",
         "Package imports."
-      ], correct: 1,
-      why: "Aggregation = whole composed of parts (e.g., Article → Paragraphs, Sentences, Figures)." },
-
-    { q: "Generalization arrow points…",
-      options: ["From super-class to sub-class","From sub-class to super-class","Between unrelated classes","To an association node"], correct: 1,
-      why: "Diagram shows triangle/arrow pointing to super-class." },
-
+      ], correct: 2,
+      why: "Aggregation = whole composed of parts (e.g., Article \u2192 Paragraphs, Sentences, Figures)."
+    },
+    // 12
+    { q: "Generalization arrow points\u2026",
+      options: [
+        "From super-class to sub-class",
+        "Between unrelated classes",
+        "To an association node",
+        "From sub-class to super-class"
+      ], correct: 3,
+      why: "Diagram shows triangle/arrow pointing to super-class."
+    },
+    // 13
     { q: "Choose the correct mapping:",
       options: [
-        "Association: part–whole; Aggregation: interactions; Generalization: classification.",
-        "Association: interactions; Aggregation: part–whole; Generalization: classification.",
-        "Association: classification; Aggregation: interactions; Generalization: part–whole.",
+        "Association: interactions; Aggregation: part\u2013whole; Generalization: classification.",
+        "Association: part\u2013whole; Aggregation: interactions; Generalization: classification.",
+        "Association: classification; Aggregation: interactions; Generalization: part\u2013whole.",
         "All three are identical."
-      ], correct: 1,
-      why: "Slide ‘Association, Aggregation, Generalization’." },
-
-    // Class diagram example constraints
+      ], correct: 0,
+      why: "Slide \u2018Association, Aggregation, Generalization\u2019."
+    },
+    // 14
     { q: "In the IT admissions example, how many external examiners review an application?",
-      options: ["1","2","3","It depends; unspecified"], correct: 2,
-      why: "The example states review by 3 external examiners." },
-
+      options: [
+        "1",
+        "3",
+        "2",
+        "It depends; unspecified"
+      ], correct: 1,
+      why: "The example states review by 3 external examiners."
+    },
+    // 15
     { q: "Which constraint is stated for admin members managing applications?",
       options: [
-        "Each admin manages at least 10 applications.",
         "Each admin manages at most 3 applications.",
         "Only the chief admin manages applications.",
+        "Each admin manages at least 10 applications.",
         "Admins do not manage applications."
-      ], correct: 0,
-      why: "Example: an admin member manages \u2265 10 applications." },
-
-    // Use case concepts & template
-    { q: "A use case is…",
+      ], correct: 2,
+      why: "Example: an admin member manages \u2265 10 applications."
+    },
+    // 16
+    { q: "A use case is\u2026",
       options: [
         "A class attribute.",
-        "A collection of scenarios describing interactions between system and external environments from an actor’s viewpoint.",
         "A database schema.",
-        "A deployment script."
-      ], correct: 1,
-      why: "Use case: collection of scenarios; actor can be person/device/entity." },
-
+        "A deployment script.",
+        "A collection of scenarios describing interactions between system and external environments from an actor\u2019s viewpoint."
+      ], correct: 3,
+      why: "Use case: collection of scenarios; actor can be person/device/entity."
+    },
+    // 17
     { q: "Which is NOT a primary field in the use case template?",
-      options: ["Primary actor","Goal in context","Preconditions","Compiler options"], correct: 3,
-      why: "Template lists actor, goal, preconditions, trigger, scenario, exceptions, etc.—not compiler options." },
-
+      options: [
+        "Compiler options",
+        "Primary actor",
+        "Goal in context",
+        "Preconditions"
+      ], correct: 0,
+      why: "Template lists actor, goal, preconditions, trigger, scenario, exceptions, etc.\u2014not compiler options."
+    },
+    // 18
     { q: "Which items appear in the extended template?",
       options: [
-        "Priority, When available, Frequency of use, Channels to actors, Secondary actors, Open issues.",
         "Programming language, IDE theme, Keyboard layout.",
+        "Priority, When available, Frequency of use, Channels to actors, Secondary actors, Open issues.",
         "IP addresses, VLAN IDs, TLS versions.",
         "Budget approvals only."
-      ], correct: 0,
-      why: "Slides show these additional fields." },
-
-    { q: "In use case diagrams, actors are drawn as…",
+      ], correct: 1,
+      why: "Slides show these additional fields."
+    },
+    // 19
+    { q: "In use case diagrams, actors are drawn as\u2026",
       options: [
-        "Stick-person for humans; rectangle for non-human actors.",
         "Only rectangles.",
         "Only circles.",
+        "Stick-person for humans; rectangle for non-human actors.",
         "Lightning bolts."
-      ], correct: 0,
-      why: "Slide ‘Use Case Diagram’ notes symbols for human vs non-human actors." },
-
-    { q: "‘Include’ relationship notation is…",
+      ], correct: 2,
+      why: "Slide \u2018Use Case Diagram\u2019 notes symbols for human vs non-human actors."
+    },
+    // 20
+    { q: "\u2018Include\u2019 relationship notation is\u2026",
       options: [
         "Solid line with closed arrow.",
-        "Dashed line with open arrow from base use case to inclusion use case, labelled <<include>>.",
         "Dashed line with open arrow from inclusion to base.",
-        "Zig‑zag line without label."
-      ], correct: 1,
-      why: "Slide ‘Include and Extend’." },
-
-    { q: "‘Extend’ relationship means…",
+        "Zig\u2011zag line without label.",
+        "Dashed line with open arrow from base use case to inclusion use case, labelled <<include>>."
+      ], correct: 3,
+      why: "Slide \u2018Include and Extend\u2019."
+    },
+    // 21
+    { q: "\u2018Extend\u2019 relationship means\u2026",
       options: [
-        "One use case (extension) adds behaviour to a base use case under certain conditions.",
         "Two use cases are identical.",
+        "One use case (extension) adds behaviour to a base use case under certain conditions.",
         "A class inherits from a superclass.",
         "Actors include other actors."
-      ], correct: 0,
-      why: "Extension use case augments base use case behaviour." },
-
+      ], correct: 1,
+      why: "Extension use case augments base use case behaviour."
+    },
+    // 22
     { q: "Which is TRUE about actors in use case diagrams?",
       options: [
         "Actors must be human.",
-        "Actors can be human or non-human (e.g., sensors, systems).",
         "Actors are always inside the system boundary.",
+        "Actors can be human or non-human (e.g., sensors, systems).",
         "Actors represent classes."
-      ], correct: 1,
-      why: "Slides: non-human actors are possible and drawn with rectangles." },
-
+      ], correct: 2,
+      why: "Slides: non-human actors are possible and drawn with rectangles."
+    },
+    // 23
     { q: "Which mapping is correct for the Home Security example?",
       options: [
-        "Homeowner uses ‘Arms/disarms’, ‘Remote Access’, ‘Respond to alarms’, ‘Encounter errors’; IT technician ‘Reconfigure sensors & features’.",
         "Only IT technician uses all use cases.",
         "Sensors are primary actors for all use cases.",
+        "Homeowner uses \u2018Arms/disarms\u2019, \u2018Remote Access\u2019, \u2018Respond to alarms\u2019, \u2018Encounter errors\u2019; IT technician \u2018Reconfigure sensors & features\u2019.",
         "No actors interact with use cases."
-      ], correct: 0,
-      why: "Slide lists these use cases and actor interactions." },
-
+      ], correct: 2,
+      why: "Slide lists these use cases and actor interactions."
+    },
+    // 24
     { q: "What does a use case diagram primarily convey?",
       options: [
         "Detailed algorithmic steps.",
-        "Overview of all use cases and their interactions with actors (who does what).",
         "Database schema normal forms.",
-        "Runtime memory layout."
-      ], correct: 1,
-      why: "It is an overview of actor–use case interactions, not detailed flows." },
-
+        "Runtime memory layout.",
+        "Overview of all use cases and their interactions with actors (who does what)."
+      ], correct: 3,
+      why: "It is an overview of actor\u2013use case interactions, not detailed flows."
+    },
+    // 25
     { q: "Which of the following is LEAST appropriate to put on a class diagram?",
       options: [
+        "Detailed use case scenarios.",
         "Associations with multiplicities.",
         "Aggregation and generalization relationships.",
-        "Detailed use case scenarios.",
         "Classes with attributes/methods."
-      ], correct: 2,
-      why: "Detailed scenarios belong to use case/specification, not the class diagram." }
+      ], correct: 0,
+      why: "Detailed scenarios belong to use case/specification, not the class diagram."
+    }
   ];
 
   const state = { score: 0, answered: 0 };

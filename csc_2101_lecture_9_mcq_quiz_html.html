@@ -63,555 +63,505 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    {
-      q: "What is the primary goal of a sprint planning meeting?",
+    const QUESTIONS = [
+    // 1
+    { q: "What is the primary goal of a sprint planning meeting?",
       options: [
-        "To finalise the project’s budget",
         "To decide which product backlog items will be developed and set a sprint goal",
-        "To review only the previous sprint’s performance metrics",
+        "To finalise the project\u2019s budget",
+        "To review only the previous sprint\u2019s performance metrics",
         "To design the user interface"
-      ],
-      correct: 1,
+      ], correct: 0,
       why: "Sprint planning analyses the product backlog and selects items to achieve a clear goal for the upcoming sprint."
     },
-    {
-      q: "During a sprint review, what activity typically occurs?",
+    // 2
+    { q: "During a sprint review, what activity typically occurs?",
       options: [
         "The team picks new user stories for the next sprint",
-        "Completed work is demonstrated to stakeholders to gather feedback",
         "Tasks are assigned to individuals",
+        "Completed work is demonstrated to stakeholders to gather feedback",
         "Team grievances are discussed in detail"
-      ],
-      correct: 1,
+      ], correct: 2,
       why: "The sprint review showcases the increment to stakeholders and invites feedback for product backlog updates."
     },
-    {
-      q: "The sprint retrospective meeting is focused on…",
+    // 3
+    { q: "The sprint retrospective meeting is focused on\u2026",
       options: [
         "Delivering new features to users",
-        "Reflecting on the last sprint to identify what went well, what didn’t and how to improve",
         "Planning backlog items",
+        "Reflecting on the last sprint to identify what went well, what didn\u2019t and how to improve",
         "Calculating sprint velocity"
-      ],
-      correct: 1,
+      ], correct: 2,
       why: "The retrospective is a team meeting to learn from the last sprint and plan process improvements."
     },
-    {
-      q: "Which of the following is a retrospective technique mentioned in the lecture?",
+    // 4
+    { q: "Which of the following is a retrospective technique mentioned in the lecture?",
       options: [
         "Fishbone diagram",
-        "Start/Stop/Continue template",
         "Waterfall chart",
-        "PERT analysis"
-      ],
-      correct: 1,
+        "PERT analysis",
+        "Start/Stop/Continue template"
+      ], correct: 3,
       why: "The slides list several templates such as Start/Stop/Continue, Mad/Sad/Glad and Sailboat for organising retrospective feedback."
     },
-    {
-      q: "In Extreme Programming (XP), how often are new versions of the software built and deployed?",
+    // 5
+    { q: "In Extreme Programming (XP), how often are new versions of the software built and deployed?",
       options: [
-        "Once per year",
         "Multiple times per day with increments released every two weeks",
+        "Once per year",
         "Only after all features are complete",
         "Whenever managers decide"
-      ],
-      correct: 1,
+      ], correct: 0,
       why: "XP advocates frequent releases: developers integrate and build code several times daily and deliver working increments every one to two weeks."
     },
-    {
-      q: "Which practice is central to XP and encourages developers to work together at one workstation?",
+    // 6
+    { q: "Which practice is central to XP and encourages developers to work together at one workstation?",
       options: [
         "Code review",
-        "Pair programming",
         "Solo programming",
+        "Pair programming",
         "Shift left testing"
-      ],
-      correct: 1,
+      ], correct: 2,
       why: "XP promotes pair programming where two developers collaboratively write code, enhancing quality and shared understanding."
     },
-    {
-      q: "What principle of XP emphasises that everyone can modify any code and no single person owns a specific part?",
+    // 7
+    { q: "What principle of XP emphasises that everyone can modify any code and no single person owns a specific part?",
       options: [
-        "Collective code ownership",
         "Strict code control",
         "Documentation first",
-        "Domain‑driven design"
-      ],
-      correct: 0,
+        "Collective code ownership",
+        "Domain\u2011driven design"
+      ], correct: 2,
       why: "Collective code ownership means any team member can improve any part of the codebase, reducing bottlenecks and encouraging responsibility."
     },
-    {
-      q: "What question is commonly asked during a sprint retrospective meeting to encourage continuous improvement?",
+    // 8
+    { q: "What question is commonly asked during a sprint retrospective meeting to encourage continuous improvement?",
       options: [
         "What test coverage did we achieve?",
-        "What should we start, stop and continue?",
         "How can we reduce hardware cost?",
-        "Who is to blame for delays?"
-      ],
-      correct: 1,
+        "Who is to blame for delays?",
+        "What should we start, stop and continue?"
+      ], correct: 3,
       why: "Templates like Start/Stop/Continue or Mad/Sad/Glad encourage the team to think about actions to begin, cease or maintain in the next sprint."
     },
-    {
-      q: "Which activity is not part of the sprint planning meeting as described in the lecture?",
+    // 9
+    { q: "Which activity is not part of the sprint planning meeting as described in the lecture?",
       options: [
+        "Reviewing the long\u2011term company budget",
         "Analysing the product backlog",
         "Selecting a sprint goal",
-        "Splitting user stories into tasks",
-        "Reviewing the long‑term company budget"
-      ],
-      correct: 3,
+        "Splitting user stories into tasks"
+      ], correct: 0,
       why: "Sprint planning focuses on backlog items, goals and tasks; budget decisions are outside its scope."
     },
-    {
-      q: "Sprint planning results in which two main artefacts?",
+    // 10
+    { q: "Sprint planning results in which two main artefacts?",
       options: [
-        "A sprint goal and a sprint backlog of tasks",
         "A final product release and a contract",
+        "A sprint goal and a sprint backlog of tasks",
         "A new budget and marketing plan",
         "A risk register"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "The meeting produces a sprint goal describing the mission and a sprint backlog listing the tasks to accomplish it."
     },
-    {
-      q: "What is the typical agenda for a sprint review meeting?",
+    // 11
+    { q: "What is the typical agenda for a sprint review meeting?",
       options: [
-        "Demonstrate completed work and gather feedback from stakeholders",
         "Assign tasks for the next sprint",
         "Discuss team emotions",
+        "Demonstrate completed work and gather feedback from stakeholders",
         "Set company policies"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "During the review the team shows the increment to stakeholders and adjusts the backlog based on their feedback."
     },
-    {
-      q: "Who participates in the sprint retrospective?",
+    // 12
+    { q: "Who participates in the sprint retrospective?",
       options: [
-        "The scrum master, product owner and development team",
         "Only developers",
         "External customers only",
-        "Marketing team only"
-      ],
-      correct: 0,
-      why: "The retrospective involves the whole Scrum team – scrum master, product owner and developers – to improve the process together."
+        "Marketing team only",
+        "The scrum master, product owner and development team"
+      ], correct: 3,
+      why: "The retrospective involves the whole Scrum team \u2013 scrum master, product owner and developers \u2013 to improve the process together."
     },
-    {
-      q: "The retrospective template \"Mad/Sad/Glad\" encourages participants to discuss:",
+    // 13
+    { q: "The retrospective template \"Mad/Sad/Glad\" encourages participants to discuss:",
       options: [
-        "Feelings about what frustrated them, disappointed them and made them happy",
         "The budget",
+        "Feelings about what frustrated them, disappointed them and made them happy",
         "Future features",
         "Hardware issues"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Mad/Sad/Glad helps the team articulate emotions, which can reveal underlying issues and successes."
     },
-    {
-      q: "What is the purpose of grouping similar sticky notes during a retrospective?",
+    // 14
+    { q: "What is the purpose of grouping similar sticky notes during a retrospective?",
       options: [
-        "To identify common themes and focus discussion",
         "To decorate the room",
+        "To identify common themes and focus discussion",
         "To assign blame",
         "To count story points"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Clustering similar comments highlights patterns and helps the team concentrate on the most significant topics."
     },
-    {
-      q: "In the Sailboat retrospective format, what do the anchors represent?",
+    // 15
+    { q: "In the Sailboat retrospective format, what do the anchors represent?",
       options: [
-        "Obstacles that slow the team down",
         "Items that propel the team forward",
         "Completed features",
+        "Obstacles that slow the team down",
         "Customer feedback"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Anchors symbolise impediments or risks hindering progress, whereas the wind represents helpful factors."
     },
-    {
-      q: "According to the lecture, after grouping and voting on issues in a retrospective, the team should:",
+    // 16
+    { q: "According to the lecture, after grouping and voting on issues in a retrospective, the team should:",
       options: [
-        "Discuss root causes and agree on concrete actions for improvement",
         "End the meeting immediately",
         "Reassign blame",
-        "Increase workload without changes"
-      ],
-      correct: 0,
+        "Increase workload without changes",
+        "Discuss root causes and agree on concrete actions for improvement"
+      ], correct: 3,
       why: "Identifying root causes and deciding tangible next steps ensures the retrospective leads to meaningful change."
     },
-    {
-      q: "Sprint planning meeting length is typically proportional to:",
+    // 17
+    { q: "Sprint planning meeting length is typically proportional to:",
       options: [
-        "The length of the sprint, such as one hour per week of sprint",
         "The number of developers",
+        "The length of the sprint, such as one hour per week of sprint",
         "Lines of code",
         "Customer satisfaction rating"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Longer sprints warrant longer planning sessions; a common rule is one hour of planning per week of sprint."
     },
-    {
-      q: "In Extreme Programming, what does test‑driven development involve?",
+    // 18
+    { q: "In Extreme Programming, what does test\u2011driven development involve?",
       options: [
-        "Writing tests before writing the code and then writing the minimal code to pass tests",
         "Waiting until all code is complete before testing",
+        "Writing tests before writing the code and then writing the minimal code to pass tests",
         "Writing tests after deployment",
         "Avoiding tests to save time"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "TDD is an XP practice where tests guide the implementation and ensure the code meets specifications."
     },
-    {
-      q: "XP’s emphasis on small, frequent releases aims to:",
+    // 19
+    { q: "XP\u2019s emphasis on small, frequent releases aims to:",
       options: [
-        "Deliver working software quickly and obtain feedback",
         "Avoid stakeholder involvement",
         "Delay integration",
-        "Increase big‑bang releases"
-      ],
-      correct: 0,
+        "Deliver working software quickly and obtain feedback",
+        "Increase big\u2011bang releases"
+      ], correct: 2,
       why: "Small releases enable rapid learning from users and reduce the risk associated with large changes."
     },
-    {
-      q: "Pair programming benefits include:",
+    // 20
+    { q: "Pair programming benefits include:",
       options: [
-        "Improved code quality and knowledge sharing",
         "Slower progress and less collaboration",
         "Fewer tests",
-        "Elimination of planning"
-      ],
-      correct: 0,
+        "Elimination of planning",
+        "Improved code quality and knowledge sharing"
+      ], correct: 3,
       why: "Two developers working together can spot defects earlier and spread understanding of the system."
     },
-    {
-      q: "Collective code ownership in XP means:",
+    // 21
+    { q: "Collective code ownership in XP means:",
       options: [
-        "Any developer can modify any part of the codebase",
         "Only senior developers can modify code",
+        "Any developer can modify any part of the codebase",
         "Code is owned by individuals",
         "Testers own the code"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Collective ownership prevents bottlenecks and encourages shared responsibility for quality."
     },
-    {
-      q: "What is the purpose of refactoring in XP?",
+    // 22
+    { q: "What is the purpose of refactoring in XP?",
       options: [
-        "To improve code structure without changing behaviour",
         "To add new features",
+        "To improve code structure without changing behaviour",
         "To merge branches",
         "To slow down development"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Refactoring tidies code and supports simple design, allowing new features to be added more easily."
     },
-    {
-      q: "Which statement about the difference between a sprint review and a sprint retrospective is correct?",
+    // 23
+    { q: "Which statement about the difference between a sprint review and a sprint retrospective is correct?",
       options: [
-        "A sprint review focuses on the product and stakeholder feedback, while the retrospective focuses on the process and team improvement",
         "Both meetings address the same topics",
         "The retrospective is public while the review is private",
+        "A sprint review focuses on the product and stakeholder feedback, while the retrospective focuses on the process and team improvement",
         "The review happens before the sprint"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "The review looks outward at what was built; the retrospective looks inward at how the team worked."
     },
-    {
-      q: "During sprint planning, the team estimates tasks and:",
+    // 24
+    { q: "During sprint planning, the team estimates tasks and:",
       options: [
-        "Commits to a workload based on their velocity and capacity",
         "Chooses tasks at random",
         "Commits to as many tasks as possible to impress stakeholders",
-        "Ignores velocity"
-      ],
-      correct: 0,
+        "Ignores velocity",
+        "Commits to a workload based on their velocity and capacity"
+      ], correct: 3,
       why: "The team uses historical velocity and availability to decide how much work can realistically be completed."
     },
-    {
-      q: "The \"Start/Stop/Continue\" retrospective template prompts team members to suggest:",
+    // 25
+    { q: "The \"Start/Stop/Continue\" retrospective template prompts team members to suggest:",
       options: [
-        "Actions to begin, stop and maintain",
         "Lines of code",
+        "Actions to begin, stop and maintain",
         "Budget cuts",
         "Holidays"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "It helps the team identify behaviours to adopt, cease or keep doing."
     },
-    {
-      q: "Which of the following is NOT a principle of Extreme Programming?",
+    // 26
+    { q: "Which of the following is NOT a principle of Extreme Programming?",
       options: [
         "Customer involvement",
+        "Waterfall development",
         "Small frequent releases",
-        "Pair programming",
-        "Waterfall development"
-      ],
-      correct: 3,
-      why: "XP rejects waterfall in favour of iterative, customer‑centric practices."
+        "Pair programming"
+      ], correct: 1,
+      why: "XP rejects waterfall in favour of iterative, customer\u2011centric practices."
     },
-    {
-      q: "In XP, who writes acceptance tests?",
+    // 27
+    { q: "In XP, who writes acceptance tests?",
       options: [
-        "The customer defines acceptance tests to confirm stories meet requirements",
         "Developers alone",
         "The scrum master",
+        "The customer defines acceptance tests to confirm stories meet requirements",
         "The marketing team"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Customers or their proxies create acceptance tests to ensure the delivered features satisfy their needs."
     },
-    {
-      q: "What does sustainable pace mean in XP?",
+    // 28
+    { q: "What does sustainable pace mean in XP?",
       options: [
-        "Developers should work at a rate that is maintainable long‑term without overtime",
         "Team members should work as fast as possible",
         "Work should only be done on weekends",
-        "Pace should vary unpredictably"
-      ],
-      correct: 0,
+        "Pace should vary unpredictably",
+        "Developers should work at a rate that is maintainable long\u2011term without overtime"
+      ], correct: 3,
       why: "Sustainable pace encourages a balanced workload to prevent burnout and maintain quality."
     },
-    {
-      q: "During retrospective voting, how do participants identify priority items?",
+    // 29
+    { q: "During retrospective voting, how do participants identify priority items?",
       options: [
-        "They place dot stickers or mark votes next to items they feel are most important",
         "They count lines of code",
+        "They place dot stickers or mark votes next to items they feel are most important",
         "They ask the manager to pick",
         "They vote by leaving the room"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Dot voting helps the team collectively decide which issues warrant discussion."
     },
-    {
-      q: "What is one reason to use the \"4Ls\" (Liked, Learned, Lacked, Longed for) template?",
+    // 30
+    { q: "What is one reason to use the \"4Ls\" (Liked, Learned, Lacked, Longed for) template?",
       options: [
-        "To structure discussion around positives, learnings, missing elements and desired improvements",
         "To discuss story points",
+        "To structure discussion around positives, learnings, missing elements and desired improvements",
         "To set salary",
         "To determine velocity"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "The 4Ls helps the team reflect on different dimensions of their experience and identify actions."
     },
-    {
-      q: "When using the Sailboat retrospective, what do the wind and rocks represent?",
+    // 31
+    { q: "When using the Sailboat retrospective, what do the wind and rocks represent?",
       options: [
-        "The wind represents positive forces moving the team forward and rocks represent risks ahead",
         "The wind symbolises obstacles",
         "Rocks are deliverables",
+        "The wind represents positive forces moving the team forward and rocks represent risks ahead",
         "There is no symbolic meaning"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "In the Sailboat metaphor, wind propels the boat (team), while rocks are dangers to navigate around."
     },
-    {
-      q: "In XP, how often is integration performed?",
+    // 32
+    { q: "In XP, how often is integration performed?",
       options: [
-        "Frequently, multiple times per day",
         "At the end of the project",
         "Once per sprint",
-        "Only after QA approval"
-      ],
-      correct: 0,
+        "Only after QA approval",
+        "Frequently, multiple times per day"
+      ], correct: 3,
       why: "Continuous integration in XP means merging and testing code often to catch problems early."
     },
-    {
-      q: "Which XP practice encourages removal of unnecessary design complexity?",
+    // 33
+    { q: "Which XP practice encourages removal of unnecessary design complexity?",
       options: [
-        "Simple design",
         "Feature bloat",
-        "Big up‑front design",
+        "Simple design",
+        "Big up\u2011front design",
         "Domain modelling"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Simple design insists on building only what is needed now, avoiding speculative features."
     },
-    {
-      q: "What is the \"planning game\" in XP?",
+    // 34
+    { q: "What is the \"planning game\" in XP?",
       options: [
-        "A collaborative process where the customer and developers prioritise and estimate user stories",
         "A video game used for team bonding",
+        "A collaborative process where the customer and developers prioritise and estimate user stories",
         "Managers assign tasks",
         "Gamified time tracking"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "The planning game involves customers ranking stories by value and developers estimating effort to select work."
     },
-    {
-      q: "In XP, what is an \"on‑site customer\" practice?",
+    // 35
+    { q: "In XP, what is an \"on\u2011site customer\" practice?",
       options: [
-        "Having a real customer representative available to answer questions and make decisions with the team",
         "Delivering code at the customer's site",
         "Having developers work at client's offices",
+        "Having a real customer representative available to answer questions and make decisions with the team",
         "None of the above"
-      ],
-      correct: 0,
-      why: "An on‑site customer provides continuous feedback and clarifies requirements throughout development."
+      ], correct: 2,
+      why: "An on\u2011site customer provides continuous feedback and clarifies requirements throughout development."
     },
-    {
-      q: "Which retrospective technique uses categories \"Liked, Learned, Lacked, Longed for\"?",
+    // 36
+    { q: "Which retrospective technique uses categories \"Liked, Learned, Lacked, Longed for\"?",
       options: [
-        "4Ls",
         "Sailboat",
         "SWOT",
-        "Fishbone"
-      ],
-      correct: 0,
+        "Fishbone",
+        "4Ls"
+      ], correct: 3,
       why: "The 4Ls template explicitly prompts the team to identify things they liked, learned, lacked and longed for."
     },
-    {
-      q: "When splitting user stories during sprint planning, why is it important?",
+    // 37
+    { q: "When splitting user stories during sprint planning, why is it important?",
       options: [
-        "It makes large stories manageable and allows accurate estimation and commitment",
         "It increases complexity",
+        "It makes large stories manageable and allows accurate estimation and commitment",
         "It reduces collaboration",
         "It delays the sprint"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Breaking down stories into smaller pieces helps ensure they can be completed within a sprint and estimated reliably."
     },
-    {
-      q: "Why is it important to time‑box the sprint planning meeting?",
+    // 38
+    { q: "Why is it important to time\u2011box the sprint planning meeting?",
       options: [
-        "To prevent endless discussion and ensure decisions are made efficiently",
         "To restrict team collaboration",
+        "To prevent endless discussion and ensure decisions are made efficiently",
         "To satisfy management",
         "It is not recommended"
-      ],
-      correct: 0,
-      why: "Time‑boxing encourages focus and prevents planning from consuming more time than necessary."
+      ], correct: 1,
+      why: "Time\u2011boxing encourages focus and prevents planning from consuming more time than necessary."
     },
-    {
-      q: "In a retrospective, what is the goal of discussing root causes of problems rather than symptoms?",
+    // 39
+    { q: "In a retrospective, what is the goal of discussing root causes of problems rather than symptoms?",
       options: [
-        "To identify underlying issues and develop effective solutions",
         "To assign blame",
         "To avoid taking action",
-        "To highlight individuals’ faults"
-      ],
-      correct: 0,
+        "To identify underlying issues and develop effective solutions",
+        "To highlight individuals\u2019 faults"
+      ], correct: 2,
       why: "Understanding root causes helps the team address the true source of problems rather than treating superficial effects."
     },
-    {
-      q: "How does pair programming support knowledge transfer in XP?",
+    // 40
+    { q: "How does pair programming support knowledge transfer in XP?",
       options: [
-        "By having two developers share the task, they share ideas and spread understanding of the code",
         "It isolates knowledge",
         "It reduces quality",
-        "It increases secrecy"
-      ],
-      correct: 0,
+        "It increases secrecy",
+        "By having two developers share the task, they share ideas and spread understanding of the code"
+      ], correct: 3,
       why: "Pair programming rotates partners and disseminates expertise across the team, reducing information silos."
     },
-    {
-      q: "When conducting a retrospective, why should the team create a safe environment?",
+    // 41
+    { q: "When conducting a retrospective, why should the team create a safe environment?",
       options: [
-        "To encourage honest feedback without fear of blame",
         "To hide mistakes",
+        "To encourage honest feedback without fear of blame",
         "To make decisions unilaterally",
         "To satisfy compliance"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "Psychological safety enables team members to speak openly about issues and improvements."
     },
-    {
-      q: "How does test‑driven development help support simple design?",
+    // 42
+    { q: "How does test\u2011driven development help support simple design?",
       options: [
-        "Writing tests first forces developers to write only enough code to satisfy the tests and prevents unnecessary complexity",
         "It leads to large design",
+        "Writing tests first forces developers to write only enough code to satisfy the tests and prevents unnecessary complexity",
         "It delays coding",
         "It eliminates need for design"
-      ],
-      correct: 0,
-      why: "TDD encourages the simplest solution that meets the test requirements, avoiding over‑engineering."
+      ], correct: 1,
+      why: "TDD encourages the simplest solution that meets the test requirements, avoiding over\u2011engineering."
     },
-    {
-      q: "In XP, what does continuous integration emphasise?",
+    // 43
+    { q: "In XP, what does continuous integration emphasise?",
       options: [
-        "Regularly merging and testing code to detect issues early",
         "Merging branches only at project end",
         "Avoiding integration",
+        "Regularly merging and testing code to detect issues early",
         "Deleting history"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "Continuous integration ensures small changes are integrated and tested often, reducing integration headaches."
     },
-    {
-      q: "Which step is included in the sprint retrospective process?",
+    // 44
+    { q: "Which step is included in the sprint retrospective process?",
       options: [
-        "Team members populate a board with observations and group similar items before voting",
         "The product owner reprioritises the product backlog",
         "Individual developers are assigned tasks for the next sprint backlog",
-        "Stakeholders decide the sprint goal"
-      ],
-      correct: 0,
+        "Stakeholders decide the sprint goal",
+        "Team members populate a board with observations and group similar items before voting"
+      ], correct: 3,
       why: "The retrospective process involves the team capturing observations, grouping them, voting on priorities and discussing root causes before deciding actions."
     },
-    {
-      q: "What is the purpose of the 'Mad, Sad, Glad' retrospective template?",
+    // 45
+    { q: "What is the purpose of the 'Mad, Sad, Glad' retrospective template?",
       options: [
-        "To categorise feedback based on whether events made the team mad, sad or glad",
         "To assign specific tasks to developers",
+        "To categorise feedback based on whether events made the team mad, sad or glad",
         "To calculate team velocity",
         "To collect user stories from customers"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "The 'Mad, Sad, Glad' exercise encourages team members to share emotions associated with the sprint, providing insight into morale and pain points."
     },
-    {
-      q: "What does the 'Five Whys' technique aim to accomplish during retrospectives?",
+    // 46
+    { q: "What does the 'Five Whys' technique aim to accomplish during retrospectives?",
       options: [
-        "Identify the root cause of an issue by repeatedly asking why it occurs",
         "Estimate story points",
+        "Identify the root cause of an issue by repeatedly asking why it occurs",
         "Design the system architecture",
         "Rewrite outdated test cases"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "By asking 'why?' multiple times, the team digs beneath symptoms to uncover underlying causes of problems."
     },
-    {
-      q: "After a retrospective, action items should be prioritised by feasibility, ROI and priority, and each item assigned an owner. Which acronym summarises this follow‑up process?",
+    // 47
+    { q: "After a retrospective, action items should be prioritised by feasibility, ROI and priority, and each item assigned an owner. Which acronym summarises this follow\u2011up process?",
       options: [
-        "PACT",
         "SWOT",
         "MoSCoW",
+        "PACT",
         "RACI"
-      ],
-      correct: 0,
+      ], correct: 2,
       why: "PACT stands for Prioritise, Assign an owner, Create tickets and (T) review/revisit past decisions during the next retrospective."
     },
-    {
-      q: "One potential issue with infrequent retrospective meetings is that:",
+    // 48
+    { q: "One potential issue with infrequent retrospective meetings is that:",
       options: [
-        "Problems can linger because details and context are forgotten before they are addressed",
         "Velocity will automatically increase",
-        "It eliminates the need for daily stand‑ups",
-        "The backlog becomes unmanageable"
-      ],
-      correct: 0,
+        "It eliminates the need for daily stand\u2011ups",
+        "The backlog becomes unmanageable",
+        "Problems can linger because details and context are forgotten before they are addressed"
+      ], correct: 3,
       why: "When retrospectives are held only every few weeks, issues may persist and important context may be lost, reducing the effectiveness of improvement actions."
     },
-    {
-      q: "In Extreme Programming (XP), which practice ensures that code is continually improved and simplified?",
+    // 49
+    { q: "In Extreme Programming (XP), which practice ensures that code is continually improved and simplified?",
       options: [
+        "Big up\u2011front design",
         "Continuous refactoring",
-        "Big up‑front design",
         "Avoiding tests",
         "Weekly releases only"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "XP emphasises simplicity and encourages developers to refactor their code continually to keep the design clean and maintainable."
     },
-    {
-      q: "Which XP value highlights responsiveness to changing requirements over following a strict plan?",
+    // 50
+    { q: "Which XP value highlights responsiveness to changing requirements over following a strict plan?",
       options: [
-        "Responding to change over following a plan",
         "Individuals and interactions over processes and tools",
+        "Responding to change over following a plan",
         "Working software over comprehensive documentation",
         "Customer collaboration over contract negotiation"
-      ],
-      correct: 0,
+      ], correct: 1,
       why: "XP aligns with the Agile Manifesto, which values responding to change over following a plan, enabling teams to adapt to new information."
     }
   ];

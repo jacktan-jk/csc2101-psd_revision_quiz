@@ -63,212 +63,257 @@
   </footer>
 
   <script>
-  const QUESTIONS = [
-    // Agile basics & suitability
+    const QUESTIONS = [
+    // 1
     { q: "Which statement best reflects the Agile philosophy in this lecture?",
       options: [
-        "Heavy upfront analysis and formal documentation over delivery.",
         "Encourage customer satisfaction through early, incremental delivery using small, motivated teams and informal methods.",
+        "Heavy upfront analysis and formal documentation over delivery.",
         "Prioritise hardware integration first.",
         "Design freeze before any customer contact."
-      ], correct: 1,
-      why: "Agile emphasises customer satisfaction, early incremental delivery, small motivated teams, informal methods, simplicity, and active developer–customer communication." },
-
+      ], correct: 0,
+      why: "Agile emphasises customer satisfaction, early incremental delivery, small motivated teams, informal methods, simplicity, and active developer\u2013customer communication."
+    },
+    // 2
     { q: "When is Agile generally a poor fit according to the slides?",
       options: [
-        "Time‑critical prototypes.",
-        "New/uncertain requirements.",
+        "Time\u2011critical prototypes.",
         "Lack a good team attitude/skills; very large projects needing heavy formal documentation.",
+        "New/uncertain requirements.",
         "Technology is new."
-      ], correct: 2,
-      why: "Lecture cautions against Agile when team quality is weak or for large projects requiring specific documentation and formal comms." },
-
+      ], correct: 1,
+      why: "Lecture cautions against Agile when team quality is weak or for large projects requiring specific documentation and formal comms."
+    },
+    // 3
     { q: "Which model is contrasted with Agile alongside Waterfall in the overview?",
-      options: ["Spiral only","Incremental","Big‑bang","V‑Model"], correct: 1,
-      why: "The lecture’s process slide shows Waterfall, Incremental, and Agile together." },
-
-    // Team size & effects
+      options: [
+        "Spiral only",
+        "Big\u2011bang",
+        "Incremental",
+        "V\u2011Model"
+      ], correct: 2,
+      why: "The lecture\u2019s process slide shows Waterfall, Incremental, and Agile together."
+    },
+    // 4
     { q: "Why do smaller agile teams often achieve bigger impact?",
       options: [
         "They avoid any meetings.",
-        "They move faster, decide quicker, fail fast/mature faster, provide transparency/accountability, and keep a familial feel.",
         "They have more managers.",
-        "They eliminate testing."
-      ], correct: 1,
-      why: "Slide: smaller teams → faster decisions, fail‑fast maturity, transparency/accountability, familial feel." },
-
+        "They eliminate testing.",
+        "They move faster, decide quicker, fail fast/mature faster, provide transparency/accountability, and keep a familial feel."
+      ], correct: 3,
+      why: "Slide: smaller teams \u2192 faster decisions, fail\u2011fast maturity, transparency/accountability, familial feel."
+    },
+    // 5
     { q: "Which is NOT a characteristic listed for agile teams?",
-      options: ["Less social loafing","Visible contributions","Minimal coordination needed","Strict role silos that never flex"], correct: 3,
-      why: "Agile teams show constructive interactions, minimal coordination overhead, visible/meaningful contributions, and willingness to work beyond roles—strict silos contradict this." },
-
-    // Traditional vs Agile roles/structure
-    { q: "Traditional teams typically have Project Manager/Team Lead. What’s the comparable concept in Agile teams?",
-      options: ["Chief Architect","Servant Leader / Facilitator (e.g., Scrum Master)","Foreman","Director of Waterfall"], correct: 1,
-      why: "Slide contrasts traditional PM/lead with servant‑leader/facilitator roles in Agile." },
-
-    // Scrum essentials
-    { q: "What is the time‑boxed unit of development in Scrum?",
-      options: ["Epic","Iteration of 6–12 weeks","Sprint of 1–3 weeks (up to a month)","Release only"], correct: 2,
-      why: "Scrum progresses in sprints typically 1–3 weeks; at most a calendar month." },
-
+      options: [
+        "Strict role silos that never flex",
+        "Less social loafing",
+        "Visible contributions",
+        "Minimal coordination needed"
+      ], correct: 0,
+      why: "Agile teams show constructive interactions, minimal coordination overhead, visible/meaningful contributions, and willingness to work beyond roles\u2014strict silos contradict this."
+    },
+    // 6
+    { q: "Traditional teams typically have Project Manager/Team Lead. What\u2019s the comparable concept in Agile teams?",
+      options: [
+        "Chief Architect",
+        "Foreman",
+        "Servant Leader / Facilitator (e.g., Scrum Master)",
+        "Director of Waterfall"
+      ], correct: 2,
+      why: "Slide contrasts traditional PM/lead with servant\u2011leader/facilitator roles in Agile."
+    },
+    // 7
+    { q: "What is the time\u2011boxed unit of development in Scrum?",
+      options: [
+        "Epic",
+        "Iteration of 6\u201312 weeks",
+        "Release only",
+        "Sprint of 1\u20133 weeks (up to a month)"
+      ], correct: 3,
+      why: "Scrum progresses in sprints typically 1\u20133 weeks; at most a calendar month."
+    },
+    // 8
     { q: "Which artefacts are highlighted in Scrum?",
       options: [
-        "Product backlog, Sprint backlog, Burndown charts",
         "Gantt chart only",
         "Architecture decision records only",
-        "Risk register and contract only"
-      ], correct: 0,
-      why: "Lecture lists core Scrum artefacts: product backlog, sprint backlog, burndown charts." },
-
-    { q: "A ‘product backlog’ is best described as…",
+        "Risk register and contract only",
+        "Product backlog, Sprint backlog, Burndown charts"
+      ], correct: 3,
+      why: "Lecture lists core Scrum artefacts: product backlog, sprint backlog, burndown charts."
+    },
+    // 9
+    { q: "A \u2018product backlog\u2019 is best described as\u2026",
       options: [
-        "A detailed test plan.",
         "A prioritised list of deliverables/features for implementation.",
+        "A detailed test plan.",
         "A code review checklist.",
         "Only the UX assets."
-      ], correct: 1,
-      why: "Slide: product backlog = prioritised list of deliverables/features." },
-
+      ], correct: 0,
+      why: "Slide: product backlog = prioritised list of deliverables/features."
+    },
+    // 10
     { q: "What typically happens during a Sprint Review meeting?",
       options: [
         "Estimate story points for the next sprint only.",
+        "Re\u2011negotiate employee contracts.",
         "Deliver & demonstrate the increment; summarise progress vs plan; explain deviations; identify new features.",
-        "Re‑negotiate employee contracts.",
         "Only fix bugs."
-      ], correct: 1,
-      why: "Lecture specifies showcasing the new version, comparing to plan, reasons for deviations, and identifying new features." },
-
+      ], correct: 2,
+      why: "Lecture specifies showcasing the new version, comparing to plan, reasons for deviations, and identifying new features."
+    },
+    // 11
     { q: "Which two key questions drive a Sprint Retrospective?",
       options: [
-        "What went well? What could be improved?",
         "What failed testing? What is in scope?",
         "Who to hire? What to cut?",
+        "What went well? What could be improved?",
         "What did the customer pay? What is profit?"
-      ], correct: 0,
-      why: "Retrospectives ask what went well and what to improve; time‑boxed (three hours in slide)." },
-
-    { q: "Stand‑ups in this course context should occur…",
+      ], correct: 2,
+      why: "Retrospectives ask what went well and what to improve; time\u2011boxed (three hours in slide)."
+    },
+    // 12
+    { q: "Stand\u2011ups in this course context should occur\u2026",
       options: [
-        "At least weekly, facilitated by Scrum Master; each member covers done/doing/blockers; ~10–15 minutes.",
         "Only at project end.",
         "Whenever someone feels like it, no structure.",
-        "Only managers speak."
-      ], correct: 0,
-      why: "Monitoring progress in stand‑ups: frequency, facilitation, three questions, short duration, documentation suggested." },
-
-    { q: "A release usually comprises…",
+        "Only managers speak.",
+        "At least weekly, facilitated by Scrum Master; each member covers done/doing/blockers; ~10\u201315 minutes."
+      ], correct: 3,
+      why: "Monitoring progress in stand\u2011ups: frequency, facilitation, three questions, short duration, documentation suggested."
+    },
+    // 13
+    { q: "A release usually comprises\u2026",
       options: [
-        "Exactly one sprint.",
         "Two or more sprints, scoped in release planning meetings with roadmap/milestones.",
+        "Exactly one sprint.",
         "UI work only.",
         "Bug fixes only."
-      ], correct: 1,
-      why: "Release planning: multiple sprints, features/milestones roadmap aligned to priorities/customer days." },
-
-    // Roles
+      ], correct: 0,
+      why: "Release planning: multiple sprints, features/milestones roadmap aligned to priorities/customer days."
+    },
+    // 14
     { q: "Which is NOT a Scrum role listed on the framework slide?",
-      options: ["Scrum Master","Product Owner","UX Designer","Chief Compliance Officer"], correct: 3,
-      why: "Roles shown: Scrum Master, Product Owner, Architect, Developer, UX Designer, QA—no ‘Chief Compliance Officer’." },
-
+      options: [
+        "Scrum Master",
+        "Chief Compliance Officer",
+        "Product Owner",
+        "UX Designer"
+      ], correct: 1,
+      why: "Roles shown: Scrum Master, Product Owner, Architect, Developer, UX Designer, QA\u2014no \u2018Chief Compliance Officer\u2019."
+    },
+    // 15
     { q: "Which responsibility belongs to the Product Owner per slides?",
       options: [
         "Removes impediments and coaches the team.",
-        "Defines features, prioritises by market value, adjusts per iteration, accepts/rejects results, steers release content and ROI.",
         "Writes all code.",
+        "Defines features, prioritises by market value, adjusts per iteration, accepts/rejects results, steers release content and ROI.",
         "Approves expense claims."
-      ], correct: 1,
-      why: "These are Product Owner responsibilities in the lecture." },
-
+      ], correct: 2,
+      why: "These are Product Owner responsibilities in the lecture."
+    },
+    // 16
     { q: "Which responsibility belongs to the Scrum Master per slides?",
       options: [
         "Define all features and decide release contents.",
-        "Guide the team in Scrum use, remove impediments, enable cooperation; acts as coach rather than traditional PM.",
         "Own product profitability.",
-        "Approve marketing budget."
-      ], correct: 1,
-      why: "Scrum Master coaches/enacts Scrum values and removes impediments; may have some PM responsibilities." },
-
-    // Requirement gathering – foundations
-    { q: "A key objective of a project launch meeting is to…",
+        "Approve marketing budget.",
+        "Guide the team in Scrum use, remove impediments, enable cooperation; acts as coach rather than traditional PM."
+      ], correct: 3,
+      why: "Scrum Master coaches/enacts Scrum values and removes impediments; may have some PM responsibilities."
+    },
+    // 17
+    { q: "A key objective of a project launch meeting is to\u2026",
       options: [
+        "Identify long\u2011term objectives and MVP; develop initial user stories; refine into tasks; triage backlog by cost/priority.",
         "Freeze scope permanently.",
-        "Identify long‑term objectives and MVP; develop initial user stories; refine into tasks; triage backlog by cost/priority.",
-        "Sign a fixed‑price contract.",
+        "Sign a fixed\u2011price contract.",
         "Skip customer involvement."
-      ], correct: 1,
-      why: "Project launch focuses features over sprints, long‑term objectives/MVP, initial user stories, and backlog triage." },
-
+      ], correct: 0,
+      why: "Project launch focuses features over sprints, long\u2011term objectives/MVP, initial user stories, and backlog triage."
+    },
+    // 18
     { q: "Which is good preparation for requirement gathering?",
       options: [
         "Avoid market research to stay unbiased.",
-        "Survey market solutions; identify stakeholders (users, bosses/colleagues, data/API providers); note constraints; special tech needs.",
         "Meet only one person and decide yourself.",
+        "Survey market solutions; identify stakeholders (users, bosses/colleagues, data/API providers); note constraints; special tech needs.",
         "Write code first, discuss later."
-      ], correct: 1,
-      why: "Slide lists surveying solutions, stakeholder mapping, constraints, and tech needs." },
-
+      ], correct: 2,
+      why: "Slide lists surveying solutions, stakeholder mapping, constraints, and tech needs."
+    },
+    // 19
     { q: "Which practice improves requirement sessions per slides?",
       options: [
         "Keep agenda implicit and broad.",
-        "Use visual aides, structured techniques (mockups, user stories), visual walkthroughs; highlight complex decisions for follow‑up.",
         "Avoid time boxing.",
+        "Use visual aides, structured techniques (mockups, user stories), visual walkthroughs; highlight complex decisions for follow\u2011up.",
         "Ban customer questions."
-      ], correct: 1,
-      why: "Effective requirement gathering: clear agenda, visuals, structured techniques, and highlighting complex decisions." },
-
-    { q: "Time boxing an agenda helps the Chair to…",
+      ], correct: 2,
+      why: "Effective requirement gathering: clear agenda, visuals, structured techniques, and highlighting complex decisions."
+    },
+    // 20
+    { q: "Time boxing an agenda helps the Chair to\u2026",
       options: [
         "Extend meetings indefinitely.",
-        "Pause/park items that over‑run and allocate effort effectively.",
         "Avoid decisions.",
-        "Skip notes."
-      ], correct: 1,
-      why: "Time estimates per item help use time wisely and allow the Chair to pause over‑running discussions." },
-
+        "Skip notes.",
+        "Pause/park items that over\u2011run and allocate effort effectively."
+      ], correct: 3,
+      why: "Time estimates per item help use time wisely and allow the Chair to pause over\u2011running discussions."
+    },
+    // 21
     { q: "Which is an example of a focused question?",
       options: [
+        "Which two features should be implemented first\u2014and which two after that?",
         "Which of the 10 features would you like?",
-        "Which two features should be implemented first—and which two after that?",
         "Do you want everything?",
         "Are you happy?"
-      ], correct: 1,
-      why: "Slides propose narrowing choice to prioritise effectively (e.g., pick two now, two next)." },
-
+      ], correct: 0,
+      why: "Slides propose narrowing choice to prioritise effectively (e.g., pick two now, two next)."
+    },
+    // 22
     { q: "How should the team manage discussions in meetings?",
       options: [
         "Let the loudest person dominate.",
-        "Balance openness for ideas with adherence to agenda; Chair moderates turn‑taking, interrupts dominance, probes unclear points, stimulates quieter members.",
         "Avoid the agenda entirely.",
+        "Balance openness for ideas with adherence to agenda; Chair moderates turn\u2011taking, interrupts dominance, probes unclear points, stimulates quieter members.",
         "Ban customer input."
-      ], correct: 1,
-      why: "Managing discussions: maintain balance and use Chair authority to keep productive flow." },
-
-    { q: "Negotiating plan changes with customers should…",
+      ], correct: 2,
+      why: "Managing discussions: maintain balance and use Chair authority to keep productive flow."
+    },
+    // 23
+    { q: "Negotiating plan changes with customers should\u2026",
       options: [
         "Be accepted immediately regardless of impact.",
-        "Be approached cautiously; assess schedule impact, be honest, renegotiate timelines as needed, incorporate past delays.",
         "Be ignored.",
+        "Be approached cautiously; assess schedule impact, be honest, renegotiate timelines as needed, incorporate past delays.",
         "Only happen by email."
-      ], correct: 1,
-      why: "Slides advise careful evaluation and honest negotiation when expectations/priorities shift." },
-
+      ], correct: 2,
+      why: "Slides advise careful evaluation and honest negotiation when expectations/priorities shift."
+    },
+    // 24
     { q: "Which practice is recommended for managing and minuting outcomes?",
       options: [
         "Avoid recording.",
-        "Ask permission to record; summarise agreed goals/work items; create tracker issues for new work and follow‑ups; minute discussions.",
         "Keep decisions verbal only.",
-        "Delete backlog items."
-      ], correct: 1,
-      why: "Explicitly listed: permission to record, summarise agreements, create backlog/follow‑up issues, minute the meeting." },
-
-    { q: "Between meetings, effective communication includes…",
+        "Delete backlog items.",
+        "Ask permission to record; summarise agreed goals/work items; create tracker issues for new work and follow\u2011ups; minute discussions."
+      ], correct: 3,
+      why: "Explicitly listed: permission to record, summarise agreements, create backlog/follow\u2011up issues, minute the meeting."
+    },
+    // 25
+    { q: "Between meetings, effective communication includes\u2026",
       options: [
-        "Waiting silently for the next sprint.",
         "Direct channels, periodic demos, continuous improvements based on feedback, additional sessions to resolve uncertainty, pursuit of customer satisfaction.",
+        "Waiting silently for the next sprint.",
         "Only sending release notes at the end.",
         "Blocking stakeholders from the repo."
-      ], correct: 1,
-      why: "Slide recommends ongoing engagement and feedback loops between meetings." }
+      ], correct: 0,
+      why: "Slide recommends ongoing engagement and feedback loops between meetings."
+    }
   ];
 
   const state = { score: 0, answered: 0 };
