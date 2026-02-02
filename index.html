@@ -16,6 +16,7 @@
     @media (max-width: 900px) { main { grid-template-columns: 1fr } }
     .card { background:#0f172a; border:1px solid #1f2937; border-radius:14px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,.35) }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px }
+    .grid[hidden] { display:none }
     .tabs { display:flex; gap:8px; margin:10px 0 14px; flex-wrap:wrap }
     .tab { border:1px solid #1f2937; background:#0b1328; color:#9ca3af; padding:6px 12px; border-radius:999px; font-weight:600; cursor:pointer }
     .tab.active { background:#1e293b; border-color:#3b82f6; color:#e6f0ff }
@@ -72,18 +73,17 @@
     <section class="card">
       <h2 style="margin-top:0">Quizzes</h2>
       <div class="tabs" role="tablist">
-        <button class="tab active" type="button" data-tab="lectures" role="tab" aria-selected="true">Lectures</button>
-        <button class="tab" type="button" data-tab="topics" role="tab" aria-selected="false">Topics</button>
+        <button class="tab active" type="button" data-tab="trimester1" role="tab" aria-selected="true">Trimester 1</button>
+        <button class="tab" type="button" data-tab="trimester2" role="tab" aria-selected="false">Trimester 2</button>
       </div>
-      <div class="grid" id="lecGrid" data-panel="lectures"></div>
-      <div class="grid" id="topicGrid" data-panel="topics" hidden></div>
+      <div class="grid" id="lecGrid" data-panel="trimester1"></div>
+      <div class="grid" id="topicGrid" data-panel="trimester2" hidden></div>
       <details>
         <summary>File naming convention (keep projects portable)</summary>
         <div style="margin-top:6px">
           Save each quiz HTML beside this index as:<br>
-          <code>cscs_2102_lecture_1_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_2_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_3_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_4_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_5_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_6_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_8_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_9_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_10_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_11_mcq_quiz_html.html</code>.<br>
-          Save topic quizzes as <code>topic_1_quiz.html</code> … <code>topic_4_quiz.html</code>.<br>
-          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec11.md</code> and <code>topic_1_revision_notes.md</code> … <code>topic_4_revision_notes.md</code>.
+          <code>cscs_2102_lecture_1_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_2_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_3_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_4_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_5_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_6_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_8_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_9_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_10_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_11_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_12_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_13_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_14_mcq_quiz_html.html</code>, <code>cscs_2102_lecture_15_mcq_quiz_html.html</code>.<br>
+          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec15.md</code>.
         </div>
       </details>
     </section>
@@ -118,10 +118,10 @@
       { no:11, title:"Software Refactoring", tag:"Refactoring", quiz:"cscs_2102_lecture_11_mcq_quiz_html.html", notes:"notes/lec11.md" },
     ];
     const TOPICS = [
-      { no:1, title:"Project Management", tag:"Planning & delivery", quiz:"topic_1_quiz.html", notes:"notes/topic_1_revision_notes.md" },
-      { no:2, title:"Licensing & Copyright", tag:"Legal & licensing", quiz:"topic_2_quiz.html", notes:"notes/topic_2_revision_notes.md" },
-      { no:3, title:"Quality Assurance & Metrics", tag:"QA & reviews", quiz:"topic_3_quiz.html", notes:"notes/topic_3_revision_notes.md" },
-      { no:4, title:"Cloud Native & Microservices", tag:"Cloud architecture", quiz:"topic_4_quiz.html", notes:"notes/topic_4_revision_notes.md" },
+      { no:1, title:"Project Management", tag:"Planning & delivery", quiz:"cscs_2102_lecture_12_mcq_quiz_html.html", notes:"notes/lec12.md" },
+      { no:2, title:"Licensing & Copyright", tag:"Legal & licensing", quiz:"cscs_2102_lecture_13_mcq_quiz_html.html", notes:"notes/lec13.md" },
+      { no:3, title:"Quality Assurance & Metrics", tag:"QA & reviews", quiz:"cscs_2102_lecture_14_mcq_quiz_html.html", notes:"notes/lec14.md" },
+      { no:4, title:"Cloud Native & Microservices", tag:"Cloud architecture", quiz:"cscs_2102_lecture_15_mcq_quiz_html.html", notes:"notes/lec15.md" },
     ];
     // ---- Render quiz cards ----
     const lectureGrid = document.getElementById('lecGrid');
@@ -141,7 +141,7 @@
     `).join('');
     }
     renderCards(lectureGrid, LECTURES, 'Lec');
-    renderCards(topicGrid, TOPICS, 'Topic');
+    renderCards(topicGrid, TOPICS, 'Lec');
     [lectureGrid, topicGrid].forEach(grid => {
       grid.addEventListener('click', (e) => {
         const b = e.target.closest('button[data-notes]');
