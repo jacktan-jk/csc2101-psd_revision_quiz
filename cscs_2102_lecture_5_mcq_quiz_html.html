@@ -355,10 +355,36 @@
   function buildQuestions() {
     const items = cloneQuestions(BASE_QUESTIONS);
     shuffleArray(items);
-    return items.map(item => {
+
+    const targetsByIndex = new Map();
+    const grouped = new Map();
+
+    items.forEach((item, idx) => {
+      const len = item.options.length;
+      if (!grouped.has(len)) grouped.set(len, []);
+      grouped.get(len).push(idx);
+    });
+
+    grouped.forEach((indexes, len) => {
+      const targets = [];
+      for (let i = 0; i < indexes.length; i++) targets.push(i % len);
+      shuffleArray(targets);
+      indexes.forEach((qIdx, i) => {
+        targetsByIndex.set(qIdx, targets[i]);
+      });
+    });
+
+    return items.map((item, qIdx) => {
       const optionPool = item.options.map((text, index) => ({ text, index }));
       shuffleArray(optionPool);
-      const correct = optionPool.findIndex(opt => opt.index === item.correct);
+      let correct = optionPool.findIndex(opt => opt.index === item.correct);
+      const target = targetsByIndex.get(qIdx);
+
+      if (typeof target === 'number' && target >= 0 && target < optionPool.length && correct !== target) {
+        [optionPool[correct], optionPool[target]] = [optionPool[target], optionPool[correct]];
+        correct = target;
+      }
+
       return {
         ...item,
         options: optionPool.map(opt => opt.text),
