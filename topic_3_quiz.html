@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PSD Topic 3 MCQ Quiz: Quality Assurance, Code Review & Metrics</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 3 MCQ Quiz — Quality Assurance, Code Review & Metrics</h1>
+      <div class="sub">Professional Software Development • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 30</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on PSD Topic 3 slides on Quality Assurance, Code Review and Software Metrics. This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      // 1
+      { q: "What is the primary goal of Quality Assurance (QA)?",
+        options: [
+          "Detecting defects after they occur",
+          "Preventing mistakes and defects and ensuring products meet expectations",
+          "Marketing a product",
+          "Managing budgets only"
+        ], correct: 1,
+        why: "QA is a systematic effort to ensure delivered products meet customer expectations and to prevent mistakes and defects【746985869383496†L209-L216】."
+      },
+      // 2
+      { q: "How does Quality Assurance differ from Quality Control?",
+        options: [
+          "QA focuses on prevention, whereas QC focuses on defect detection",
+          "QA is done after release and QC before coding",
+          "They are the same",
+          "QC is only about budgeting"
+        ], correct: 0,
+        why: "Quality Assurance aims to prevent mistakes and defects; Quality Control focuses on defect detection【746985869383496†L213-L216】."
+      },
+      // 3
+      { q: "According to ISO 9000, QA is part of quality management focused on…",
+        options: [
+          "Providing confidence that quality requirements will be fulfilled",
+          "Writing code modules",
+          "Market research",
+          "Graphic design"
+        ], correct: 0,
+        why: "ISO 9000 defines QA as part of quality management focused on providing confidence that quality requirements will be fulfilled【746985869383496†L217-L224】."
+      },
+      // 4
+      { q: "Which ISO 9000 standard applies to organisations involved in design, development, production and servicing?",
+        options: [
+          "ISO 9001",
+          "ISO 9002",
+          "ISO 9003",
+          "ISO 31000"
+        ], correct: 0,
+        why: "ISO 9001 applies to organisations involved in design, development, production and servicing【746985869383496†L221-L225】."
+      },
+      // 5
+      { q: "Which ISO 9000 standard applies to production‑only organisations and does not apply to software development?",
+        options: [
+          "ISO 9001",
+          "ISO 9002",
+          "ISO 9003",
+          "ISO 10006"
+        ], correct: 1,
+        why: "ISO 9002 applies to production‑only organisations, such as steel or car manufacturing, and does not apply to software development【746985869383496†L222-L228】."
+      },
+      // 6
+      { q: "Which ISO 9000 standard applies to organisations involved only in installation and testing?",
+        options: [
+          "ISO 9001",
+          "ISO 9002",
+          "ISO 9003",
+          "ISO 9004"
+        ], correct: 2,
+        why: "ISO 9003 applies to organisations involved only in installation and testing【746985869383496†L229-L231】."
+      },
+      // 7
+      { q: "In the code review process described, what is required for every commit?",
+        options: [
+          "It must be reviewed by at least one other developer via integrated tools",
+          "It must be reviewed only by the author",
+          "It must be reviewed after deployment",
+          "It must be reviewed by customers"
+        ], correct: 0,
+        why: "Every commit is reviewed by at least one other developer via integrated tools, and reviews are linked to systems of record【746985869383496†L236-L243】."
+      },
+      // 8
+      { q: "What should code review feedback focus on according to the lecture?",
+        options: [
+          "Personal preferences and style",
+          "Constructive suggestions regarding standards, security and best practices",
+          "Blaming developers",
+          "User interface only"
+        ], correct: 1,
+        why: "Feedback should be constructive, focusing on standards, security and best practices rather than subjective opinions【746985869383496†L243-L246】."
+      },
+      // 9
+      { q: "Which of the following is NOT a cited benefit of code review?",
+        options: [
+          "Improved software quality",
+          "Knowledge sharing across the team",
+          "Mentoring less experienced developers",
+          "Increased complexity of the code"
+        ], correct: 3,
+        why: "Benefits include improved quality, knowledge sharing, mentoring and collaboration; increased complexity is not a benefit【746985869383496†L248-L253】."
+      },
+      // 10
+      { q: "What did the Hewlett Packard case study conclude about code reviews?",
+        options: [
+          "They have no impact on cost",
+          "They saved more money than resolving defects after customer delivery",
+          "They delayed projects",
+          "They are only useful in hardware projects"
+        ], correct: 1,
+        why: "HP found that code reviews saved more money than resolving defects after customer delivery【746985869383496†L255-L257】."
+      },
+      // 11
+      { q: "Which of the following is a common obstacle to code reviews?",
+        options: [
+          "Workload and deadline constraints",
+          "Excessive manpower",
+          "Too many reviewers",
+          "Abundant free time"
+        ], correct: 0,
+        why: "Common obstacles include workload (27%), deadline/time constraints (22%) and lack of manpower (16%)【746985869383496†L258-L263】."
+      },
+      // 12
+      { q: "What is the recommended limit of lines of code (LOC) to review at a time?",
+        options: [
+          "50–100 lines",
+          "200–400 lines",
+          "500–700 lines",
+          "There is no limit"
+        ], correct: 1,
+        why: "Volume limits suggest not reviewing more than 200–400 lines of code at a time; defect detection rate drops significantly as LOC under review increases【746985869383496†L270-L275】."
+      },
+      // 13
+      { q: "Which coding technique emphasises returning boolean conditions directly instead of using if...else to return True/False?",
+        options: [
+          "Compact code",
+          "Deep nesting",
+          "Global variables",
+          "Avoiding functions"
+        ], correct: 0,
+        why: "Compact code encourages returning boolean conditions directly rather than using if...else blocks to return True/False【746985869383496†L276-L280】."
+      },
+      // 14
+      { q: "What does the variable management guideline advise against?",
+        options: [
+          "Creating unnecessary variables",
+          "Returning objects or expressions directly",
+          "Using descriptive names",
+          "Following standard casing"
+        ], correct: 0,
+        why: "Variable management recommends avoiding creating unnecessary variables and returning objects or expressions directly where possible【746985869383496†L281-L283】."
+      },
+      // 15
+      { q: "Why is using descriptive names and avoiding abbreviations important?",
+        options: [
+          "It makes code harder to read",
+          "It reduces the need for comments because the code explains itself",
+          "It increases cyclomatic complexity",
+          "It wastes disk space"
+        ], correct: 1,
+        why: "Using descriptive function and variable names makes code self‑explanatory, reducing reliance on comments【746985869383496†L284-L288】."
+      },
+      // 16
+      { q: "What does the simplicity guideline suggest to avoid?",
+        options: [
+          "Breaking complex one‑liners into understandable steps and reducing nesting levels",
+          "Using nested list comprehensions",
+          "Increasing indentation depth",
+          "Hiding logic in long expressions"
+        ], correct: 0,
+        why: "Simplicity guidelines advise avoiding clever but complex one‑liners and reducing nesting levels by using guard clauses and clear steps【746985869383496†L293-L298】."
+      },
+      // 17
+      { q: "To extract unique values efficiently, which data structure is recommended?",
+        options: [
+          "List",
+          "Dictionary",
+          "Set",
+          "Tuple"
+        ], correct: 2,
+        why: "A set() is suggested to extract unique values rather than iterating through a list to check duplicates【746985869383496†L302-L305】."
+      },
+      // 18
+      { q: "Which metric simply counts source lines and is simple and objective but encourages verbosity?",
+        options: [
+          "Function Points",
+          "Lines of Code (LOC)",
+          "Story Points",
+          "Cyclomatic Complexity"
+        ], correct: 1,
+        why: "Lines of Code counts source lines and is simple and objective but language‑dependent and encourages verbosity【746985869383496†L313-L320】."
+      },
+      // 19
+      { q: "Function Points (FP) measure…",
+        options: [
+          "Source lines only",
+          "User‑visible functions (inputs, outputs and interfaces) adjusted by complexity",
+          "Programmer productivity",
+          "Hardware utilisation"
+        ], correct: 1,
+        why: "Function Points measure user‑visible functions (inputs, outputs, interfaces) adjusted by complexity【746985869383496†L322-L327】."
+      },
+      // 20
+      { q: "Story Points are primarily used to estimate…",
+        options: [
+          "Relative effort and complexity in Agile using a Fibonacci scale",
+          "Number of defects",
+          "Hardware costs",
+          "Cyclomatic Complexity"
+        ], correct: 0,
+        why: "Story Points use a relative effort/complexity scale (e.g., Fibonacci sequence) in Agile teams【746985869383496†L334-L339】."
+      },
+      // 21
+      { q: "What does the COCOMO model estimate?",
+        options: [
+          "Hardware specifications",
+          "Person‑months based on size and cost drivers",
+          "Number of users",
+          "License fees"
+        ], correct: 1,
+        why: "The constructive cost model (COCOMO) uses size and cost drivers to predict person‑months【746985869383496†L342-L345】."
+      },
+      // 22
+      { q: "What does Cycle/Lead Time measure?",
+        options: [
+          "The number of defects per kLOC",
+          "Time taken from work start (or request) to completion",
+          "Relative complexity",
+          "Training hours"
+        ], correct: 1,
+        why: "Cycle/Lead Time measures the time taken from work start (or request) to completion; it is customer‑focused and highlights bottlenecks【746985869383496†L350-L355】."
+      },
+      // 23
+      { q: "Why should mature teams use multiple types of metrics?",
+        options: [
+          "Because no single metric works everywhere; combining size, effort, complexity and productivity metrics gives a more comprehensive view",
+          "Because metrics are useless",
+          "Because each metric must be used separately",
+          "Because managers demand it"
+        ], correct: 0,
+        why: "No single metric works everywhere; mature teams combine metrics like size, effort, complexity and productivity to get a full picture【746985869383496†L361-L363】."
+      },
+      // 24
+      { q: "What does Inspection Rate in code review metrics indicate?",
+        options: [
+          "Speed of review in lines of code per inspection hour",
+          "Number of bugs per line",
+          "The number of developers",
+          "Hardware utilisation during review"
+        ], correct: 0,
+        why: "Inspection Rate measures the speed of review (LOC per inspection hours); slow rates indicate readability issues【746985869383496†L366-L368】."
+      },
+      // 25
+      { q: "What does Defect Rate measure in code reviews?",
+        options: [
+          "Number of defects per developer",
+          "Frequency of defects found per inspection hour",
+          "Function point count",
+          "Number of users"
+        ], correct: 1,
+        why: "Defect Rate is the frequency of defects found (Defect Count per inspection hours) and helps determine testing effectiveness【746985869383496†L369-L370】."
+      },
+      // 26
+      { q: "Defect Density is calculated as…",
+        options: [
+          "Defect Count divided by kLOC",
+          "Lines of code divided by defects",
+          "Defect Count times story points",
+          "Time per defect"
+        ], correct: 0,
+        why: "Defect Density equals Defect Count divided by size unit (kLOC)【746985869383496†L372-L374】."
+      },
+      // 27
+      { q: "What does Cyclomatic Complexity measure?",
+        options: [
+          "Number of physical lines of code",
+          "Logical complexity by counting independent execution paths through code",
+          "Hardware performance",
+          "User interface quality"
+        ], correct: 1,
+        why: "Cyclomatic Complexity measures logical complexity by counting the number of independent execution paths through the source code【746985869383496†L381-L384】."
+      },
+      // 28
+      { q: "Which formula can be used to calculate Cyclomatic Complexity for a single function?",
+        options: [
+          "Number of edges minus nodes plus 2",
+          "Number of decision points plus 1",
+          "Lines of code divided by complexity",
+          "Number of functions times variables"
+        ], correct: 1,
+        why: "The shortcut formula for a single function is Cyclomatic Complexity = Number of decision points + 1【746985869383496†L389-L395】."
+      },
+      // 29
+      {
+        q: "Consider the following Python function: def is_eligible(age, has_license, has_insurance): if age >= 18: if has_license: if has_insurance: return True return False. What is the Cyclomatic Complexity (CC) of this function?",
+        options: [
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        correct: 2,
+        why: "Cyclomatic complexity for a single function equals the number of decision points plus one【746985869383496†L389-L395】. This function contains three decision points (three nested if statements), so its CC is 4."
+      },
+      // 30
+      { q: "What happens to defect detection rate as the lines of code under review increase beyond the recommended limit?",
+        options: [
+          "It increases exponentially",
+          "It remains constant",
+          "It drops significantly",
+          "It becomes unpredictable"
+        ], correct: 2,
+        why: "Data show that the defect detection rate drops significantly as the lines of code under review increase beyond 200–400 lines【746985869383496†L270-L275】."
+      }
+    ];
+
+    const state = { score: 0, answered: 0 };
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+
+    function render() {
+      quizEl.innerHTML = '';
+      QUESTIONS.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.__answered = false;
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'opt';
+          row.setAttribute('data-q', idx);
+          row.setAttribute('data-o', oi);
+          row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = QUESTIONS[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+      const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = QUESTIONS[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PSD Topic 2 MCQ Quiz: Licensing & Copyright</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 2 MCQ Quiz — Licensing & Copyright</h1>
+      <div class="sub">Professional Software Development • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 30</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on PSD Topic 2 slides on licensing, copyright and related legal issues. This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      // 1
+      { q: "What is a software license as described in the lecture?",
+        options: [
+          "A hardware specification document",
+          "A legal instrument governing the use or redistribution of software",
+          "A programming language standard",
+          "An encryption algorithm specification"
+        ], correct: 1,
+        why: "A software license is a legal instrument governing the use or redistribution of software【746985869383496†L65-L69】."
+      },
+      // 2
+      { q: "Under US law, how is software treated with respect to copyright?",
+        options: [
+          "It is automatically copyrighted unless developed by the US Government",
+          "It is never copyrighted",
+          "It must be registered to obtain copyright",
+          "It becomes public domain after release"
+        ], correct: 0,
+        why: "All software (source and object code) is automatically copyrighted unless developed by the US Government【746985869383496†L68-L71】."
+      },
+      // 3
+      { q: "Which term describes software donated with no rights reserved?",
+        options: [
+          "Permissive license",
+          "Copyleft license",
+          "Public domain",
+          "Dual license"
+        ], correct: 2,
+        why: "Authors may donate software to the public domain, relinquishing copyright and licensing requirements【746985869383496†L72-L74】."
+      },
+      // 4
+      { q: "What is the purpose of the SPDX standard?",
+        options: [
+          "To define a new programming paradigm",
+          "To provide an open standard for software bill of materials to improve license compliance and supply‑chain security",
+          "To prevent any commercial use of software",
+          "To specify network protocols"
+        ], correct: 1,
+        why: "SPDX (Software Package Data Exchange) is an open standard for software bill of materials to improve license compliance and supply‑chain security【746985869383496†L75-L78】."
+      },
+      // 5
+      { q: "Which license classification permits re‑licensing and allows proprietary appropriation?",
+        options: [
+          "Public domain",
+          "Permissive license",
+          "Copyleft (protective) license",
+          "Noncommercial license"
+        ], correct: 1,
+        why: "Permissive licenses grant use rights and allow re‑licensing or proprietisation【746985869383496†L82-L85】."
+      },
+      // 6
+      { q: "Which license class forbids proprietisation and requires derivative works to remain open?",
+        options: [
+          "MIT license",
+          "Permissive license",
+          "Copyleft license",
+          "Noncommercial license"
+        ], correct: 2,
+        why: "Copyleft (protective) licenses grant use rights but forbid proprietisation; derivative works must remain open【746985869383496†L86-L88】."
+      },
+      // 7
+      { q: "A licence that restricts use of software to non‑commercial purposes falls under which category?",
+        options: [
+          "Permissive license",
+          "Copyleft license",
+          "Noncommercial license",
+          "Trade secret"
+        ], correct: 2,
+        why: "Noncommercial licenses restrict use to non‑commercial purposes【746985869383496†L91-L92】."
+      },
+      // 8
+      { q: "What does dual licensing mean?",
+        options: [
+          "Releasing software under both an open‑source license and a commercial license",
+          "Licensing software to exactly two users",
+          "Having two different authors for one license",
+          "Requiring two signatures to validate a license"
+        ], correct: 0,
+        why: "Dual licensing releases the same software under both an open‑source license and a commercial license【746985869383496†L95-L101】."
+      },
+      // 9
+      { q: "Which Creative Commons (CC) condition requires users to credit the author?",
+        options: [
+          "Share‑alike (SA)",
+          "Non‑commercial (NC)",
+          "No Derivative Works (ND)",
+          "Attribution (BY)"
+        ], correct: 3,
+        why: "Creative Commons licenses include core rights such as Attribution (BY), requiring credit to the author【746985869383496†L105-L111】."
+      },
+      // 10
+      { q: "Which CC clause mandates that derivative works use the same license?",
+        options: [
+          "BY (Attribution)",
+          "SA (Share‑alike)",
+          "NC (Non‑commercial)",
+          "ND (No Derivative Works)"
+        ], correct: 1,
+        why: "Share‑alike (SA) requires derivative works to use the same license【746985869383496†L109-L112】."
+      },
+      // 11
+      { q: "Which Creative Commons element prohibits commercial use of a work?",
+        options: [
+          "BY",
+          "SA",
+          "NC",
+          "ND"
+        ], correct: 2,
+        why: "The Non‑commercial (NC) term prohibits commercial use【746985869383496†L109-L112】."
+      },
+      // 12
+      { q: "What does CC0 signify?",
+        options: [
+          "No rights reserved or public domain",
+          "Attribution required",
+          "Share‑alike required",
+          "Commercial use forbidden"
+        ], correct: 0,
+        why: "CC0 means \"No Rights Reserved\" and effectively places the work in the public domain【746985869383496†L113-L114】."
+      },
+      // 13
+      { q: "How is the MIT license characterised in the lecture?",
+        options: [
+          "A non‑free proprietary license",
+          "A permissive license with high compatibility",
+          "A copyleft license",
+          "A license requiring share‑alike"
+        ], correct: 1,
+        why: "The MIT license is permissive, allowing reuse within proprietary software when license terms and copyright notice are included【746985869383496†L115-L119】."
+      },
+      // 14
+      { q: "What clause does the X11 license add compared to the MIT license?",
+        options: [
+          "It requires all derivative works to be open",
+          "It adds a clause restricting use of the copyright holder’s name for advertising",
+          "It grants patent rights to all users",
+          "It forbids distribution"
+        ], correct: 1,
+        why: "The X11 license is a variation of the MIT license that adds a clause restricting use of the copyright holder's name for advertising【746985869383496†L122-L126】."
+      },
+      // 15
+      { q: "Which statement describes the Apache license?",
+        options: [
+          "It forbids modification",
+          "It allows modification and distribution without royalty concerns",
+          "It prohibits redistribution",
+          "It restricts use of the licensor’s name"
+        ], correct: 1,
+        why: "The Apache license allows modification and distribution of software without royalty concerns【746985869383496†L128-L131】."
+      },
+      // 16
+      { q: "What requirement does the GPL impose on derivative works?",
+        options: [
+          "Derivative works may be relicensed as proprietary",
+          "Derivative works must be released under the GPL",
+          "Derivative works may not be distributed",
+          "Derivative works must include the author's name"
+        ], correct: 1,
+        why: "The GPL is a copyleft license requiring any derivative work to be released under the GPL to prevent proprietary lock‑in【746985869383496†L134-L137】."
+      },
+      // 17
+      { q: "Why is license compatibility important?",
+        options: [
+          "Because some licenses may be incompatible and make projects unusable",
+          "Because it determines file sizes",
+          "Because it determines programming language",
+          "Because it affects CPU usage"
+        ], correct: 0,
+        why: "Projects can become legally unusable if components have conflicting licenses; not all licenses can be combined【746985869383496†L138-L143】."
+      },
+      // 18
+      { q: "What do the Equality Act 2010 and WCAG 2.0 emphasise?",
+        options: [
+          "Only commercial licensing",
+          "Inclusive products and accessible website design",
+          "Patent protection for software",
+          "Exclusivity of software distribution"
+        ], correct: 1,
+        why: "The Equality Act 2010 mandates inclusivity, and WCAG 2.0 provides guidelines for accessible website design (e.g., for screen readers)【746985869383496†L147-L154】."
+      },
+      // 19
+      { q: "What is intellectual theft as defined in the lecture?",
+        options: [
+          "Creating original software",
+          "Copying features or digital assets without permission",
+          "Selling used software legally",
+          "Training AI models"
+        ], correct: 1,
+        why: "Intellectual theft involves intentionally copying features or digital assets (logos, images) without permission【746985869383496†L155-L159】."
+      },
+      // 20
+      { q: "What must developers ensure when using external assets (e.g., logos, images)?",
+        options: [
+          "They have permission, paid licenses or royalties",
+          "Assets are stored on the same server",
+          "Assets are compressed",
+          "Assets are open source"
+        ], correct: 0,
+        why: "Developers must ensure they have permission, paid licenses, or pay royalties for any assets used【746985869383496†L160-L162】."
+      },
+      // 21
+      { q: "Which regulation applies to organisations processing personal data of EU citizens and can impose severe fines?",
+        options: [
+          "Equality Act 2010",
+          "SPDX",
+          "GDPR (General Data Protection Regulation)",
+          "CC0"
+        ], correct: 2,
+        why: "GDPR applies to organisations processing personal data of EU citizens, with penalties up to €20 million or 4 % of turnover【746985869383496†L165-L169】."
+      },
+      // 22
+      { q: "What precedent did the case Vernor v. Autodesk establish?",
+        options: [
+          "Software license agreements supersede the first‑sale doctrine, so users cannot resell software if the license prohibits transfer",
+          "Scraping publicly available data is always illegal",
+          "Derivative works must be released under GPL",
+          "Personal data must be encrypted"
+        ], correct: 0,
+        why: "Vernor v. Autodesk ruled that software license agreements supersede the first‑sale doctrine; users cannot sell used software if the license prohibits transfer【746985869383496†L175-L178】."
+      },
+      // 23
+      { q: "What did the hiQ Labs v. LinkedIn case clarify?",
+        options: [
+          "Scraping publicly available information is legal if it does not circumvent technical barriers",
+          "All data scraping is illegal regardless of barriers",
+          "Reselling software is always permissible",
+          "AI training is prohibited"
+        ], correct: 0,
+        why: "The hiQ Labs v. LinkedIn case established that scraping publicly available information is legal if it does not circumvent technical barriers【746985869383496†L180-L183】."
+      },
+      // 24
+      { q: "Which case involved open‑source licence violation where one company copied code and marketing materials?",
+        options: [
+          "Vernor v. Autodesk",
+          "hiQ Labs v. LinkedIn",
+          "SugarCRM v. vTiger Systems",
+          "Thomson Reuters v. Ross Intelligence"
+        ], correct: 2,
+        why: "In SugarCRM v. vTiger Systems, vTiger was sued for infringing copyright by copying code and marketing materials【746985869383496†L187-L188】."
+      },
+      // 25
+      { q: "What was the outcome of Authors Guild v. Google regarding scanning books for search?",
+        options: [
+          "It was deemed copyright infringement and not fair use",
+          "It was ruled as fair use because scanning for search/analysis is transformative",
+          "It banned scanning books altogether",
+          "It mandated royalties for each scanned book"
+        ], correct: 1,
+        why: "Authors Guild v. Google ruled that scanning books for search/analysis (Google Books) is transformative and constitutes fair use【746985869383496†L194-L196】."
+      },
+      // 26
+      { q: "What did the Thomson Reuters v. Ross Intelligence case decide?",
+        options: [
+          "Training AI on legal headnotes was fair use",
+          "Using legal headnotes to train an AI that competes directly is not fair use",
+          "Dual licensing is invalid",
+          "Scraping data is legal in all contexts"
+        ], correct: 1,
+        why: "The case ruled against Ross Intelligence because using headnotes to train an AI competing directly with the original source was not fair use【746985869383496†L197-L200】."
+      },
+      // 27
+      { q: "Which of the following definitions best describes 'public domain' in software licensing?",
+        options: [
+          "Software with restrictive proprietary terms",
+          "Software for which authors relinquish copyright and licensing requirements",
+          "Software requiring payment of royalties for use",
+          "Software that can only be used by public organisations"
+        ], correct: 1,
+        why: "Authors may donate software to the public domain, relinquishing copyright and licensing requirements【746985869383496†L72-L74】."
+      },
+      // 28
+      { q: "What does the non‑commercial license classification prohibit?",
+        options: [
+          "Modifying source code",
+          "Using the software for commercial purposes",
+          "Using the software privately",
+          "Viewing the source code"
+        ], correct: 1,
+        why: "Non‑commercial licenses restrict use to non‑commercial purposes【746985869383496†L91-L93】."
+      },
+      // 29
+      {
+        q: "A software team builds a web application using an MIT‑licensed UI library and a GPL‑licensed analytics module. They intend to distribute the final product under a proprietary commercial license. What best describes the legal situation?",
+        options: [
+          "This is allowed because both components are open source",
+          "This is allowed as long as attribution is provided",
+          "This is not allowed because GPL imposes copyleft obligations",
+          "This is allowed only if the software is free for non‑commercial use"
+        ],
+        correct: 2,
+        why: "The MIT license is permissive and allows reuse within proprietary software when license terms and copyright notice are included, but the GPL is a copyleft license requiring derivative works to be released under the GPL【746985869383496†L115-L119】【746985869383496†L134-L137】. Combining GPL‑licensed code with MIT‑licensed code creates a derivative work that must be distributed under the GPL, so it cannot be relicensed as proprietary even if attribution is provided."
+      },
+      // 30
+      { q: "Why might a project adopt dual licensing?",
+        options: [
+          "To prevent adoption by the community",
+          "To encourage adoption via open source while monetising enterprise usage",
+          "To restrict all derivative works",
+          "To avoid licensing altogether"
+        ], correct: 1,
+        why: "Dual licensing encourages adoption via open source while monetising enterprise usage and controlling proprietary redistribution【746985869383496†L96-L101】."
+      }
+    ];
+
+    const state = { score: 0, answered: 0 };
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+
+    function render() {
+      quizEl.innerHTML = '';
+      QUESTIONS.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.__answered = false;
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'opt';
+          row.setAttribute('data-q', idx);
+          row.setAttribute('data-o', oi);
+          row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = QUESTIONS[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+      const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = QUESTIONS[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    render();
+  </script>
+</body>
+</html>

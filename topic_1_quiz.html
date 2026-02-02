@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PSD Topic 1 MCQ Quiz: Project Management</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 1 MCQ Quiz — Project Management</h1>
+      <div class="sub">Professional Software Development • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 30</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on PSD Topic 1 slides on Project Management. This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      // 1
+      { q: "Which component of the Triple Constraint represents the features and tasks to be delivered?",
+        options: [
+          "Time",
+          "Scope",
+          "Cost",
+          "Quality"
+        ], correct: 1,
+        why: "The Triple Constraint describes Time (deadlines), Cost (budget/resources), and Scope (features/tasks). Scope defines what will be done【746985869383496†L10-L19】."
+      },
+      // 2
+      { q: "In the Triple Constraint, what happens if you increase the scope without changing time or cost?",
+        options: [
+          "Quality improves automatically",
+          "Time and cost can stay the same",
+          "Time or cost must increase to maintain quality",
+          "It has no impact on the project"
+        ], correct: 2,
+        why: "The Triple Constraint model notes that changing one component (like scope) requires adjusting time or cost to maintain quality【746985869383496†L10-L19】."
+      },
+      // 3
+      { q: "Which of the following is NOT listed among the universal management activities?",
+        options: [
+          "Proposal writing",
+          "Project planning",
+          "Risk management",
+          "Software deployment"
+        ], correct: 3,
+        why: "Universal management activities include proposal writing, project planning, risk management, people management, and reporting【746985869383496†L20-L28】. Software deployment is not one of them."
+      },
+      // 4
+      { q: "Why is software project management particularly challenging according to the lecture?",
+        options: [
+          "Software projects always reuse the same process",
+          "Progress is intangible and each project is one‑off",
+          "Hardware issues dominate software projects",
+          "Budgets never change"
+        ], correct: 1,
+        why: "Challenges include intangibility (progress is hard to visualise), one‑off projects, and variable processes【746985869383496†L29-L35】."
+      },
+      // 5
+      { q: "What is the main goal of scope management?",
+        options: [
+          "To identify risks only",
+          "To define and control what is included in the project",
+          "To allocate team members",
+          "To write code modules"
+        ], correct: 1,
+        why: "Scope management defines project boundaries, determining what will and will not be done. Activities include defining, verifying and controlling scope to avoid cost/time overruns【746985869383496†L36-L44】."
+      },
+      // 6
+      { q: "Which size estimation measure counts user-visible functions adjusted by complexity?",
+        options: [
+          "KLOC (Kilo Lines of Code)",
+          "Function Points (FP)",
+          "Story Points",
+          "Cyclomatic Complexity"
+        ], correct: 1,
+        why: "Function Points measure user-visible functions (inputs, outputs, interfaces) adjusted by complexity【746985869383496†L322-L329】."
+      },
+      // 7
+      { q: "What does effort estimation typically measure?",
+        options: [
+          "Program length in bytes",
+          "Personnel requirements and man‑hours",
+          "Cost of licences",
+          "Number of test cases"
+        ], correct: 1,
+        why: "Effort estimation measures the personnel and man‑hours required【746985869383496†L46-L50】."
+      },
+      // 8
+      { q: "Which estimation type is described as the hardest metric due to influences like hardware, licences and training?",
+        options: [
+          "Size estimation",
+          "Effort estimation",
+          "Time estimation",
+          "Cost estimation"
+        ], correct: 3,
+        why: "Cost estimation is difficult because it depends on hardware, licences, skilled personnel, travel and training【746985869383496†L50-L54】."
+      },
+      // 9
+      { q: "IEEE 730 is a standard covering what aspect of software engineering?",
+        options: [
+          "Software Project Management",
+          "Software Quality Assurance (SQA)",
+          "Software Requirements Specification (SRS)",
+          "Software Configuration Management (SCM)"
+        ], correct: 1,
+        why: "IEEE 730 addresses Software Quality Assurance (SQA)【746985869383496†L55-L60】."
+      },
+      // 10
+      { q: "Which IEEE standard specifies processes for Software Project Management?",
+        options: [
+          "IEEE 828",
+          "IEEE 1012",
+          "IEEE 16326",
+          "IEEE 29148"
+        ], correct: 2,
+        why: "IEEE 16326 covers Software Project Management (SPM)【746985869383496†L55-L61】."
+      },
+      // 11
+      { q: "KLOC stands for Kilo Lines of Code and is used in size estimation. Why is it considered language-dependent?",
+        options: [
+          "Because different programming languages produce different numbers of lines for the same functionality",
+          "Because it depends on programmer salary",
+          "Because it measures lines of comments only",
+          "Because it counts number of functions"
+        ], correct: 0,
+        why: "Lines of Code counts source lines and is simple and objective, but it is language‑dependent and encourages verbosity【746985869383496†L313-L320】."
+      },
+      // 12
+      { q: "Function points are considered language‑independent. What is one drawback noted in the lecture?",
+        options: [
+          "They encourage code duplication",
+          "They require trained analysts and can be subjective",
+          "They cannot be used for contracts",
+          "They only apply to hardware projects"
+        ], correct: 1,
+        why: "Function points are language‑independent and good for contracts but require trained analysts and are somewhat subjective【746985869383496†L322-L331】."
+      },
+      // 13
+      { q: "What does the Equality Act 2010 require of software products?",
+        options: [
+          "They must be open source",
+          "They must be inclusive and make reasonable adjustments for disabled users",
+          "They must be written in Java",
+          "They must use agile methodologies"
+        ], correct: 1,
+        why: "Legal regulations require developers to make reasonable adjustments for disabled users under the Equality Act 2010【746985869383496†L147-L154】."
+      },
+      // 14
+      { q: "Which regulation can impose fines up to €20 million or 4% of turnover for violations?",
+        options: [
+          "Equality Act 2010",
+          "GDPR (General Data Protection Regulation)",
+          "SPDX",
+          "SOX"
+        ], correct: 1,
+        why: "The GDPR applies to organisations processing personal data and penalties include fines up to €20 million or 4% of turnover【746985869383496†L165-L169】."
+      },
+      // 15
+      { q: "Which activity involves selecting team members and leading them toward meeting objectives?",
+        options: [
+          "Proposal writing",
+          "Project planning",
+          "Risk management",
+          "People management"
+        ], correct: 3,
+        why: "Universal management activities include People Management, which entails selecting teams and leading performance【746985869383496†L20-L28】."
+      },
+      // 16
+      { q: "What is the purpose of Work Breakdown Structure (WBS) in time estimation?",
+        options: [
+          "To identify legal risks",
+          "To break tasks into manageable parts for scheduling",
+          "To document licences",
+          "To measure code complexity"
+        ], correct: 1,
+        why: "Time estimation is derived from size/effort and tasks are broken down via a Work Breakdown Structure for scheduling【746985869383496†L46-L51】."
+      },
+      // 17
+      { q: "Which of the following influences cost estimation in software projects?",
+        options: [
+          "User acceptance testing only",
+          "Travel and training expenses",
+          "Repository popularity",
+          "Number of open issues"
+        ], correct: 1,
+        why: "Cost estimation is influenced by hardware, licences, skilled personnel, travel and training【746985869383496†L50-L54】."
+      },
+      // 18
+      { q: "Why are software processes considered variable according to the lecture?",
+        options: [
+          "They are identical across organisations",
+          "They are organisation‑specific and often unpredictable",
+          "They are mandated by IEEE",
+          "They never change"
+        ], correct: 1,
+        why: "Processes are organisation‑specific and often unpredictable, making software management challenging【746985869383496†L29-L35】."
+      },
+      // 19
+      { q: "Which universal management activity entails assessing and monitoring potential events that could impact the project?",
+        options: [
+          "Project planning",
+          "Risk management",
+          "Proposal writing",
+          "Reporting"
+        ], correct: 1,
+        why: "Risk management involves assessing and monitoring potential risks to a project【746985869383496†L20-L28】."
+      },
+      // 20
+      { q: "What is the purpose of the IEEE 29148 standard?",
+        options: [
+          "Software Quality Assurance (SQA)",
+          "Software Configuration Management (SCM)",
+          "Requirements Specification (SRS)",
+          "Verification and Validation (V&V)"
+        ], correct: 2,
+        why: "IEEE 29148 specifies the Software Requirements Specification (SRS) process【746985869383496†L55-L60】."
+      },
+      // 21
+      { q: "Which universal management activity covers communicating progress, meetings and reviews?",
+        options: [
+          "Reporting",
+          "Risk management",
+          "People management",
+          "Scope management"
+        ], correct: 0,
+        why: "Reporting is a universal management activity that covers communicating progress and conducting meetings and reviews【746985869383496†L20-L28】."
+      },
+      // 22
+      { q: "What does IEEE 828 deal with in software development?",
+        options: [
+          "Software Configuration Management (SCM)",
+          "Software Quality Assurance (SQA)",
+          "Verification and Validation (V&V)",
+          "Project Management"
+        ], correct: 0,
+        why: "IEEE 828 relates to Software Configuration Management (SCM)【746985869383496†L55-L60】."
+      },
+      // 23
+      { q: "Which activity among those listed is necessary for bidding on contracts?",
+        options: [
+          "Risk management",
+          "Proposal writing",
+          "People management",
+          "Project planning"
+        ], correct: 1,
+        why: "Proposal writing is the universal management activity used when bidding for contracts【746985869383496†L20-L24】."
+      },
+      // 24
+      { q: "Which of the following is a reason for needing project management in software development?",
+        options: [
+          "Software is always delivered on time",
+          "Budgets are unlimited",
+          "Projects face constraints on budget, schedule and quality",
+          "Software rarely fails to meet customer expectations"
+        ], correct: 2,
+        why: "Project management is necessary because software development faces constraints regarding budget, schedule and quality and must prevent late delivery, cost overruns and failure to meet customer expectations【746985869383496†L2-L8】."
+      },
+      // 25
+      { q: "What is one reason lessons learned from previous software projects might not transfer well?",
+        options: [
+          "All projects use the same staff",
+          "Software projects are often one‑off and unique",
+          "Project managers do not document lessons learned",
+          "Software technology never evolves"
+        ], correct: 1,
+        why: "The lecture notes that software projects are often one‑off, so lessons from previous projects may not always be transferable【746985869383496†L29-L35】."
+      },
+      // 26
+      { q: "Which standard provides guidance for Verification and Validation (V&V)?",
+        options: [
+          "IEEE 1012",
+          "IEEE 730",
+          "IEEE 16326",
+          "IEEE 29148"
+        ], correct: 0,
+        why: "IEEE 1012 specifies processes for Verification and Validation (V&V)【746985869383496†L55-L60】."
+      },
+      // 27
+      { q: "What kind of data does GDPR protect?",
+        options: [
+          "Only names and emails",
+          "Only corporate data",
+          "Personal data like names, emails, photos and medical history",
+          "Only data stored in the EU"
+        ], correct: 2,
+        why: "GDPR covers personal data such as names, emails, photos, medical history and religious beliefs【746985869383496†L165-L170】."
+      },
+      // 28
+      { q: "Which project estimation activity directly follows size and effort estimation to derive timing?",
+        options: [
+          "Cost estimation",
+          "Risk estimation",
+          "Time estimation",
+          "Scope estimation"
+        ], correct: 2,
+        why: "Time estimation is derived from size and effort; tasks are broken down into a Work Breakdown Structure and scheduled【746985869383496†L46-L51】."
+      },
+      // 29
+      { q: "Which of the following IEEE standards relates to Software Configuration Management (SCM)?",
+        options: [
+          "IEEE 730",
+          "IEEE 828",
+          "IEEE 1012",
+          "IEEE 16326"
+        ], correct: 1,
+        why: "IEEE 828 is the standard for Software Configuration Management (SCM)【746985869383496†L55-L60】."
+      },
+      // 30
+      { q: "What is the relationship between scope, time and cost within the Triple Constraint?",
+        options: [
+          "They are independent and changes in one do not affect the others",
+          "They are interdependent; changing one requires adjustments to maintain quality",
+          "Only time and cost affect quality; scope is unrelated",
+          "Only cost affects the other two"
+        ], correct: 1,
+        why: "The Triple Constraint model shows that scope, time and cost are interdependent. Changing one component necessitates changes in the others to maintain quality【746985869383496†L10-L19】."
+      }
+    ];
+
+    const state = { score: 0, answered: 0 };
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+
+    function render() {
+      quizEl.innerHTML = '';
+      QUESTIONS.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.__answered = false;
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'opt';
+          row.setAttribute('data-q', idx);
+          row.setAttribute('data-o', oi);
+          row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = QUESTIONS[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
+      const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = QUESTIONS[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    render();
+  </script>
+</body>
+</html>
