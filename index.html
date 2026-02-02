@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CSC2101 – Quizzes & Markdown Notes</title>
+  <title>CSC2101 & CSCS2102 – Quizzes & Revision Notes</title>
   <style>
     :root { --maxw:1100px; --accent:#111827; --brand:#2563eb; --muted:#6b7280; }
     * { box-sizing:border-box }
@@ -16,6 +16,9 @@
     @media (max-width: 900px) { main { grid-template-columns: 1fr } }
     .card { background:#0f172a; border:1px solid #1f2937; border-radius:14px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,.35) }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px }
+    .tabbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px }
+    .tab { appearance:none; border:1px solid #1f2937; background:#0b1328; color:#e5e7eb; padding:8px 12px; border-radius:999px; font-weight:600; cursor:pointer }
+    .tab.active { background:#1e293b; border-color:#3b82f6; color:#e6f0ff }
     .lec { display:flex; flex-direction:column; gap:10px; padding:12px; border:1px solid #1f2937; border-radius:12px; background:#0b1328 }
     .lec h3 { margin:0; font-size:16px }
     .lec .tag { color:#93c5fd; font-size:12px }
@@ -61,20 +64,27 @@
 <body>
   <header>
     <div class="wrap">
-      <h1>CSC2101 — Quizzes & Revision Notes</h1>
-      <div class="sub">Lectures 1–11 • Quick links to quizzes • Lightweight Markdown viewer for notes</div>
+      <h1>CSC2101 & CSCS2102 — Quizzes & Revision Notes</h1>
+      <div class="sub">Trimester 1 (CSC2101) and Trimester 2 (CSCS2102) • Quick quiz access • Markdown notes viewer</div>
     </div>
   </header>
   <main>
     <section class="card">
       <h2 style="margin-top:0">Quizzes</h2>
+      <div class="tabbar" role="tablist" aria-label="Select term">
+        <button class="tab active" type="button" data-term="t1" role="tab" aria-selected="true">Trimester 1 — CSC2101</button>
+        <button class="tab" type="button" data-term="t2" role="tab" aria-selected="false">Trimester 2 — CSCS2102</button>
+      </div>
+      <div class="sub" id="termDesc">Lectures 1–11 for CSC2101 (TP1).</div>
       <div class="grid" id="lecGrid"></div>
       <details>
         <summary>File naming convention (keep projects portable)</summary>
         <div style="margin-top:6px">
-          Save each quiz HTML beside this index as:<br>
+          CSC2101 quizzes live beside this index as:<br>
           <code>csc_2101_lecture_1_mcq_quiz_html.html</code>, <code>csc_2101_lecture_2_mcq_quiz_html.html</code>, <code>csc_2101_lecture_3_mcq_quiz_html.html</code>, <code>csc_2101_lecture_4_mcq_quiz_html.html</code>, <code>csc_2101_lecture_5_mcq_quiz_html.html</code>, <code>csc_2101_lecture_6_mcq_quiz_html.html</code>, <code>csc_2101_lecture_8_mcq_quiz_html.html</code>, <code>csc_2101_lecture_9_mcq_quiz_html.html</code>, <code>csc_2101_lecture_10_mcq_quiz_html.html</code>, <code>csc_2101_lecture_11_mcq_quiz_html.html</code>.<br>
-          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec11.md</code>.
+          CSCS2102 quizzes live beside this index as:<br>
+          <code>topic_1_quiz.html</code>, <code>topic_2_quiz.html</code>, <code>topic_3_quiz.html</code>, <code>topic_4_quiz.html</code>, <code>topic_5_quiz.html</code>, <code>topic_6_quiz.html</code>, <code>topic_8_quiz.html</code>, <code>topic_9_quiz.html</code>, <code>topic_10_quiz.html</code>, <code>topic_11_quiz.html</code>.<br>
+          Place Markdown notes in a <code>notes/</code> folder as <code>lec1.md</code> … <code>lec11.md</code> (CSC2101) and <code>topic_1_revision_notes.md</code> … <code>topic_11_revision_notes.md</code> (CSCS2102).
         </div>
       </details>
     </section>
@@ -96,32 +106,81 @@
   </main>
   <script>
     // ---- Data ----
-    const LECTURES = [
-      { no:1, title:"Intro to Software Engineering & Process", tag:"SE overview", quiz:"csc_2101_lecture_1_mcq_quiz_html.html", notes:"notes/lec1.md" },
-      { no:2, title:"Team Organization & Requirement Gathering", tag:"Agile & discovery", quiz:"csc_2101_lecture_2_mcq_quiz_html.html", notes:"notes/lec2.md" },
-      { no:3, title:"Functional & Non-functional Requirements", tag:"FR/NFR", quiz:"csc_2101_lecture_3_mcq_quiz_html.html", notes:"notes/lec3.md" },
-      { no:4, title:"UML Class & Use Case Diagrams", tag:"UML (structural)", quiz:"csc_2101_lecture_4_mcq_quiz_html.html", notes:"notes/lec4.md" },
-      { no:5, title:"UML Behavioural Modelling & Software Reuse", tag:"UML (behavioural)", quiz:"csc_2101_lecture_5_mcq_quiz_html.html", notes:"notes/lec5.md" },
-      { no:6, title:"Software Architecture", tag:"Architecture", quiz:"csc_2101_lecture_6_mcq_quiz_html.html", notes:"notes/lec6.md" },
-      { no:8, title:"Estimating & Planning", tag:"Agile planning", quiz:"csc_2101_lecture_8_mcq_quiz_html.html", notes:"notes/lec8.md" },
-      { no:9, title:"Sprint Ceremonies & Agile Techniques", tag:"Scrum & XP", quiz:"csc_2101_lecture_9_mcq_quiz_html.html", notes:"notes/lec9.md" },
-      { no:10, title:"Software Change Management", tag:"SCM & Git", quiz:"csc_2101_lecture_10_mcq_quiz_html.html", notes:"notes/lec10.md" },
-      { no:11, title:"Software Refactoring", tag:"Refactoring", quiz:"csc_2101_lecture_11_mcq_quiz_html.html", notes:"notes/lec11.md" },
-    ];
+    const TERMS = {
+      t1: {
+        label: "Trimester 1 — CSC2101",
+        desc: "Lectures 1–11 for CSC2101 (TP1).",
+        prefix: "Lec",
+        items: [
+          { no:1, title:"Intro to Software Engineering & Process", tag:"SE overview", quiz:"csc_2101_lecture_1_mcq_quiz_html.html", notes:"notes/lec1.md" },
+          { no:2, title:"Team Organization & Requirement Gathering", tag:"Agile & discovery", quiz:"csc_2101_lecture_2_mcq_quiz_html.html", notes:"notes/lec2.md" },
+          { no:3, title:"Functional & Non-functional Requirements", tag:"FR/NFR", quiz:"csc_2101_lecture_3_mcq_quiz_html.html", notes:"notes/lec3.md" },
+          { no:4, title:"UML Class & Use Case Diagrams", tag:"UML (structural)", quiz:"csc_2101_lecture_4_mcq_quiz_html.html", notes:"notes/lec4.md" },
+          { no:5, title:"UML Behavioural Modelling & Software Reuse", tag:"UML (behavioural)", quiz:"csc_2101_lecture_5_mcq_quiz_html.html", notes:"notes/lec5.md" },
+          { no:6, title:"Software Architecture", tag:"Architecture", quiz:"csc_2101_lecture_6_mcq_quiz_html.html", notes:"notes/lec6.md" },
+          { no:8, title:"Estimating & Planning", tag:"Agile planning", quiz:"csc_2101_lecture_8_mcq_quiz_html.html", notes:"notes/lec8.md" },
+          { no:9, title:"Sprint Ceremonies & Agile Techniques", tag:"Scrum & XP", quiz:"csc_2101_lecture_9_mcq_quiz_html.html", notes:"notes/lec9.md" },
+          { no:10, title:"Software Change Management", tag:"SCM & Git", quiz:"csc_2101_lecture_10_mcq_quiz_html.html", notes:"notes/lec10.md" },
+          { no:11, title:"Software Refactoring", tag:"Refactoring", quiz:"csc_2101_lecture_11_mcq_quiz_html.html", notes:"notes/lec11.md" },
+        ],
+      },
+      t2: {
+        label: "Trimester 2 — CSCS2102",
+        desc: "Topics 1–11 for CSCS2102 (TP2).",
+        prefix: "Topic",
+        items: [
+          { no:1, title:"Intro to Software Engineering & Process", tag:"SE overview", quiz:"topic_1_quiz.html", notes:"notes/topic_1_revision_notes.md" },
+          { no:2, title:"Team Organization & Requirement Gathering", tag:"Agile & discovery", quiz:"topic_2_quiz.html", notes:"notes/topic_2_revision_notes.md" },
+          { no:3, title:"Functional & Non-functional Requirements", tag:"FR/NFR", quiz:"topic_3_quiz.html", notes:"notes/topic_3_revision_notes.md" },
+          { no:4, title:"UML Class & Use Case Diagrams", tag:"UML (structural)", quiz:"topic_4_quiz.html", notes:"notes/topic_4_revision_notes.md" },
+          { no:5, title:"UML Behavioural Modelling & Software Reuse", tag:"UML (behavioural)", quiz:"topic_5_quiz.html", notes:"notes/topic_5_revision_notes.md" },
+          { no:6, title:"Software Architecture", tag:"Architecture", quiz:"topic_6_quiz.html", notes:"notes/topic_6_revision_notes.md" },
+          { no:8, title:"Estimating & Planning", tag:"Agile planning", quiz:"topic_8_quiz.html", notes:"notes/topic_8_revision_notes.md" },
+          { no:9, title:"Sprint Ceremonies & Agile Techniques", tag:"Scrum & XP", quiz:"topic_9_quiz.html", notes:"notes/topic_9_revision_notes.md" },
+          { no:10, title:"Software Change Management", tag:"SCM & Git", quiz:"topic_10_quiz.html", notes:"notes/topic_10_revision_notes.md" },
+          { no:11, title:"Software Refactoring", tag:"Refactoring", quiz:"topic_11_quiz.html", notes:"notes/topic_11_revision_notes.md" },
+        ],
+      },
+    };
     // ---- Render lecture cards ----
     const grid = document.getElementById('lecGrid');
-    grid.innerHTML = LECTURES.map(l => `
-      <article class="lec">
-        <div>
-          <h3>Lec ${l.no}: ${l.title}</h3>
-          <div class="tag">${l.tag}</div>
-        </div>
-        <div class="btns">
-          <a class="btn primary" href="${l.quiz}" target="_blank" rel="noopener">Open Quiz</a>
-          <button class="btn" data-notes="${l.notes}">Open Notes</button>
-        </div>
-      </article>
-    `).join('');
+    const termDescEl = document.getElementById('termDesc');
+    const tabs = Array.from(document.querySelectorAll('.tabbar .tab'));
+    let activeTerm = 't1';
+
+    function renderCards(termKey) {
+      const term = TERMS[termKey];
+      termDescEl.textContent = term.desc;
+      document.getElementById('mdPath').placeholder = termKey === 't1' ? 'notes/lec1.md' : 'notes/topic_1_revision_notes.md';
+      grid.innerHTML = term.items.map(l => `
+        <article class="lec">
+          <div>
+            <h3>${term.prefix} ${l.no}: ${l.title}</h3>
+            <div class="tag">${l.tag}</div>
+          </div>
+          <div class="btns">
+            <a class="btn primary" href="${l.quiz}" target="_blank" rel="noopener">Open Quiz</a>
+            <button class="btn" data-notes="${l.notes}">Open Notes</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const termKey = tab.dataset.term;
+        if (!TERMS[termKey]) return;
+        activeTerm = termKey;
+        tabs.forEach(t => {
+          const isActive = t.dataset.term === termKey;
+          t.classList.toggle('active', isActive);
+          t.setAttribute('aria-selected', String(isActive));
+        });
+        renderCards(termKey);
+      });
+    });
+
+    renderCards(activeTerm);
     grid.addEventListener('click', (e) => {
       const b = e.target.closest('button[data-notes]');
       if (!b) return;
