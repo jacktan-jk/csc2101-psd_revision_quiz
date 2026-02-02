@@ -1,4 +1,4 @@
-# CSC2101 — Lecture 3 Revision Notes
+# CSCS2102 — Lecture 3 Revision Notes
 **Topic:** Functional & Non‑functional Requirements (FR/NFR)  
 **Use with:** Quiz “lec3-quiz.html”
 

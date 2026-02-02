@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PSD Topic 2 MCQ Quiz: Licensing & Copyright</title>
+  <title>CSCS2102 – Topic 2 MCQ Quiz: Licensing & Copyright</title>
   <style>
     :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
@@ -39,7 +39,7 @@
   <header>
     <div class="wrap">
       <h1>Topic 2 MCQ Quiz — Licensing & Copyright</h1>
-      <div class="sub">Professional Software Development • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Instant feedback • Score tracking • One attempt per question</div>
       <div class="stats" id="stats">
         <span class="pill" id="score">Score: 0</span>
         <span class="pill" id="progress">Answered: 0 / 30</span>
@@ -48,6 +48,7 @@
       <div class="controls">
         <button class="primary" id="resetBtn">Reset quiz</button>
         <button id="revealBtn">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle questions &amp; answers</button>
         <details>
           <summary>How scoring works</summary>
           <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
@@ -368,100 +369,156 @@
       }
     ];
 
-    const state = { score: 0, answered: 0 };
-    const quizEl = document.getElementById('quiz');
-    const scoreEl = document.getElementById('score');
-    const progressEl = document.getElementById('progress');
-    const percentEl = document.getElementById('percent');
-    const resetBtn = document.getElementById('resetBtn');
-    const revealBtn = document.getElementById('revealBtn');
+  const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+  let currentQuestions = [];
 
-    function render() {
-      quizEl.innerHTML = '';
-      QUESTIONS.forEach((item, idx) => {
-        const card = document.createElement('article');
-        card.className = 'qcard';
-        const head = document.createElement('div');
-        head.className = 'qhead';
-        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
-        card.appendChild(head);
-        const opts = document.createElement('div');
-        opts.className = 'opts';
-        item.__answered = false;
-        item.options.forEach((opt, oi) => {
-          const row = document.createElement('button');
-          row.type = 'button';
-          row.className = 'opt';
-          row.setAttribute('data-q', idx);
-          row.setAttribute('data-o', oi);
-          row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
-          row.addEventListener('click', onChoose);
-          opts.appendChild(row);
-        });
-        const exp = document.createElement('div');
-        exp.className = 'exp';
-        exp.hidden = true;
-        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
-        card.appendChild(opts);
-        card.appendChild(exp);
-        quizEl.appendChild(card);
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  function cloneQuestions(data) {
+    return data.map(item => ({ ...item, options: [...item.options] }));
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildQuestions() {
+    const items = cloneQuestions(BASE_QUESTIONS);
+    shuffleArray(items);
+    return items.map(item => {
+      const optionPool = item.options.map((text, index) => ({ text, index }));
+      shuffleArray(optionPool);
+      const correct = optionPool.findIndex(opt => opt.index === item.correct);
+      return {
+        ...item,
+        options: optionPool.map(opt => opt.text),
+        correct,
+        __answered: false
+      };
+    });
+  }
+
+  function render() {
+    quizEl.innerHTML = '';
+    currentQuestions.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
       });
-      updateStats();
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = currentQuestions[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      // also highlight the correct option
+      options[data.correct].classList.add('correct');
     }
 
-    function onChoose(e) {
-      const btn = e.currentTarget;
-      const qIndex = +btn.getAttribute('data-q');
-      const oIndex = +btn.getAttribute('data-o');
-      const card = btn.closest('.qcard');
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+    const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = currentQuestions[qi];
       const exp = card.querySelector('.exp');
-      const data = QUESTIONS[qIndex];
-      if (data.__answered) return;
       const options = card.querySelectorAll('.opt');
-      options.forEach(b => b.classList.add('disabled'));
-      data.__answered = true;
-      state.answered++;
-      if (oIndex === data.correct) {
-        btn.classList.add('correct');
-        state.score++;
-      } else {
-        btn.classList.add('wrong');
-        options[data.correct].classList.add('correct');
-      }
-      exp.hidden = false;
-      updateStats();
-    }
-
-    function updateStats() {
-      scoreEl.textContent = `Score: ${state.score}`;
-      progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
-      const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
-      percentEl.textContent = `${pct}%`;
-    }
-
-    function revealAll() {
-      document.querySelectorAll('.qcard').forEach((card, qi) => {
-        const data = QUESTIONS[qi];
-        const exp = card.querySelector('.exp');
-        const options = card.querySelectorAll('.opt');
-        options.forEach((b, oi) => {
-          b.classList.remove('wrong');
-          if (oi === data.correct) b.classList.add('correct');
-          b.classList.add('disabled');
-        });
-        data.__answered = true;
-        exp.hidden = false;
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
       });
-    }
+      data.__answered = true;
+      exp.hidden = false;
+    });
+    // revealing does not alter score or answered counts
+  }
 
-    function resetQuiz() {
-      state.score = 0; state.answered = 0;
-      render();
-    }
-
-    resetBtn.addEventListener('click', resetQuiz);
-    revealBtn.addEventListener('click', revealAll);
+  function resetQuiz() {
+    state.score = 0; state.answered = 0;
     render();
-  </script>
+  }
+
+  function shuffleQuiz() {
+    state.score = 0; state.answered = 0;
+    currentQuestions = buildQuestions();
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  shuffleBtn.addEventListener('click', shuffleQuiz);
+
+  currentQuestions = buildQuestions();
+  render();
+</script>
 </body>
 </html>

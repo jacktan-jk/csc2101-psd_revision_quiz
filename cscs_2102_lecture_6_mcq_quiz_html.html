@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CSC2101 – Lecture 6 MCQ Quiz: Software Architecture</title>
+  <title>CSCS2102 – Lecture 6 MCQ Quiz: Software Architecture</title>
   <style>
     :root { --maxw: 980px; --accent: #1e3a8a; --muted:#6b7280; }
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
@@ -39,7 +39,7 @@
   <header>
     <div class="wrap">
       <h1>Lecture 6 MCQ Quiz — Software Architecture</h1>
-      <div class="sub">CSC2101 – Professional Software Development & TP1 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Instant feedback • Score tracking • One attempt per question</div>
       <div class="stats" id="stats">
         <span class="pill" id="score">Score: 0</span>
         <span class="pill" id="progress">Answered: 0 / 0</span>
@@ -48,6 +48,7 @@
       <div class="controls">
         <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
         <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle questions &amp; answers</button>
         <details>
           <summary>How scoring works</summary>
           <div class="sub">+1 if you select the correct option on your first click. After answering a question, it locks. “Reveal all” shows correct answers without changing your score.</div>
@@ -486,17 +487,50 @@
     }
   ];
 
+  const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+  let currentQuestions = [];
+
   const state = { score: 0, answered: 0 };
+
   const quizEl = document.getElementById('quiz');
   const scoreEl = document.getElementById('score');
   const progressEl = document.getElementById('progress');
   const percentEl = document.getElementById('percent');
   const resetBtn = document.getElementById('resetBtn');
   const revealBtn = document.getElementById('revealBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  function cloneQuestions(data) {
+    return data.map(item => ({ ...item, options: [...item.options] }));
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildQuestions() {
+    const items = cloneQuestions(BASE_QUESTIONS);
+    shuffleArray(items);
+    return items.map(item => {
+      const optionPool = item.options.map((text, index) => ({ text, index }));
+      shuffleArray(optionPool);
+      const correct = optionPool.findIndex(opt => opt.index === item.correct);
+      return {
+        ...item,
+        options: optionPool.map(opt => opt.text),
+        correct,
+        __answered: false
+      };
+    });
+  }
 
   function render() {
     quizEl.innerHTML = '';
-    QUESTIONS.forEach((item, idx) => {
+    currentQuestions.forEach((item, idx) => {
       const card = document.createElement('article');
       card.className = 'qcard';
 
@@ -507,7 +541,9 @@
 
       const opts = document.createElement('div');
       opts.className = 'opts';
-      item.__answered = false;
+
+      item.__answered = false; // reset
+
       item.options.forEach((opt, oi) => {
         const row = document.createElement('button');
         row.type = 'button';
@@ -528,6 +564,7 @@
       card.appendChild(exp);
       quizEl.appendChild(card);
     });
+
     updateStats();
   }
 
@@ -537,33 +574,39 @@
     const oIndex = +btn.getAttribute('data-o');
     const card = btn.closest('.qcard');
     const exp = card.querySelector('.exp');
-    const data = QUESTIONS[qIndex];
-    if (data.__answered) return;
+
+    const data = currentQuestions[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
     const options = card.querySelectorAll('.opt');
     options.forEach(b => b.classList.add('disabled'));
+
     data.__answered = true;
     state.answered++;
+
     if (oIndex === data.correct) {
       btn.classList.add('correct');
       state.score++;
     } else {
       btn.classList.add('wrong');
+      // also highlight the correct option
       options[data.correct].classList.add('correct');
     }
+
     exp.hidden = false;
     updateStats();
   }
 
   function updateStats() {
     scoreEl.textContent = `Score: ${state.score}`;
-    progressEl.textContent = `Answered: ${state.answered} / ${QUESTIONS.length}`;
-    const pct = QUESTIONS.length ? Math.round((state.score/QUESTIONS.length)*100) : 0;
+    progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+    const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
     percentEl.textContent = `${pct}%`;
   }
 
   function revealAll() {
     document.querySelectorAll('.qcard').forEach((card, qi) => {
-      const data = QUESTIONS[qi];
+      const data = currentQuestions[qi];
       const exp = card.querySelector('.exp');
       const options = card.querySelectorAll('.opt');
       options.forEach((b, oi) => {
@@ -574,17 +617,26 @@
       data.__answered = true;
       exp.hidden = false;
     });
+    // revealing does not alter score or answered counts
   }
 
   function resetQuiz() {
-    state.score = 0;
-    state.answered = 0;
+    state.score = 0; state.answered = 0;
+    render();
+  }
+
+  function shuffleQuiz() {
+    state.score = 0; state.answered = 0;
+    currentQuestions = buildQuestions();
     render();
   }
 
   resetBtn.addEventListener('click', resetQuiz);
   revealBtn.addEventListener('click', revealAll);
+  shuffleBtn.addEventListener('click', shuffleQuiz);
+
+  currentQuestions = buildQuestions();
   render();
-  </script>
+</script>
 </body>
 </html>

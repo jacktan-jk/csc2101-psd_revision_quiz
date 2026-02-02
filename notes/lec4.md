@@ -1,4 +1,4 @@
-# CSC2101 — Lecture 4 Revision Notes
+# CSCS2102 — Lecture 4 Revision Notes
 **Topic:** UML Class Diagrams & Use Case Diagrams  
 **Use with:** Quiz “lec4-quiz.html”
 

@@ -1,4 +1,4 @@
-# CSC2101 — Lecture 5 Revision Notes
+# CSCS2102 — Lecture 5 Revision Notes
 **Topic:** UML Behavioural Modelling & Software Reuse  
 **Use with:** Quiz “lec5-quiz.html”
 

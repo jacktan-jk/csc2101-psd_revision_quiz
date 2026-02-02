@@ -1,4 +1,4 @@
-# CSC2101 — Lecture 2 Revision Notes
+# CSCS2102 — Lecture 2 Revision Notes
 **Topic:** Team Organization & Requirement Gathering  
 **Use with:** Quiz “lec2-quiz.html”
 

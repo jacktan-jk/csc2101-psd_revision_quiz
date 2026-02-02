@@ -1,4 +1,4 @@
-# CSC2101 — Lecture 1 Revision Notes
+# CSCS2102 — Lecture 1 Revision Notes
 **Topic:** Introduction to Software Engineering (SE) & Process  
 **Use with:** Quiz “lec1-quiz.html”
 
