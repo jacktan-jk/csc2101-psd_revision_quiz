@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSCS2102 – Topic 5 MCQ Quiz: Maintenance &amp; Documentation</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap: wrap; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.85 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; flex: 0 0 28px; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 5 MCQ Quiz — Maintenance &amp; Documentation</h1>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Topic 5 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 30</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on Trimester 2 Lec 5 notes on Maintenance and Documentation. This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+            "q": "Why does software require maintenance and documentation according to the lecture?",
+            "options": [
+                  "Because software is static once released",
+                  "Because software needs ongoing attention to stay reliable and useful",
+                  "Because documentation replaces testing",
+                  "Because maintenance is only required for hardware"
+            ],
+            "correct": 1,
+            "why": "The lecture states that software is not static and requires ongoing attention so it remains reliable and useful over time."
+      },
+      {
+            "q": "Which reason for maintenance focuses on identifying and fixing bugs that affect functionality, performance, and security?",
+            "options": [
+                  "User support and training",
+                  "Bug fixing and issue resolution",
+                  "Version control",
+                  "Hardware replacement"
+            ],
+            "correct": 1,
+            "why": "Bug fixing and issue resolution address defects that impact functionality, performance, and security."
+      },
+      {
+            "q": "Software updates and upgrades are needed mainly to…",
+            "options": [
+                  "Remove all documentation",
+                  "Add new features, improve performance, or patch vulnerabilities",
+                  "Avoid code reviews",
+                  "Replace user training"
+            ],
+            "correct": 1,
+            "why": "The lecture explains that updates and upgrades are used to add features, boost performance, and address security vulnerabilities."
+      },
+      {
+            "q": "Why is documentation such as user manuals and help files important?",
+            "options": [
+                  "It explains every line of source code",
+                  "It helps users use the software, troubleshoot issues, and understand features",
+                  "It eliminates the need for maintenance",
+                  "It is only needed by developers"
+            ],
+            "correct": 1,
+            "why": "Documentation supports users by explaining how to use the software effectively, troubleshoot, and understand features."
+      },
+      {
+            "q": "What does codebase maintenance include?",
+            "options": [
+                  "Only renaming files",
+                  "Refactoring and optimizing code to keep it organized and maintainable",
+                  "Deleting old features without review",
+                  "Avoiding changes to the code"
+            ],
+            "correct": 1,
+            "why": "The lecture notes that maintenance includes refactoring and optimization to keep the code organized, efficient, and maintainable."
+      },
+      {
+            "q": "Which real-world incident is used to show the danger of poor documentation?",
+            "options": [
+                  "The Y2K bug",
+                  "Varig Flight 254 crashing in the Amazon rainforest",
+                  "Apollo 13",
+                  "A social media outage"
+            ],
+            "correct": 1,
+            "why": "The lecture uses Varig Flight 254 as an example of how inadequate documentation can contribute to a serious disaster."
+      },
+      {
+            "q": "According to the lecture, the Varig Flight 254 accident involved a combination of factors including…",
+            "options": [
+                  "Pilot error, inadequate training, and lack of proper documentation",
+                  "Only engine failure",
+                  "Only a weather problem",
+                  "Only a software bug"
+            ],
+            "correct": 0,
+            "why": "The slide states that pilot error, inadequate training, and lack of proper documentation for the navigation system all contributed."
+      },
+      {
+            "q": "Which factor helps determine whether fixing a software issue is your responsibility?",
+            "options": [
+                  "Your favorite programming language",
+                  "Your role in relation to the software",
+                  "The color of the user interface",
+                  "The age of the computer"
+            ],
+            "correct": 1,
+            "why": "The lecture lists role as one factor in deciding responsibility for fixing an issue."
+      },
+      {
+            "q": "What does 'level of authority' refer to when deciding responsibility for software issues?",
+            "options": [
+                  "Whether you can make changes to the software or codebase",
+                  "How many users installed the software",
+                  "How long the README is",
+                  "Whether the software uses a database"
+            ],
+            "correct": 0,
+            "why": "If you have the authority to make changes, such as admin or codebase access, it may be your responsibility to fix issues."
+      },
+      {
+            "q": "If an issue is caused by user behavior error or a hardware problem, the lecture suggests it is…",
+            "options": [
+                  "Always the development team's responsibility",
+                  "Typically not the development team's responsibility",
+                  "Always a preventive maintenance task",
+                  "Always caused by poor documentation"
+            ],
+            "correct": 1,
+            "why": "The lecture distinguishes bugs and defects from user behavior errors or hardware problems, which are typically outside the development team's responsibility."
+      },
+      {
+            "q": "What is corrective maintenance?",
+            "options": [
+                  "Improving performance before any issue appears",
+                  "Fixing defects or bugs to restore correct functioning",
+                  "Adding support for new business requirements",
+                  "Writing user manuals"
+            ],
+            "correct": 1,
+            "why": "Corrective maintenance is defined as fixing defects or bugs so the software returns to its correct functioning state."
+      },
+      {
+            "q": "A payment app has a defect that prevents users from completing transactions. Which type of maintenance is this fix?",
+            "options": [
+                  "Adaptive maintenance",
+                  "Corrective maintenance",
+                  "Preventive maintenance",
+                  "Emergency maintenance"
+            ],
+            "correct": 1,
+            "why": "The lecture gives a payment app defect as an example of corrective maintenance."
+      },
+      {
+            "q": "What is adaptive maintenance?",
+            "options": [
+                  "Fixing a critical outage immediately",
+                  "Modifying software to meet changing user or business requirements",
+                  "Reducing future risk through audits",
+                  "Only improving code readability"
+            ],
+            "correct": 1,
+            "why": "Adaptive maintenance keeps software relevant by changing it to meet new user or business requirements."
+      },
+      {
+            "q": "An inventory system is updated to support multiple languages and currencies after international expansion. This is…",
+            "options": [
+                  "Adaptive maintenance",
+                  "Corrective maintenance",
+                  "Emergency maintenance",
+                  "README maintenance"
+            ],
+            "correct": 0,
+            "why": "The lecture uses this exact scenario as an example of adaptive maintenance."
+      },
+      {
+            "q": "What is perfective maintenance mainly concerned with?",
+            "options": [
+                  "Restoring a failed system after a crash",
+                  "Enhancing functionality, performance, or overall quality",
+                  "Assigning team roles",
+                  "Removing all existing features"
+            ],
+            "correct": 1,
+            "why": "Perfective maintenance improves the software's capabilities, performance, or quality."
+      },
+      {
+            "q": "An order and inventory system becomes slow and unresponsive as data grows. Optimizing the code and schema is an example of…",
+            "options": [
+                  "Preventive maintenance",
+                  "Emergency maintenance",
+                  "Perfective maintenance",
+                  "Adaptive maintenance"
+            ],
+            "correct": 2,
+            "why": "The lecture describes this slow inventory/order system scenario as perfective maintenance."
+      },
+      {
+            "q": "Which of the following is given as another example of perfective maintenance?",
+            "options": [
+                  "Adding two-factor authentication",
+                  "Replacing a broken monitor",
+                  "Deleting the README",
+                  "Rolling back after a system crash"
+            ],
+            "correct": 0,
+            "why": "The slides list adding a reporting module or two-factor authentication as perfective maintenance examples."
+      },
+      {
+            "q": "What is preventive maintenance?",
+            "options": [
+                  "Fixing defects after users complain",
+                  "Proactively identifying and fixing potential problems before they occur",
+                  "Changing software to fit new hardware only",
+                  "Documenting code comments only"
+            ],
+            "correct": 1,
+            "why": "Preventive maintenance is proactive work intended to reduce the risk of future software failure."
+      },
+      {
+            "q": "Conducting regular security audits and penetration testing to find vulnerabilities before exploitation is…",
+            "options": [
+                  "Corrective maintenance",
+                  "Preventive maintenance",
+                  "Emergency maintenance",
+                  "Adaptive maintenance"
+            ],
+            "correct": 1,
+            "why": "The lecture gives security audits and penetration testing as examples of preventive maintenance."
+      },
+      {
+            "q": "What is emergency maintenance?",
+            "options": [
+                  "Routine refactoring done over several months",
+                  "Fixing critical issues as quickly as possible to minimize downtime",
+                  "Updating a system for new currencies",
+                  "Writing support forum posts"
+            ],
+            "correct": 1,
+            "why": "Emergency maintenance focuses on urgent, critical problems that require immediate attention."
+      },
+      {
+            "q": "A mission-critical airline application crashes and blocks access to flight data. The team quickly rolls back changes and deploys a temporary fix. This is…",
+            "options": [
+                  "Adaptive maintenance",
+                  "Emergency maintenance",
+                  "Perfective maintenance",
+                  "Preventive maintenance"
+            ],
+            "correct": 1,
+            "why": "The lecture uses an airline application crash scenario as an example of emergency maintenance."
+      },
+      {
+            "q": "Why is classifying maintenance types useful?",
+            "options": [
+                  "It removes the need for planning",
+                  "It helps engineers prioritize work and develop effective strategies",
+                  "It guarantees zero software defects",
+                  "It replaces user feedback"
+            ],
+            "correct": 1,
+            "why": "The lecture states that understanding maintenance types helps engineers prioritize their work and develop effective maintenance strategies."
+      },
+      {
+            "q": "A software developer fixes a bug that is causing the software to crash. Which maintenance type fits best?",
+            "options": [
+                  "Corrective maintenance",
+                  "Adaptive maintenance",
+                  "Preventive maintenance",
+                  "Perfective maintenance"
+            ],
+            "correct": 0,
+            "why": "Fixing a bug or defect that causes a crash is corrective maintenance."
+      },
+      {
+            "q": "A software team updates code to improve performance on newer hardware. Which maintenance type best fits?",
+            "options": [
+                  "Emergency maintenance",
+                  "Preventive maintenance",
+                  "Perfective maintenance",
+                  "Adaptive maintenance"
+            ],
+            "correct": 3,
+            "why": "The lecture defines adaptive maintenance as modifying software to meet changing requirements or environments, including changes needed over time."
+      },
+      {
+            "q": "A software team conducts a security audit and fixes vulnerabilities they find. Which maintenance type is this?",
+            "options": [
+                  "Adaptive maintenance",
+                  "Preventive maintenance",
+                  "Corrective maintenance",
+                  "Emergency maintenance"
+            ],
+            "correct": 1,
+            "why": "Security audits and fixing vulnerabilities before exploitation are preventive maintenance activities."
+      },
+      {
+            "q": "What is the main purpose of a README file according to the lecture?",
+            "options": [
+                  "To explain every internal algorithm in detail",
+                  "To provide project information and instructions on how to use or install it",
+                  "To replace all other documentation",
+                  "To store configuration secrets"
+            ],
+            "correct": 1,
+            "why": "A README should explain the project, its purpose, and how to install or use it."
+      },
+      {
+            "q": "Which statement about a README is correct?",
+            "options": [
+                  "It should mainly contain a detailed technical explanation of the source code",
+                  "It is unnecessary in software projects",
+                  "It helps users understand the project and how to use it",
+                  "It should avoid installation instructions"
+            ],
+            "correct": 2,
+            "why": "The lecture says a README is essential because it helps users understand the project and how to use it."
+      },
+      {
+            "q": "What should a README generally avoid?",
+            "options": [
+                  "Project purpose",
+                  "Installation instructions",
+                  "Detailed explanation of how the source code is programmed",
+                  "Examples of usage"
+            ],
+            "correct": 2,
+            "why": "The lecture explicitly says it is unnecessary for a README to include detailed explanations of how the source code is programmed."
+      },
+      {
+            "q": "Which README practice is recommended in the lecture?",
+            "options": [
+                  "Use lengthy descriptions whenever possible",
+                  "Use technical jargon for precision",
+                  "Provide an overview, installation steps, examples, and contact information",
+                  "Update it only when a major rewrite happens"
+            ],
+            "correct": 2,
+            "why": "The lecture recommends keeping the README concise, using clear language, providing an overview, installation and usage guidance, examples, contact information, and regular updates."
+      },
+      {
+            "q": "Why should a README be updated regularly?",
+            "options": [
+                  "To make it longer each semester",
+                  "To keep users informed and reduce confusion or errors",
+                  "To hide outdated features",
+                  "To replace code comments"
+            ],
+            "correct": 1,
+            "why": "The lecture says regular updates keep the README current and reduce user confusion or errors."
+      }
+];
+
+    const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+    let currentQuestions = [];
+
+    const state = { score: 0, answered: 0 };
+
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+
+    function cloneQuestions(data) {
+      return data.map(item => ({ ...item, options: [...item.options] }));
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function buildQuestions() {
+      const items = cloneQuestions(BASE_QUESTIONS);
+      shuffleArray(items);
+
+      const targetsByIndex = new Map();
+      const grouped = new Map();
+
+      items.forEach((item, idx) => {
+        const len = item.options.length;
+        if (!grouped.has(len)) grouped.set(len, []);
+        grouped.get(len).push(idx);
+      });
+
+      grouped.forEach((indexes, len) => {
+        const targets = [];
+        for (let i = 0; i < indexes.length; i++) targets.push(i % len);
+        shuffleArray(targets);
+        indexes.forEach((qIdx, i) => {
+          targetsByIndex.set(qIdx, targets[i]);
+        });
+      });
+
+      return items.map((item, qIdx) => {
+        const optionPool = item.options.map((text, index) => ({ text, index }));
+        shuffleArray(optionPool);
+        let correct = optionPool.findIndex(opt => opt.index === item.correct);
+        const target = targetsByIndex.get(qIdx);
+
+        if (typeof target === 'number' && target >= 0 && target < optionPool.length && correct !== target) {
+          [optionPool[correct], optionPool[target]] = [optionPool[target], optionPool[correct]];
+          correct = target;
+        }
+
+        return {
+          ...item,
+          options: optionPool.map(opt => opt.text),
+          correct,
+          __answered: false
+        };
+      });
+    }
+
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx + 1}. ${item.q}</h3><span class="badge">1 point</span>`;
+        card.appendChild(head);
+
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+
+        item.__answered = false;
+
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'opt';
+          row.setAttribute('data-q', idx);
+          row.setAttribute('data-o', oi);
+          row.innerHTML = `<span class="letter">${String.fromCharCode(65 + oi)}</span><span>${opt}</span>`;
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+
+      updateStats();
+    }
+
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+
+      data.__answered = true;
+      state.answered++;
+
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+
+      exp.hidden = false;
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score / currentQuestions.length) * 100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+
+    function resetQuiz() {
+      state.score = 0;
+      state.answered = 0;
+      render();
+    }
+
+    function shuffleQuiz() {
+      state.score = 0;
+      state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

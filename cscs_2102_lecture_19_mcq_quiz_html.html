@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSCS2102 – Topic 8 MCQ Quiz: Configuration Management</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap: wrap; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; flex: 0 0 auto; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 8 MCQ Quiz — Configuration Management</h1>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 32</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on the lecture topic “Configuration Management.” This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+            "q": "What is configuration management (CM)?",
+            "options": [
+                  "A process for establishing and maintaining consistency of a product's attributes with its requirements, design, and operational information",
+                  "A method for writing source code faster",
+                  "A way to remove all change from a system",
+                  "A type of programming language"
+            ],
+            "correct": 0,
+            "why": "CM is defined as a process for establishing and maintaining consistency of a product's performance, functional, and physical attributes with its requirements, design, and operational information throughout its life."
+      },
+      {
+            "q": "Where did the CM process originate as a widely used discipline?",
+            "options": [
+                  "Mobile app startups",
+                  "Military engineering organizations",
+                  "Social media companies",
+                  "Video game studios"
+            ],
+            "correct": 1,
+            "why": "The lecture states that CM was widely used by military engineering organizations to manage complex systems and changes through the system lifecycle."
+      },
+      {
+            "q": "Outside the military, CM is also used with IT service management as defined by…",
+            "options": [
+                  "Agile",
+                  "Scrum",
+                  "ITIL",
+                  "Kanban"
+            ],
+            "correct": 2,
+            "why": "The lecture explicitly mentions IT service management as defined by ITIL."
+      },
+      {
+            "q": "According to the lecture, practitioners view software configuration management (SCM) as…",
+            "options": [
+                  "mainly a hardware procurement activity",
+                  "the best solution to handling changes in software projects",
+                  "a way to avoid documentation",
+                  "an optional add-on with little value"
+            ],
+            "correct": 1,
+            "why": "The lecture says the SCM process is looked upon by practitioners as the best solution to handling changes in software projects."
+      },
+      {
+            "q": "SCM identifies which kinds of software attributes at various points in time?",
+            "options": [
+                  "Only financial attributes",
+                  "Only legal attributes",
+                  "Functional and physical attributes",
+                  "Marketing and branding attributes"
+            ],
+            "correct": 2,
+            "why": "SCM identifies the functional and physical attributes of software at various points in time."
+      },
+      {
+            "q": "A key purpose of SCM is to maintain software…",
+            "options": [
+                  "popularity and sales",
+                  "integrity and traceability",
+                  "advertising and branding",
+                  "ownership and licensing only"
+            ],
+            "correct": 1,
+            "why": "The lecture states that SCM performs systematic control of changes for the purpose of maintaining software integrity and traceability throughout the SDLC."
+      },
+      {
+            "q": "The SCM process helps teams verify that the final delivered software has…",
+            "options": [
+                  "all planned enhancements included in the release",
+                  "no source code comments",
+                  "only one developer involved",
+                  "a single monolithic architecture"
+            ],
+            "correct": 0,
+            "why": "The lecture says SCM defines the ability to verify that the final delivered software has all planned enhancements that are supposed to be included in the release."
+      },
+      {
+            "q": "Which of the following is one of the four core SCM procedures?",
+            "options": [
+                  "Configuration identification",
+                  "Cloud auto-scaling",
+                  "Requirements outsourcing",
+                  "Incident escalation"
+            ],
+            "correct": 0,
+            "why": "Configuration identification is one of the four SCM procedures listed in the lecture."
+      },
+      {
+            "q": "Which SCM procedure is concerned with systematically controlling changes?",
+            "options": [
+                  "Configuration control",
+                  "Configuration decoration",
+                  "Configuration retirement",
+                  "Configuration outsourcing"
+            ],
+            "correct": 0,
+            "why": "Configuration control is one of the four defined SCM procedures and addresses systematic control of changes."
+      },
+      {
+            "q": "Which SCM procedure records and reports the status of configuration information?",
+            "options": [
+                  "Configuration forecasting",
+                  "Configuration status accounting",
+                  "Configuration compression",
+                  "Configuration outsourcing"
+            ],
+            "correct": 1,
+            "why": "Configuration status accounting is one of the four SCM procedures."
+      },
+      {
+            "q": "Which SCM procedure checks whether configuration items and changes meet required standards and records?",
+            "options": [
+                  "Configuration audits",
+                  "Configuration marketing",
+                  "Configuration coding",
+                  "Configuration bootstrapping"
+            ],
+            "correct": 0,
+            "why": "Configuration audits are one of the four SCM procedures and are used to verify correctness and compliance."
+      },
+      {
+            "q": "In the lecture, a service is defined as a means of delivering value to customers by facilitating outcomes they want to achieve without…",
+            "options": [
+                  "using any technology",
+                  "the ownership of specific costs and risks",
+                  "needing software",
+                  "requiring a support team"
+            ],
+            "correct": 1,
+            "why": "The lecture's service definition says customers gain desired outcomes without owning the specific costs and risks."
+      },
+      {
+            "q": "In ITILv3, configuration management is responsible for maintaining information about configuration items required to deliver…",
+            "options": [
+                  "a printed manual",
+                  "an IT service",
+                  "a legal contract",
+                  "a marketing campaign"
+            ],
+            "correct": 1,
+            "why": "The lecture says configuration management in ITILv3 maintains information about CIs required to deliver an IT service."
+      },
+      {
+            "q": "Besides CI details themselves, ITILv3 configuration management also maintains information about their…",
+            "options": [
+                  "advertising budgets",
+                  "relationships",
+                  "holiday schedules",
+                  "office politics"
+            ],
+            "correct": 1,
+            "why": "The lecture emphasizes that the process includes information about the relationships between configuration items."
+      },
+      {
+            "q": "Configuration management in ITILv3 is part of the overall…",
+            "options": [
+                  "Service Asset and Configuration Management process",
+                  "continuous deployment only process",
+                  "database backup process",
+                  "human resource management process"
+            ],
+            "correct": 0,
+            "why": "The lecture explicitly states that configuration management is part of the overall Service Asset and Configuration Management process."
+      },
+      {
+            "q": "What is an asset according to the lecture?",
+            "options": [
+                  "Something with intrinsic value to a person or enterprise",
+                  "Any item that exists in a building",
+                  "Only hardware owned by the IT team",
+                  "A document that describes an incident"
+            ],
+            "correct": 0,
+            "why": "An asset is defined as something that has intrinsic value to a person or an enterprise."
+      },
+      {
+            "q": "What is a configuration item (CI)?",
+            "options": [
+                  "Only a software package in storage",
+                  "An entity or thing that requires tracking or monitoring for service delivery",
+                  "Any file stored in a folder",
+                  "Any product with a sales invoice"
+            ],
+            "correct": 1,
+            "why": "A CI is defined as an entity or thing that tracking or monitoring is required by you for the delivery of a service."
+      },
+      {
+            "q": "Which statement correctly describes the relationship between assets and configuration items?",
+            "options": [
+                  "Assets and CIs are always identical",
+                  "A CI is always an asset, but an asset is never a CI",
+                  "An asset is often a CI, but CIs are not necessarily assets",
+                  "Assets and CIs are unrelated concepts"
+            ],
+            "correct": 2,
+            "why": "The lecture states that an asset is often a configuration item, but configuration items are not necessarily assets."
+      },
+      {
+            "q": "Using a server as an example, which of the following is listed as an asset attribute?",
+            "options": [
+                  "Criticality to the business",
+                  "Model, CPU, RAM, and OS",
+                  "Incident response time",
+                  "Ticket priority"
+            ],
+            "correct": 1,
+            "why": "For a server, the lecture lists Model, CPU, RAM, and OS as examples of asset attributes."
+      },
+      {
+            "q": "For a server CI, which of the following belongs to ownership details?",
+            "options": [
+                  "Responsible person, purchase date, warranty info, and location",
+                  "Compiler version and branch name only",
+                  "Logo color and brand slogan",
+                  "Only CPU architecture"
+            ],
+            "correct": 0,
+            "why": "The lecture lists responsible person, purchase date, warranty info, and location as ownership details for a server CI."
+      },
+      {
+            "q": "For a server CI, 'relationship' refers to details about how the CI…",
+            "options": [
+                  "is sold to customers",
+                  "contributes to delivery of a service and business value",
+                  "is packaged in a box",
+                  "is advertised on a website"
+            ],
+            "correct": 1,
+            "why": "The lecture explains that relationship covers how a CI contributes to service delivery which ultimately brings value to the business."
+      },
+      {
+            "q": "What is a CMDB?",
+            "options": [
+                  "A configuration management database containing relevant configuration information and relationships",
+                  "A coding style guide for developers",
+                  "A test case repository only",
+                  "A financial ledger for project costs"
+            ],
+            "correct": 0,
+            "why": "The lecture defines a CMDB as a file or standardized database containing relevant information about hardware, software, and their relationships."
+      },
+      {
+            "q": "What kind of view does a CMDB provide?",
+            "options": [
+                  "An organized view of configuration data from any desired perspective",
+                  "Only a developer's view of source code",
+                  "Only a list of passwords",
+                  "A purely graphical network map with no data"
+            ],
+            "correct": 0,
+            "why": "The lecture says a CMDB provides an organized view of configuration data and a means of examining that data from any desired perspective."
+      },
+      {
+            "q": "According to the lecture, configuration items are the _____ of a CMDB.",
+            "options": [
+                  "backup copies",
+                  "focal point",
+                  "user interface theme",
+                  "risk register"
+            ],
+            "correct": 1,
+            "why": "The lecture states that configuration items are the focal point of a CMDB."
+      },
+      {
+            "q": "Which description best matches a CI in the CMDB?",
+            "options": [
+                  "Information about an entity, but not the entity itself",
+                  "An instance of an entity that is part of your environment and has configurable attributes",
+                  "A generic product brochure",
+                  "A one-time event log entry"
+            ],
+            "correct": 1,
+            "why": "A CI is described as a specific instance of an entity that is part of your environment and has configurable attributes."
+      },
+      {
+            "q": "Which of the following is a logical CI example from the lecture?",
+            "options": [
+                  "An installed instance of a software program",
+                  "A generic unopened software package",
+                  "A helpdesk incident ticket",
+                  "A runtime event"
+            ],
+            "correct": 0,
+            "why": "The lecture gives an installed instance of a software program as an example of a logical CI."
+      },
+      {
+            "q": "Why is an incident ticket not considered a CI?",
+            "options": [
+                  "Because it has no attributes at all",
+                  "Because it is information about other entities, not a direct part of the environment",
+                  "Because it is always stored in source control",
+                  "Because it belongs to finance rather than IT"
+            ],
+            "correct": 1,
+            "why": "The lecture says an incident ticket may have configurable attributes, but it is not a direct part of the environment; it is information about other entities."
+      },
+      {
+            "q": "Why is a generic software package typically not treated as a CI in this context?",
+            "options": [
+                  "Because software can never be a CI",
+                  "Because only installed instances are part of the environment; generic packages are usually kept in the DML",
+                  "Because software is always an asset but never configurable",
+                  "Because software packages do not have versions"
+            ],
+            "correct": 1,
+            "why": "The lecture explains that a software package itself is not part of your environment, while installed instances are; generic packages are usually stored in the Definitive Media Library (DML)."
+      },
+      {
+            "q": "What is the purpose of a CI eligibility matrix?",
+            "options": [
+                  "To decide which items in the IT environment should be tracked as CIs",
+                  "To allocate salaries to developers",
+                  "To replace all configuration audits",
+                  "To estimate software testing effort"
+            ],
+            "correct": 0,
+            "why": "The lecture says a CI eligibility matrix helps make decisions about which items in the IT environment should be treated as CIs."
+      },
+      {
+            "q": "Which of the following is one of the CI eligibility matrix criteria mentioned in the lecture?",
+            "options": [
+                  "Cost or value",
+                  "Developer happiness score",
+                  "Office desk color",
+                  "Printer paper size"
+            ],
+            "correct": 0,
+            "why": "Cost or value is explicitly listed as one of the CI eligibility matrix criteria."
+      },
+      {
+            "q": "According to the lecture, what does the Magnuson-Moss Warranty Act say about warranties on consumer products?",
+            "options": [
+                  "Every product must be sold with a warranty",
+                  "Products may be sold 'as is', but if a warranty is offered it must comply with the law",
+                  "Only software products can have warranties",
+                  "Warranty disclaimers may be misleading if clearly printed"
+            ],
+            "correct": 1,
+            "why": "The lecture states that the law does not require a product to have a warranty, but if a warranty is offered, it must comply with the statute."
+      },
+      {
+            "q": "Which statement best distinguishes maintenance from warranty in the lecture?",
+            "options": [
+                  "Maintenance is routine service usually paid by the owner, while warranty is a guarantee to fix major damage or poor performance",
+                  "Warranty is routine cleaning and maintenance is a legal disclaimer",
+                  "They are exactly the same",
+                  "Warranty applies only to software, maintenance only to hardware"
+            ],
+            "correct": 0,
+            "why": "The lecture says maintenance is routine service typically paid out of pocket, while a warranty is a guarantee to fix the asset if major damage happens or it does not run to full potential."
+      }
+];
+
+    const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+    let currentQuestions = [];
+
+    const state = { score: 0, answered: 0 };
+
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+
+    function cloneQuestions(data) {
+      return data.map(item => ({ ...item, options: [...item.options] }));
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function buildQuestions() {
+      const items = cloneQuestions(BASE_QUESTIONS);
+      shuffleArray(items);
+
+      const targetsByIndex = new Map();
+      const grouped = new Map();
+
+      items.forEach((item, idx) => {
+        const len = item.options.length;
+        if (!grouped.has(len)) grouped.set(len, []);
+        grouped.get(len).push(idx);
+      });
+
+      grouped.forEach((indexes, len) => {
+        const targets = [];
+        for (let i = 0; i < indexes.length; i++) targets.push(i % len);
+        shuffleArray(targets);
+        indexes.forEach((qIdx, i) => {
+          targetsByIndex.set(qIdx, targets[i]);
+        });
+      });
+
+      return items.map((item, qIdx) => {
+        const optionPool = item.options.map((text, index) => ({ text, index }));
+        shuffleArray(optionPool);
+        let correct = optionPool.findIndex(opt => opt.index === item.correct);
+        const target = targetsByIndex.get(qIdx);
+
+        if (typeof target === 'number' && target >= 0 && target < optionPool.length && correct !== target) {
+          [optionPool[correct], optionPool[target]] = [optionPool[target], optionPool[correct]];
+          correct = target;
+        }
+
+        return {
+          ...item,
+          options: optionPool.map(opt => opt.text),
+          correct,
+          __answered: false
+        };
+      });
+    }
+
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        const letters = ['A','B','C','D','E','F'];
+
+        item.options.forEach((text, optIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt';
+          btn.type = 'button';
+          btn.innerHTML = `<span class="letter">${letters[optIdx] || optIdx+1}</span><span>${text}</span>`;
+          btn.addEventListener('click', () => answerQuestion(idx, optIdx, btn, card));
+          opts.appendChild(btn);
+        });
+
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.style.display = 'none';
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+        card.appendChild(head);
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function answerQuestion(qIdx, selectedIdx, btnEl, cardEl) {
+      const item = currentQuestions[qIdx];
+      if (item.__answered) return;
+      item.__answered = true;
+      state.answered += 1;
+
+      const optButtons = [...cardEl.querySelectorAll('.opt')];
+      optButtons.forEach((b, i) => {
+        b.classList.add('disabled');
+        if (i === item.correct) b.classList.add('correct');
+      });
+
+      if (selectedIdx === item.correct) {
+        state.score += 1;
+      } else {
+        btnEl.classList.add('wrong');
+      }
+
+      const exp = cardEl.querySelector('.exp');
+      exp.style.display = 'block';
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score / currentQuestions.length) * 100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function resetQuiz() {
+      state.score = 0;
+      state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function revealAll() {
+      const cards = [...document.querySelectorAll('.qcard')];
+      cards.forEach((card, qIdx) => {
+        const item = currentQuestions[qIdx];
+        const optButtons = [...card.querySelectorAll('.opt')];
+        optButtons.forEach((b, i) => {
+          b.classList.add('disabled');
+          if (i === item.correct) b.classList.add('correct');
+        });
+        card.querySelector('.exp').style.display = 'block';
+        item.__answered = true;
+      });
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', resetQuiz);
+
+    resetQuiz();
+  </script>
+</body>
+</html>

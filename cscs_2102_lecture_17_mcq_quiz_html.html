@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSCS2102 – Topic 6 MCQ Quiz: Deployment</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 6 MCQ Quiz — Deployment</h1>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 33</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on the SIT lecture “Deployment.” This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+            q: "What is software deployment?",
+            options: [
+                  "Only writing source code for a new feature",
+                  "All activities that make a software system available for use",
+                  "Only packaging software into a ZIP file",
+                  "Only testing software before release"
+            ],
+            correct: 1,
+            why: "The lecture defines software deployment as all the activities that make a software system available for use."
+      },
+      {
+            q: "Why must the deployment process usually be customized?",
+            options: [
+                  "Because deployment is identical for every system",
+                  "Because every software system is unique and precise procedures are hard to define universally",
+                  "Because deployment applies only to open-source software",
+                  "Because only hardware projects need deployment"
+            ],
+            correct: 1,
+            why: "The lecture states that every software system is unique, so deployment should be interpreted as a general process customized to the system’s requirements and characteristics."
+      },
+      {
+            q: "Which deployment activity prepares a system for assembly and transfer to the production computers?",
+            options: [
+                  "Deactivation",
+                  "Release",
+                  "Uninstallation",
+                  "Rollback"
+            ],
+            correct: 1,
+            why: "Release includes the operations needed to prepare a system for assembly and transfer to the computer systems on which it will run in production."
+      },
+      {
+            q: "In simple systems, installation commonly involves establishing what?",
+            options: [
+                  "A command, shortcut, script or service for executing the software",
+                  "A second production database",
+                  "A legal software license only",
+                  "A backup site"
+            ],
+            correct: 0,
+            why: "For simple systems, installation may involve creating a command, shortcut, script, or service to run the software manually or automatically."
+      },
+      {
+            q: "What does activation mean in the deployment context?",
+            options: [
+                  "Purchasing the software license",
+                  "Starting the executable component of the software for the first time",
+                  "Deleting the previous release",
+                  "Creating a new user account"
+            ],
+            correct: 1,
+            why: "Activation is defined as starting up the executable component of software for the first time."
+      },
+      {
+            q: "What is deactivation?",
+            options: [
+                  "Starting a newly installed application",
+                  "Shutting down already-executing components of a system",
+                  "Creating a deployment script",
+                  "Assigning tasks to developers"
+            ],
+            correct: 1,
+            why: "Deactivation is the inverse of activation and refers to shutting down any already-executing components of a system."
+      },
+      {
+            q: "Why is deactivation often required before an update?",
+            options: [
+                  "Because updates can only be done during office hours",
+                  "Because a system may need to be shut down before other deployment activities such as updating can be performed",
+                  "Because updates require a new programming language",
+                  "Because backups cannot be created otherwise"
+            ],
+            correct: 1,
+            why: "The lecture notes that deactivation is often required to perform other deployment activities, for example before an update."
+      },
+      {
+            q: "What is uninstallation?",
+            options: [
+                  "Adding a new feature flag",
+                  "The inverse of installation and the removal of a system no longer required",
+                  "A special type of testing",
+                  "A way to migrate users to a beta channel"
+            ],
+            correct: 1,
+            why: "Uninstallation is defined as the inverse of installation and involves removing a system that is no longer required."
+      },
+      {
+            q: "What does the update process do?",
+            options: [
+                  "Adds documentation only",
+                  "Replaces an earlier version of all or part of a software system with a newer release",
+                  "Removes all environments except production",
+                  "Moves code from testing back to development"
+            ],
+            correct: 1,
+            why: "An update replaces an earlier version of all or part of the system with a newer release."
+      },
+      {
+            q: "A typical update commonly consists of which sequence?",
+            options: [
+                  "Uninstallation followed by coding",
+                  "Deactivation followed by installation",
+                  "Testing followed by requirements gathering",
+                  "Activation followed by architecture redesign"
+            ],
+            correct: 1,
+            why: "The lecture explicitly states that the update process commonly consists of deactivation followed by installation."
+      },
+      {
+            q: "What is meant by a built-in update mechanism?",
+            options: [
+                  "Updates are impossible to automate",
+                  "The software includes its own mechanism for installing updates",
+                  "Updates can only be done by the operating system vendor",
+                  "Users must reinstall the whole operating system"
+            ],
+            correct: 1,
+            why: "Built-in update means the mechanism for installing updates is integrated into the software system itself."
+      },
+      {
+            q: "Which environment is the developer’s own desktop or workstation?",
+            options: [
+                  "Production",
+                  "Local",
+                  "Staging",
+                  "Acceptance"
+            ],
+            correct: 1,
+            why: "The Local environment is described as the developer’s desktop/workstation."
+      },
+      {
+            q: "Which environment acts as a sandbox where developer unit testing may be performed?",
+            options: [
+                  "Development/Trunk",
+                  "Production/Live",
+                  "Backup",
+                  "Education"
+            ],
+            correct: 0,
+            why: "Development/Trunk is described as a development server acting as a sandbox for unit testing."
+      },
+      {
+            q: "Which environment is typically the CI build target or used for testing side effects?",
+            options: [
+                  "Local",
+                  "Integration",
+                  "Production",
+                  "Staging"
+            ],
+            correct: 1,
+            why: "The Integration tier is described as the CI build target or an environment for testing side effects."
+      },
+      {
+            q: "What is the purpose of the Testing/Test/QC/Internal Acceptance environment?",
+            options: [
+                  "Serving end-users directly",
+                  "Interface testing and checking that new code does not break existing functionality",
+                  "Replacing backups during disasters",
+                  "Editing deployment scripts only"
+            ],
+            correct: 1,
+            why: "This environment is where interface testing is performed and the QC team checks that new code does not negatively affect existing functionality."
+      },
+      {
+            q: "What best describes the staging or pre-production environment?",
+            options: [
+                  "A mirror of the production environment",
+                  "A private laptop setup",
+                  "The place where requirements are written",
+                  "A permanent disaster recovery site"
+            ],
+            correct: 0,
+            why: "Staging/Pre-production is described as a mirror of the production environment for final acceptance or demo use."
+      },
+      {
+            q: "Which environment serves end-users or clients?",
+            options: [
+                  "Development",
+                  "Integration",
+                  "Production/Live",
+                  "Testing"
+            ],
+            correct: 2,
+            why: "Production/Live is the environment that serves end-users/clients."
+      },
+      {
+            q: "What does DTAP stand for?",
+            options: [
+                  "Development, Testing, Acceptance and Production",
+                  "Deployment, Tracking, Automation and Performance",
+                  "Development, Trunk, Architecture and Packaging",
+                  "Design, Testing, Activation and Provisioning"
+            ],
+            correct: 0,
+            why: "DTAP is the phased deployment and testing approach consisting of Development, Testing, Acceptance and Production."
+      },
+      {
+            q: "In deployment architecture variants, what is the role of the Education environment?",
+            options: [
+                  "It replaces production permanently",
+                  "It is a training environment for users of the production environment",
+                  "It stores source code backups only",
+                  "It automatically fixes failed deployments"
+            ],
+            correct: 1,
+            why: "Education is described as an extension of DTAP used as a training environment for production users."
+      },
+      {
+            q: "What is the purpose of the Backup environment in deployment architecture?",
+            options: [
+                  "Providing a site for disaster recovery",
+                  "Holding unit test results only",
+                  "Training end users",
+                  "Replacing the integration server"
+            ],
+            correct: 0,
+            why: "Backup is described as a backup site used for disaster recovery."
+      },
+      {
+            q: "What is Infrastructure as Code (IaC)?",
+            options: [
+                  "Writing application business logic in assembly",
+                  "Managing and provisioning infrastructure through code instead of manual processes",
+                  "Replacing all servers with containers",
+                  "A method for writing README files"
+            ],
+            correct: 1,
+            why: "IaC means infrastructure is managed and provisioned using code and configuration files rather than manual setup."
+      },
+      {
+            q: "One major benefit of IaC is that it helps you…",
+            options: [
+                  "Provision the same environment every time",
+                  "Avoid all testing",
+                  "Eliminate the need for documentation",
+                  "Run multiple production versions on one port"
+            ],
+            correct: 0,
+            why: "The lecture notes that IaC helps provision the same environment every time, improving consistency."
+      },
+      {
+            q: "How does IaC help reduce configuration problems?",
+            options: [
+                  "By encouraging undocumented, ad-hoc changes",
+                  "By codifying and documenting configuration specifications",
+                  "By removing the need for configuration files",
+                  "By preventing software updates"
+            ],
+            correct: 1,
+            why: "IaC aids configuration management by codifying and documenting infrastructure specifications, helping teams avoid undocumented ad-hoc changes."
+      },
+      {
+            q: "What is Ansible according to the lecture?",
+            options: [
+                  "A proprietary testing-only framework",
+                  "An open-source suite of software tools that enables infrastructure as code",
+                  "A source control branching model",
+                  "A database replication engine"
+            ],
+            correct: 1,
+            why: "The lecture describes Ansible as an open-source suite of tools that enables infrastructure as code."
+      },
+      {
+            q: "Which capabilities are included in Ansible’s suite?",
+            options: [
+                  "Software provisioning, configuration management and application deployment",
+                  "Only code editing and debugging",
+                  "Only database backup and restore",
+                  "Only UI design and A/B testing"
+            ],
+            correct: 0,
+            why: "Ansible includes software provisioning, configuration management, and application deployment functionality."
+      },
+      {
+            q: "What is blue-green deployment?",
+            options: [
+                  "A strategy where only one environment exists in production",
+                  "A release model that shifts user traffic from an old production version to a nearly identical new version",
+                  "A strategy that randomly deploys code to users",
+                  "A development-only branching model"
+            ],
+            correct: 1,
+            why: "Blue-green deployment gradually transfers traffic from the old version (blue) to the new version (green), with both running in production."
+      },
+      {
+            q: "In blue-green deployment, what is a major rollback advantage?",
+            options: [
+                  "The old version can remain on standby in case rollback is needed",
+                  "Rollback is impossible once traffic moves",
+                  "Rollback requires rebuilding the whole system from scratch",
+                  "Rollback only works in local environments"
+            ],
+            correct: 0,
+            why: "Once traffic is fully transferred, the blue environment can stay on standby so the team can roll back quickly if needed."
+      },
+      {
+            q: "What is a canary release?",
+            options: [
+                  "A deployment strategy that releases changes first to a small subset of users",
+                  "A full shutdown of production before deployment",
+                  "A backup-only deployment strategy",
+                  "A method for removing dependencies from old systems"
+            ],
+            correct: 0,
+            why: "A canary release introduces changes to a small subset of users first before rolling out more widely."
+      },
+      {
+            q: "Which is listed as a benefit of canary deployments?",
+            options: [
+                  "Built-in capacity testing with real users",
+                  "Guaranteed elimination of all defects",
+                  "Removal of the need for monitoring",
+                  "Avoiding any production exposure"
+            ],
+            correct: 0,
+            why: "The lecture lists built-in capacity testing and real user feedback as important benefits of canary deployments."
+      },
+      {
+            q: "What is A/B testing in deployment?",
+            options: [
+                  "Deploying two versions to different user groups to see which performs better",
+                  "Testing only database backups",
+                  "Turning all features off for all users",
+                  "Running unit tests in production only"
+            ],
+            correct: 0,
+            why: "A/B testing deploys two versions to different user groups so teams can compare performance before broader rollout."
+      },
+      {
+            q: "What are feature flags used for?",
+            options: [
+                  "To enable or disable features for specific users or groups",
+                  "To replace all testing environments",
+                  "To uninstall old applications automatically",
+                  "To eliminate the need for deployment plans"
+            ],
+            correct: 0,
+            why: "Feature flags let teams enable or disable specific features for selected users or groups, supporting gradual release and testing."
+      },
+      {
+            q: "A deployment plan template in the lecture is described as…",
+            options: [
+                  "An unbound deployment plan that defines the steps of execution",
+                  "A branch naming convention",
+                  "A bug report form",
+                  "A user manual for QA staff"
+            ],
+            correct: 0,
+            why: "The lecture defines a deployment template as an unbound deployment plan that defines the steps of execution."
+      },
+      {
+            q: "Which item is included in the deployment plan template fields shown in the lecture?",
+            options: [
+                  "Responsible Resource",
+                  "Programming language syntax",
+                  "Git merge conflict count",
+                  "Colour palette"
+            ],
+            correct: 0,
+            why: "The deployment plan template includes fields such as Sequence Number, Activity Name, Start Date & Time, Expected Duration, Dependent Activities, and Responsible Resource."
+      }
+];
+
+  const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+  let currentQuestions = [];
+
+  const state = { score: 0, answered: 0 };
+
+  const quizEl = document.getElementById('quiz');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const percentEl = document.getElementById('percent');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  function cloneQuestions(data) {
+    return data.map(item => ({ ...item, options: [...item.options] }));
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildQuestions() {
+    const items = cloneQuestions(BASE_QUESTIONS);
+    shuffleArray(items);
+
+    const targetsByIndex = new Map();
+    const grouped = new Map();
+
+    items.forEach((item, idx) => {
+      const len = item.options.length;
+      if (!grouped.has(len)) grouped.set(len, []);
+      grouped.get(len).push(idx);
+    });
+
+    grouped.forEach((indexes, len) => {
+      const targets = [];
+      for (let i = 0; i < indexes.length; i++) targets.push(i % len);
+      shuffleArray(targets);
+      indexes.forEach((qIdx, i) => {
+        targetsByIndex.set(qIdx, targets[i]);
+      });
+    });
+
+    return items.map((item, qIdx) => {
+      const optionPool = item.options.map((text, index) => ({ text, index }));
+      shuffleArray(optionPool);
+      let correct = optionPool.findIndex(opt => opt.index === item.correct);
+      const target = targetsByIndex.get(qIdx);
+
+      if (typeof target === 'number' && target >= 0 && target < optionPool.length && correct !== target) {
+        [optionPool[correct], optionPool[target]] = [optionPool[target], optionPool[correct]];
+        correct = target;
+      }
+
+      return {
+        ...item,
+        options: optionPool.map(opt => opt.text),
+        correct,
+        __answered: false
+      };
+    });
+  }
+
+  function render() {
+    quizEl.innerHTML = '';
+    currentQuestions.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'qcard';
+
+      const head = document.createElement('div');
+      head.className = 'qhead';
+      head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+      card.appendChild(head);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      item.__answered = false; // reset
+
+      item.options.forEach((opt, oi) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'opt';
+        row.setAttribute('data-q', idx);
+        row.setAttribute('data-o', oi);
+        row.innerHTML = `<span class="letter">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+        row.addEventListener('click', onChoose);
+        opts.appendChild(row);
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'exp';
+      exp.hidden = true;
+      exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+      card.appendChild(opts);
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function onChoose(e) {
+    const btn = e.currentTarget;
+    const qIndex = +btn.getAttribute('data-q');
+    const oIndex = +btn.getAttribute('data-o');
+    const card = btn.closest('.qcard');
+    const exp = card.querySelector('.exp');
+
+    const data = currentQuestions[qIndex];
+    if (data.__answered) return; // lock after first attempt
+
+    const options = card.querySelectorAll('.opt');
+    options.forEach(b => b.classList.add('disabled'));
+
+    data.__answered = true;
+    state.answered++;
+
+    if (oIndex === data.correct) {
+      btn.classList.add('correct');
+      state.score++;
+    } else {
+      btn.classList.add('wrong');
+      // also highlight the correct option
+      options[data.correct].classList.add('correct');
+    }
+
+    exp.hidden = false;
+    updateStats();
+  }
+
+  function updateStats() {
+    scoreEl.textContent = `Score: ${state.score}`;
+    progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+    const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+    percentEl.textContent = `${pct}%`;
+  }
+
+  function revealAll() {
+    document.querySelectorAll('.qcard').forEach((card, qi) => {
+      const data = currentQuestions[qi];
+      const exp = card.querySelector('.exp');
+      const options = card.querySelectorAll('.opt');
+      options.forEach((b, oi) => {
+        b.classList.remove('wrong');
+        if (oi === data.correct) b.classList.add('correct');
+        b.classList.add('disabled');
+      });
+      data.__answered = true;
+      exp.hidden = false;
+    });
+    // revealing does not alter score or answered counts
+  }
+
+  function resetQuiz() {
+    state.score = 0; state.answered = 0;
+    render();
+  }
+
+  function shuffleQuiz() {
+    state.score = 0; state.answered = 0;
+    currentQuestions = buildQuestions();
+    render();
+  }
+
+  resetBtn.addEventListener('click', resetQuiz);
+  revealBtn.addEventListener('click', revealAll);
+  shuffleBtn.addEventListener('click', shuffleQuiz);
+
+  currentQuestions = buildQuestions();
+  render();
+</script>
+</body>
+</html>

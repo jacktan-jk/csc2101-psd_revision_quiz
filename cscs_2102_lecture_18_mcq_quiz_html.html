@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSCS2102 – Topic 7 MCQ Quiz: Software Testing</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8; color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button, .btn { cursor:pointer; border:1px solid #e5e7eb; background:white; padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; flex-wrap: wrap; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px 10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px; padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline; gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; font-weight:700; flex: 0 0 auto; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; color:#111827; }
+    .exp strong { color:#065f46 }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Topic 7 MCQ Quiz — Software Testing</h1>
+      <div class="sub">CSCS2102 – Professional Software Development • Trimester 2 • Instant feedback • Score tracking • One attempt per question</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 30</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn">Reset quiz</button>
+        <button id="revealBtn">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+        <details>
+          <summary>How scoring works</summary>
+          <div class="sub">You get +1 when you select the correct option on your first click. After you answer a question, it locks to prevent double-counting. “Reveal all” marks all correct answers without affecting your score.</div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="quiz"></main>
+
+  <footer>
+    Based on the lecture topic “Software Testing.” This educational quiz is for practice.
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+            "q": "Why does the lecture use the Ariane 5 example when discussing software testing?",
+            "options": [
+                  "To show that software bugs can contribute to catastrophic real-world failures",
+                  "To prove rockets cannot be tested",
+                  "To explain hardware-only failures",
+                  "To compare programming languages"
+            ],
+            "correct": 0,
+            "why": "The Ariane 5 failure is used to show why testing matters: software errors can have severe real-world consequences."
+      },
+      {
+            "q": "In the Ariane 5 example, what conversion error was highlighted?",
+            "options": [
+                  "A string was converted into binary",
+                  "A 16-bit integer was converted to a 64-bit float",
+                  "A 64-bit floating-point number was converted to a 16-bit signed integer",
+                  "A Boolean was converted into an array"
+            ],
+            "correct": 2,
+            "why": "The lecture states that a 64-bit floating-point number was converted to a 16-bit signed integer."
+      },
+      {
+            "q": "What is a test case?",
+            "options": [
+                  "The source code of a testing tool",
+                  "A description of actions performed on software and an expected outcome",
+                  "A database of defects",
+                  "Any bug found during production"
+            ],
+            "correct": 1,
+            "why": "A test case is defined as a description of a set of actions performed on software and an expected outcome."
+      },
+      {
+            "q": "What is a test?",
+            "options": [
+                  "The execution of a test case that produces a test outcome",
+                  "The same thing as a software requirement",
+                  "A review meeting before coding",
+                  "A list of user stories"
+            ],
+            "correct": 0,
+            "why": "A test is the execution of a test case, producing a test outcome."
+      },
+      {
+            "q": "What does 'testing' mean in the lecture terminology?",
+            "options": [
+                  "Only debugging failed code",
+                  "Only writing automated unit tests",
+                  "The practice of creating, maintaining, executing and evaluating test cases",
+                  "Installing software into production"
+            ],
+            "correct": 2,
+            "why": "Testing is defined as the practice of creating, maintaining, executing and evaluating test cases."
+      },
+      {
+            "q": "According to the lecture, software testing in ITIL includes…",
+            "options": [
+                  "avoiding user inputs during execution",
+                  "executing a program using data to simulate user inputs",
+                  "replacing validation with deployment",
+                  "removing all runtime checks"
+            ],
+            "correct": 1,
+            "why": "The lecture describes software testing as a process to execute a program using data to simulate user inputs."
+      },
+      {
+            "q": "One main goal of program testing is to…",
+            "options": [
+                  "demonstrate to stakeholders that software meets its requirements",
+                  "eliminate the need for specifications",
+                  "guarantee that no maintenance will ever be required",
+                  "replace all inspections"
+            ],
+            "correct": 0,
+            "why": "A core goal is to demonstrate to stakeholders that the software meets its requirements."
+      },
+      {
+            "q": "Defect testing mainly tries to discover behavior that is…",
+            "options": [
+                  "fully optimized",
+                  "incorrect, undesirable, or not conforming to specification",
+                  "documented in the README",
+                  "always user-friendly"
+            ],
+            "correct": 1,
+            "why": "The lecture says defect testing discovers behavior that is incorrect, undesirable, or does not conform to the specification."
+      },
+      {
+            "q": "Which statement best describes a good test?",
+            "options": [
+                  "It has a high probability of finding an error",
+                  "It must be extremely long and complex",
+                  "It should repeat the same thing many times",
+                  "It should avoid checking edge cases"
+            ],
+            "correct": 0,
+            "why": "A good test has a high probability of finding an error."
+      },
+      {
+            "q": "The lecture says a good test should be…",
+            "options": [
+                  "as complicated as possible",
+                  "neither too simple nor too complex",
+                  "always redundant",
+                  "limited to only one input"
+            ],
+            "correct": 1,
+            "why": "A good test should be neither too simple nor too complex."
+      },
+      {
+            "q": "Roughly how much of total SDLC effort and time does the lecture say is spent on testing?",
+            "options": [
+                  "About 10%",
+                  "About 25%",
+                  "About 50%",
+                  "About 90%"
+            ],
+            "correct": 2,
+            "why": "The lecture notes that about 50% of total SDLC effort and time is spent on testing."
+      },
+      {
+            "q": "What happens to the cost of fixing errors when they are found later in the life cycle?",
+            "options": [
+                  "It usually decreases",
+                  "It stays exactly the same",
+                  "It may increase exponentially",
+                  "It disappears after release"
+            ],
+            "correct": 2,
+            "why": "The lecture states that costs may increase exponentially with time between error injection and discovery."
+      },
+      {
+            "q": "Verification is mainly about checking…",
+            "options": [
+                  "consistency of an output of software with its inputs",
+                  "whether software is profitable",
+                  "only user interface colors",
+                  "only deployment scripts"
+            ],
+            "correct": 0,
+            "why": "Verification checks the consistency of an output of software with its inputs."
+      },
+      {
+            "q": "Validation is mainly about assessing…",
+            "options": [
+                  "whether the software fulfills requirements and meets users' needs",
+                  "only whether the code compiles",
+                  "whether a test runner is installed",
+                  "how many developers wrote the system"
+            ],
+            "correct": 0,
+            "why": "Validation assesses the degree to which software fulfills its requirements and meets users' needs."
+      },
+      {
+            "q": "Which question belongs to verification?",
+            "options": [
+                  "Are we building the right product?",
+                  "Are we building the product right?",
+                  "Are we deploying to the right server?",
+                  "Are we writing enough documentation?"
+            ],
+            "correct": 1,
+            "why": "Verification asks, 'Are we building the product right?'"
+      },
+      {
+            "q": "Which statement about validation is correct?",
+            "options": [
+                  "It is purely static and does not execute code",
+                  "It includes dynamic activities and execution of code",
+                  "It happens only before design begins",
+                  "It excludes black-box testing"
+            ],
+            "correct": 1,
+            "why": "Validation is described as dynamic and includes execution of the code."
+      },
+      {
+            "q": "Software inspections are mainly concerned with…",
+            "options": [
+                  "analysis of static system representations to discover problems",
+                  "live monitoring of production traffic only",
+                  "marketing acceptance of the product",
+                  "patching dependencies automatically"
+            ],
+            "correct": 0,
+            "why": "Inspections focus on analysing static system representations to discover problems."
+      },
+      {
+            "q": "What can inspections NOT check well according to the lecture?",
+            "options": [
+                  "Conformance with specifications",
+                  "Static structure of designs",
+                  "Non-functional characteristics such as performance or usability",
+                  "Whether naming is consistent"
+            ],
+            "correct": 2,
+            "why": "The lecture states that inspections cannot check non-functional characteristics such as performance and usability."
+      },
+      {
+            "q": "Which strategy is classified as static manual?",
+            "options": [
+                  "Runtime checking",
+                  "Program inspection by other programmers",
+                  "System testing",
+                  "Load balancing"
+            ],
+            "correct": 1,
+            "why": "Static manual evaluation is program inspection, where other programmers check the code."
+      },
+      {
+            "q": "Which strategy is classified as static automatic?",
+            "options": [
+                  "Program analysis",
+                  "User testing",
+                  "Integration testing",
+                  "Manual walkthrough with customers"
+            ],
+            "correct": 0,
+            "why": "Static automatic evaluation refers to program analysis that automatically checks code for good practice and common errors."
+      },
+      {
+            "q": "Which strategy is classified as dynamic automatic?",
+            "options": [
+                  "Program inspection",
+                  "Runtime checking",
+                  "Requirements review",
+                  "Pair programming"
+            ],
+            "correct": 1,
+            "why": "Dynamic automatic evaluation is runtime checking, which automatically checks for bad states during operation."
+      },
+      {
+            "q": "What is the key difference in static testing?",
+            "options": [
+                  "It requires production deployment first",
+                  "It finds bugs without executing code",
+                  "It always costs more than dynamic testing",
+                  "It can only be used for system testing"
+            ],
+            "correct": 1,
+            "why": "Static testing helps find bugs without executing code."
+      },
+      {
+            "q": "Which stage of testing involves a separate testing team testing a complete software product before release?",
+            "options": [
+                  "Development testing",
+                  "Release testing",
+                  "User testing",
+                  "Maintenance testing"
+            ],
+            "correct": 1,
+            "why": "Release testing is when a separate testing team tests a complete software product before it is released to users."
+      },
+      {
+            "q": "Which stage of testing involves users or potential users testing software in their own environment?",
+            "options": [
+                  "Release testing",
+                  "Static testing",
+                  "User testing",
+                  "Design inspection"
+            ],
+            "correct": 2,
+            "why": "User testing involves users or potential users testing the software in their own environment."
+      },
+      {
+            "q": "Unit testing focuses on…",
+            "options": [
+                  "individual units or classes",
+                  "the whole production infrastructure",
+                  "only database backups",
+                  "marketing requirements"
+            ],
+            "correct": 0,
+            "why": "Unit testing tests individual units or classes on their functionality or methods."
+      },
+      {
+            "q": "Integration testing focuses on…",
+            "options": [
+                  "testing only one function in isolation",
+                  "combining several individual units into composite components",
+                  "testing only with real customers",
+                  "checking documentation formatting"
+            ],
+            "correct": 1,
+            "why": "Integration testing integrates several individual units to create and test composite components."
+      },
+      {
+            "q": "System testing focuses on…",
+            "options": [
+                  "testing some or all parts of a system as a whole",
+                  "testing only one library method",
+                  "checking source code comments only",
+                  "running only static analysis"
+            ],
+            "correct": 0,
+            "why": "System testing checks some or all integrated parts of a system as a whole."
+      },
+      {
+            "q": "Which error-handling approach stops the program immediately and reports the error?",
+            "options": [
+                  "Ignore",
+                  "Fail safe",
+                  "Fail fast",
+                  "Retry forever"
+            ],
+            "correct": 2,
+            "why": "Fail fast means the program stops immediately and reports the error."
+      },
+      {
+            "q": "Which statement best describes black-box testing?",
+            "options": [
+                  "Testing based on internal logic and code structure",
+                  "Testing based on requirements and interface behavior without knowing internal code structure",
+                  "Testing only documentation quality",
+                  "Testing only compile-time warnings"
+            ],
+            "correct": 1,
+            "why": "Black-box testing is functional testing based on requirements and interface behavior, without knowledge of the internal code structure."
+      },
+      {
+            "q": "What is gray-box testing?",
+            "options": [
+                  "Testing where no requirements are known",
+                  "Testing that ignores both interface and code",
+                  "Looking at code to design test cases, but testing through the interface",
+                  "Testing only non-functional requirements"
+            ],
+            "correct": 2,
+            "why": "Gray-box testing looks at code to design test cases, but the actual testing is done through the interface."
+      }
+];
+
+    const BASE_QUESTIONS = QUESTIONS.map(q => ({ ...q, options: [...q.options] }));
+    let currentQuestions = [];
+
+    const state = { score: 0, answered: 0 };
+
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+
+    function cloneQuestions(data) {
+      return data.map(item => ({ ...item, options: [...item.options] }));
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function buildQuestions() {
+      const items = cloneQuestions(BASE_QUESTIONS);
+      shuffleArray(items);
+
+      const targetsByIndex = new Map();
+      const grouped = new Map();
+
+      items.forEach((item, idx) => {
+        const len = item.options.length;
+        if (!grouped.has(len)) grouped.set(len, []);
+        grouped.get(len).push(idx);
+      });
+
+      grouped.forEach((indexes, len) => {
+        const targets = [];
+        for (let i = 0; i < indexes.length; i++) targets.push(i % len);
+        shuffleArray(targets);
+        indexes.forEach((qIdx, i) => {
+          targetsByIndex.set(qIdx, targets[i]);
+        });
+      });
+
+      return items.map((item, qIdx) => {
+        const optionPool = item.options.map((text, index) => ({ text, index }));
+        shuffleArray(optionPool);
+        let correct = optionPool.findIndex(opt => opt.index === item.correct);
+        const target = targetsByIndex.get(qIdx);
+
+        if (typeof target === 'number' && target >= 0 && target < optionPool.length && correct !== target) {
+          [optionPool[correct], optionPool[target]] = [optionPool[target], optionPool[correct]];
+          correct = target;
+        }
+
+        return {
+          ...item,
+          options: optionPool.map(opt => opt.text),
+          correct,
+          __answered: false
+        };
+      });
+    }
+
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'qcard';
+
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        head.innerHTML = `<h3 class="qtitle">Q${idx+1}. ${item.q}</h3><span class="badge">1 point</span>`;
+
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        const letters = ['A','B','C','D','E','F'];
+
+        item.options.forEach((text, optIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt';
+          btn.type = 'button';
+          btn.innerHTML = `<span class="letter">${letters[optIdx] || optIdx+1}</span><span>${text}</span>`;
+          btn.addEventListener('click', () => answerQuestion(idx, optIdx, btn, card));
+          opts.appendChild(btn);
+        });
+
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.style.display = 'none';
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+
+        card.appendChild(head);
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function answerQuestion(qIdx, selectedIdx, btnEl, cardEl) {
+      const item = currentQuestions[qIdx];
+      if (item.__answered) return;
+      item.__answered = true;
+      state.answered += 1;
+
+      const optButtons = [...cardEl.querySelectorAll('.opt')];
+      optButtons.forEach((b, i) => {
+        b.classList.add('disabled');
+        if (i === item.correct) b.classList.add('correct');
+      });
+
+      if (selectedIdx === item.correct) {
+        state.score += 1;
+      } else {
+        btnEl.classList.add('wrong');
+      }
+
+      const exp = cardEl.querySelector('.exp');
+      exp.style.display = 'block';
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score / currentQuestions.length) * 100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+
+    function resetQuiz() {
+      state.score = 0;
+      state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function revealAll() {
+      const cards = [...document.querySelectorAll('.qcard')];
+      cards.forEach((card, qIdx) => {
+        const item = currentQuestions[qIdx];
+        const optButtons = [...card.querySelectorAll('.opt')];
+        optButtons.forEach((b, i) => {
+          b.classList.add('disabled');
+          if (i === item.correct) b.classList.add('correct');
+        });
+        card.querySelector('.exp').style.display = 'block';
+        item.__answered = true;
+      });
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', resetQuiz);
+
+    resetQuiz();
+  </script>
+</body>
+</html>
